@@ -1,0 +1,21 @@
+﻿{
+  "active": "请假申请",
+  "data": [
+    {
+      "title": "请假相关",
+      "ico": "el-icon-location",
+      "children": [
+        {
+          "title": "请假申请"
+        },
+        {
+          "title": "我要归档"
+        }
+      ]
+    },
+    {
+      "title": "系统设置",
+      "ico": "el-icon-menu"
+    }
+  ]
+}

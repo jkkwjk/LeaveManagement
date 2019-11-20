@@ -1,0 +1,39 @@
+[
+  {
+    "title": "导航1",
+    "ico": "el-icon-location",
+    "children": [
+      {
+        "group_title": "分组1",
+        "children": [
+          {
+            "title": "选项1"
+          },
+          {
+            "title": "选项2"
+          }
+        ]
+      },
+      {
+        "group_title": "分组2",
+        "children": [
+          {
+            "title": "选项3"
+          },
+          {
+            "title": "选项4",
+            "children": [
+              {
+                "title": "选项1"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "导航2",
+    "ico": "el-icon-menu"
+  }
+]

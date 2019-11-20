@@ -1,0 +1,24 @@
+﻿{
+  "active": "概要查询",
+  "data": [
+    {
+      "title": "概要查询"
+    },
+    {
+      "title": "请假相关",
+      "ico": "el-icon-location",
+      "children": [
+        {
+          "title": "请假审批"
+        },
+        {
+          "title": "我要归档"
+        }
+      ]
+    },
+    {
+      "title": "系统设置",
+      "ico": "el-icon-menu"
+    }
+  ]
+}

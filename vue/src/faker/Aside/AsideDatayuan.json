@@ -1,0 +1,51 @@
+﻿{
+  "active": "概要查询",
+  "data": [
+    {
+      "title": "概要查询",
+      "ico": "el-icon-pie-chart"
+    },
+    {
+      "title": "请假相关",
+      "ico": "el-icon-notebook-1",
+      "children": [
+        {
+          "title": "请假审批"
+        },
+        {
+          "title": "我要归档"
+        },
+        {
+          "title": "导入数据"
+        }
+      ]
+    },
+    {
+      "title": "人员管理",
+      "ico": "el-icon-user-solid",
+      "children": [
+        {
+          "title": "班级管理"
+        },
+        {
+          "title": "教师管理"
+        },
+        {
+          "title": "学生管理"
+        }
+      ]
+    },
+    {
+      "title": "系统设置",
+      "ico": "el-icon-menu",
+      "children": [
+        {
+          "title": "个人信息"
+        },
+        {
+          "title": "软件配置"
+        }
+      ]
+    }
+  ]
+}
