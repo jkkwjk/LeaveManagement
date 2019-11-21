@@ -1,10 +1,10 @@
 <template>
-    
+    <el-avatar :size="50" :src="''"></el-avatar>
 </template>
 
 <script>
     export default {
-        name: "Head"
+        name: "UserInfo"
     }
 </script>
 

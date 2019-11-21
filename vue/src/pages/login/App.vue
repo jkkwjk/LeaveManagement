@@ -3,7 +3,7 @@
         <div class="contain">
             <div class="show-tip">
                 <span>请假管理系统登录</span>
-                <img src="@/assets/logo.png">
+                <img src="/logo.png">
             </div>
             <Login class="login" :submit="login"></Login>
         </div>
