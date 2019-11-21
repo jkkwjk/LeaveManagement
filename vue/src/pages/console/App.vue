@@ -2,11 +2,11 @@
     <div id="app">
         <el-container style="height: 100%">
             <el-header style="padding: 0;">
-                <Head :logout="logout" :value="value" :opened="opened" :clickItem="clickItem"></Head>
+                <Header :logout="logout" :value="value" :opened="opened" :clickItem="clickItem"></Header>
             </el-header>
             <el-container style="padding-top: 10px;">
                 <el-aside width="200px">
-                    <Aside :data="Aside" style="border-radius: 5px 5px 5px 5px;"></Aside>
+                    <Aside :data="aside" style="border-radius: 5px 5px 5px 5px;"></Aside>
                 </el-aside>
                 <el-main>
                     <router-view></router-view>
@@ -19,13 +19,13 @@
 <script>
     import Aside from "@/components/console/Aside/Aside";
     import a from '@/faker/Aside/AsideDatayuan.json'
-    import Head from "@/components/console/Head/Head";
+    import Header from "@/components/console/Header/Header";
     export default {
         name: "App",
-        components: {Head, Aside},
+        components: {Header, Aside},
         data(){
            return{
-               Aside: [],
+               aside: [],
                value: 100,
            }
         },
@@ -38,16 +38,16 @@
                     this.value = 0;
                     this.$message.info("opened");
                 }
-
             },
             clickItem(id){
                 this.$message.info(`clickItem: ${id}`);
             }
-
         },
         created() {
-            this.Aside = a;
-        }
+            this.aside = a;
+            this.$router.push("/"+this.aside.active);
+        },
+
     }
 </script>
 

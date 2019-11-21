@@ -9,7 +9,7 @@
                     <template slot="title">{{ title }}</template>
                     <AsideItem :child="children"></AsideItem>
                 </el-submenu>
-                <el-menu-item :index="title" v-else>{{ title }}</el-menu-item>
+                <el-menu-item :index="'/'+title" v-else>{{ title }}</el-menu-item>
             </template>
         </template>
     </div>

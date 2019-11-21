@@ -1,6 +1,5 @@
 <template>
-<!--    todo-->
-    <el-menu :default-active="data.active" class="el-menu-vertical-demo"
+    <el-menu :default-active="$route.path" class="el-menu-vertical-demo"
              @open="handleOpen" @close="handleClose" unique-opened router>
         <template v-for="{ico, title, children} in data.data">
             <el-submenu :index="title" v-if="children">
@@ -11,7 +10,7 @@
                 <AsideItem :child="children"></AsideItem>
             </el-submenu>
 
-            <el-menu-item :index="title" v-else>
+            <el-menu-item :index="'/'+title" v-else>
                 <i :class="ico" v-if="ico"></i>
                 <span slot="title">{{ title }}</span>
             </el-menu-item>

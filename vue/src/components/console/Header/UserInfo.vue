@@ -2,7 +2,8 @@
     <div id="user-info">
         <el-avatar :size="40" :src="img" v-if="img"></el-avatar>
         <span class="user-name">{{ name }}</span>
-        <a href="#" @click.prevent="logout"><img src="/logout.png" v-if="logout"></a>
+        <el-divider direction="vertical"></el-divider>
+        <a href="#" @click.prevent="logout"><img src="/logout.png" v-if="logout" alt="登录图片加载失败"></a>
     </div>
 
 </template>
@@ -30,7 +31,7 @@
             width: 25px;
         }
         a{
-            margin-left: 30px;
+            margin-left: 20px;
         }
     }
     .user-name{
