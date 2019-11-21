@@ -4,20 +4,10 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter);
 
 const routes = [
-    /*{
-        path: '/',
-        name: 'home',
-        component: Home
-    },
     {
-        path: '/about',
-        name: 'about',
-        component: () => import('../views/About.vue')
-    }*/
-    // {
-    //     path: '/',
-    //     component:
-    // }
+        path: '/概要查询',
+        component: () => import('../../components/console/Main/Summary')
+    }
 ];
 
 const router = new VueRouter({

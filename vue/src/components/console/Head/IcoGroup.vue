@@ -24,7 +24,10 @@
             margin-left: 5px;
         }
         .item{
-            margin-left: 1px;
+            position: absolute;
+            top: -10px;
+            left: 30px;
+            opacity: 0.95;
         }
     }
 </style>

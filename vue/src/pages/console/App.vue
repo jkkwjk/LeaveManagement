@@ -2,9 +2,7 @@
     <div id="app">
         <el-container style="height: 100%">
             <el-header style="padding: 0;">
-                <Head>
-
-                </Head>
+                <Head :logout="logout" :value="value" :opened="opened" :clickItem="clickItem"></Head>
             </el-header>
             <el-container style="padding-top: 10px;">
                 <el-aside width="200px">
@@ -27,8 +25,25 @@
         components: {Head, Aside},
         data(){
            return{
-               Aside:[],
+               Aside: [],
+               value: 100,
            }
+        },
+        methods: {
+            logout(){
+                this.$message.info("logout");
+            },
+            opened(e){
+                if (e && this.value!==0){
+                    this.value = 0;
+                    this.$message.info("opened");
+                }
+
+            },
+            clickItem(id){
+                this.$message.info(`clickItem: ${id}`);
+            }
+
         },
         created() {
             this.Aside = a;

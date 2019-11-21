@@ -1,13 +1,43 @@
 <template>
-    <el-avatar :size="50" :src="''"></el-avatar>
+    <div id="user-info">
+        <el-avatar :size="40" :src="img" v-if="img"></el-avatar>
+        <span class="user-name">{{ name }}</span>
+        <a href="#" @click.prevent="logout"><img src="/logout.png" v-if="logout"></a>
+    </div>
+
 </template>
 
 <script>
     export default {
-        name: "UserInfo"
+        name: "UserInfo",
+        props: {
+            img: {},
+            name: {
+                required: true,
+            },
+            logout: {
+                type: Function,
+            }
+        }
     }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+    #user-info{
+        display: flex;
+        align-items: center;
+        img{
+            width: 25px;
+        }
+        a{
+            margin-left: 30px;
+        }
+    }
+    .user-name{
+        color: #555;
+        font-size: 13px;
+        margin-left: 2px;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: bolder;
+    }
 </style>

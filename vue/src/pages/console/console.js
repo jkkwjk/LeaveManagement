@@ -9,6 +9,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.use(ElementUI);
 Vue.use(vueAxios, axios);
+
+
 new Vue({
     router,
     render: h => h(App)

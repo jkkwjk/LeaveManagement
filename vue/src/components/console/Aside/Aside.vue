@@ -1,5 +1,7 @@
 <template>
-    <el-menu :default-active="data.active" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
+<!--    todo-->
+    <el-menu :default-active="data.active" class="el-menu-vertical-demo"
+             @open="handleOpen" @close="handleClose" unique-opened router>
         <template v-for="{ico, title, children} in data.data">
             <el-submenu :index="title" v-if="children">
                 <template slot="title">

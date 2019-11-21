@@ -5,17 +5,32 @@
             <span class="title">请假管理系统</span>
         </div>
         <div class="right">
-            <ico-group ico="el-icon-bell" content="提醒" :value="101" type="info"></ico-group>
-
+            <el-dropdown @command="clickItem" @visible-change="opened">
+                <ico-group ico="el-icon-bell" content="提醒" :value="value" type="info"></ico-group>
+                <el-dropdown-menu slot="dropdown">
+<!--                    之后又后端给数据渲染 command代表消息id-->
+                    <el-dropdown-item command="a">黄金糕</el-dropdown-item>
+                    <el-dropdown-item command="b">狮子头</el-dropdown-item>
+                    <el-dropdown-item command="c">螺蛳粉</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+            <UserInfo name="用户名" img="/dev/avatar.jpg" :logout="logout"></UserInfo>
         </div>
     </div>
 </template>
 
 <script>
     import IcoGroup from "./IcoGroup";
+    import UserInfo from "./UserInfo";
     export default {
         name: "Head",
-        components: {IcoGroup}
+        components: {UserInfo, IcoGroup},
+        props: {
+            'logout': {type: Function},
+            'value': {type: Number},
+            'opened': {type: Function},
+            'clickItem': {type: Function}
+        }
     }
 </script>
 
@@ -44,8 +59,9 @@
     .right{
         display: flex;
         align-items: center;
+        padding-right: 10px;
         .ico-group{
-            width: 100px;
+            margin-right: 30px;
             color: #666;
             font-size: 13px;
             font-family: 'Avenir', Helvetica, Arial, sans-serif;
