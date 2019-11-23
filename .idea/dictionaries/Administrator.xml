@@ -2,6 +2,9 @@
   <dictionary name="Administrator">
     <words>
       <w>axios</w>
+      <w>bgimg</w>
+      <w>echarts</w>
+      <w>eleme</w>
     </words>
   </dictionary>
 </component>

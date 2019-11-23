@@ -20,8 +20,8 @@
 </template>
 
 <script>
-    import IcoGroup from "./IcoGroup";
-    import UserInfo from "./UserInfo";
+    import IcoGroup from "@/components/IcoGroup";
+    import UserInfo from "@/components/UserInfo";
     export default {
         name: "Head",
         components: {UserInfo, IcoGroup},
@@ -61,7 +61,7 @@
         align-items: center;
         padding-right: 10px;
         .ico-group{
-            margin-right: 30px;
+            margin-right: 50px;
             color: #666;
             font-size: 13px;
             font-family: 'Avenir', Helvetica, Arial, sans-serif;

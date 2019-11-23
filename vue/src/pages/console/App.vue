@@ -9,7 +9,7 @@
                     <Aside :data="aside" style="border-radius: 5px 5px 5px 5px;"></Aside>
                 </el-aside>
                 <el-main>
-                    <router-view></router-view>
+                    <router-view class="router-view"></router-view>
                 </el-main>
             </el-container>
         </el-container>
@@ -17,16 +17,16 @@
 </template>
 
 <script>
-    import Aside from "@/components/console/Aside/Aside";
-    import a from '@/faker/Aside/AsideDatayuan.json'
-    import Header from "@/components/console/Header/Header";
+    import Aside from "@/views/console/aside/Aside";
+    import a from '@/faker/aside/AsideDatayuan.json'
+    import Header from "@/views/console/header/Header";
     export default {
         name: "App",
         components: {Header, Aside},
         data(){
            return{
                aside: [],
-               value: 100,
+               value: 100, //消息提醒个数
            }
         },
         methods: {
@@ -45,8 +45,9 @@
         },
         created() {
             this.aside = a;
-            this.$router.push("/"+this.aside.active);
         },
+        mounted() {
+            setTimeout("if (this.$route.path === '/'){console.log('我要跳到');this.$router.push('/'+this.aside.active);}",100);
 
     }
 </script>
@@ -56,5 +57,13 @@
         width: 100%;
         height: 100%;
         background-color: #E9ECF5;
+    }
+    .el-main{
+        padding: 0 20px;
+    }
+    .router-view{
+        width: 100%;
+        height: 100%;
+        border-radius: 5px 0 0 5px;
     }
 </style>

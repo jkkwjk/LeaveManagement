@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Header from './App.vue'
+import App from './App.vue'
 import router from './router'
 
 import vueAxios from 'vue-axios'
@@ -19,7 +19,11 @@ Router.prototype.push = function push(location) {
 };
 // end
 
+// echarts
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts;
+//end
 new Vue({
     router,
-    render: h => h(Header)
+    render: h => h(App)
 }).$mount('#app');

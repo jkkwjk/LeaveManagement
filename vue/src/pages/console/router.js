@@ -6,7 +6,11 @@ Vue.use(VueRouter);
 const routes = [
     {
         path: '/概要查询',
-        component: () => import('../../components/console/Main/Summary')
+        component: () => import('../../views/console/main/summary/Summary')
+    },
+    {
+        path: '/导入数据',
+        component: () => import('../../views/console/main/addData/addData')
     }
 ];
 

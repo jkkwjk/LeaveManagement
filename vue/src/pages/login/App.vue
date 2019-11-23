@@ -11,7 +11,7 @@
 </template>
 
 <script>
-    import Login from "@/components/login/Login";
+    import Login from "@/views/login/Login";
     export default {
         name: "App",
         components: {
