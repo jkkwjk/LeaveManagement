@@ -23,23 +23,23 @@
     export default {
         name: "App",
         components: {Header, Aside},
-        data(){
-           return{
-               aside: [],
-               value: 100, //消息提醒个数
-           }
+        data() {
+            return {
+                aside: [],
+                value: 100, //消息提醒个数
+            }
         },
         methods: {
-            logout(){
+            logout() {
                 this.$message.info("logout");
             },
-            opened(e){
-                if (e && this.value!==0){
+            opened(e) {
+                if (e && this.value !== 0) {
                     this.value = 0;
                     this.$message.info("opened");
                 }
             },
-            clickItem(id){
+            clickItem(id) {
                 this.$message.info(`clickItem: ${id}`);
             }
         },
@@ -47,8 +47,10 @@
             this.aside = a;
         },
         mounted() {
-            setTimeout("if (this.$route.path === '/'){console.log('我要跳到');this.$router.push('/'+this.aside.active);}",100);
-
+            setTimeout(()=>{
+                    if (this.$route.path === '/') this.$router.push('/'+this.aside.active);
+            }, 500);
+        }
     }
 </script>
 

@@ -11,6 +11,10 @@ const routes = [
     {
         path: '/导入数据',
         component: () => import('../../views/console/main/addData/addData')
+    },
+    {
+        path: '/请假审批',
+        component: () => import('../../views/console/main/leaveManagement/leaveManagement')
     }
 ];
 
