@@ -1,6 +1,6 @@
 <template>
     <div class="leave-management">
-        <table-filter-box height="50px">
+        <table-filter-box height="50px" :column="filterArray">
 
         </table-filter-box>
         <leave-table-main :tableData="data" :column="column" :hiddenColumn="hiddenColumn"
@@ -60,6 +60,11 @@
                 hiddenColumn: [
                     {title: "班级", prop: "class"},{title: "开始时间", prop: "startTime"},
                     {title: "结束时间", prop: "endTime"}],
+                filterArray: [
+                    {title: "请假类型", prop: "type"},
+                    {title: "具体原因", prop: "detail"},
+                    {title: "学期", prop: 'team', extra:[{title: "后端添加数据", prop: "2018-2019-1"}]},
+                ],
                 data: [
                     {
                     uid: '1',
@@ -107,5 +112,7 @@
 </script>
 
 <style scoped>
-
+    .leave-management{
+        overflow: hidden;
+    }
 </style>

@@ -78,6 +78,7 @@
 </style>
 <style scoped lang="scss">
     .el-table{
+
     }
     .table{
         width: 100%;
