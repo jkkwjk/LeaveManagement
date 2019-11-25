@@ -22,7 +22,7 @@
         <el-table-column :label="title" :prop="prop"
                          v-for="{title, prop} in column"
                          sortable="custom"
-                         :key="prop">
+                         :key="prop" min-width="110px">
         </el-table-column>
 
         <el-table-column fixed="right" label="操作" width="100" sortable="custom">

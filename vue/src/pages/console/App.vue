@@ -1,11 +1,11 @@
 <template>
     <div id="app">
-        <el-container style="height: 100%">
+        <el-container style="height: 100%;">
             <el-header style="padding: 0;">
                 <Header :logout="logout" :value="value" :opened="opened" :clickItem="clickItem"></Header>
             </el-header>
-            <el-container style="padding-top: 10px;">
-                <el-aside width="200px">
+            <el-container style="padding-top: 10px;background-color: #E9ECF5;">
+                <el-aside width="200px" style="">
                     <Aside :data="aside" style="border-radius: 5px 5px 5px 5px;"></Aside>
                 </el-aside>
                 <el-main>
@@ -60,8 +60,12 @@
         height: 100%;
         background-color: #E9ECF5;
     }
+    .el-aside::-webkit-scrollbar {
+        display: none;
+    }
     .el-main{
         padding: 0 20px;
+        height: auto;
     }
     .router-view{
         width: 100%;

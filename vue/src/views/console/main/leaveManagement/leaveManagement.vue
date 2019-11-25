@@ -114,5 +114,6 @@
 <style scoped>
     .leave-management{
         overflow: hidden;
+        height: calc(100% - 1px);
     }
 </style>
