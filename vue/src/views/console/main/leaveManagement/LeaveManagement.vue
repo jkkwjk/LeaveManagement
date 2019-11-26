@@ -1,25 +1,35 @@
 <template>
     <div class="leave-management">
-        <table-filter-box height="50px" :column="filterArray">
-
+        <table-filter-box height="50px" :column="filterArray" :changeFilter="changeFilter">
         </table-filter-box>
-        <leave-table-main :tableData="data" :column="column" :hiddenColumn="hiddenColumn"
-                          :willSort="willSort" subHeight="50px" :load="loadData">
-
-        </leave-table-main>
+        <table-main :tableData="data" :column="column" :hiddenColumn="hiddenColumn"
+                    :willSort="willSort" subHeight="50px" :load="loadData"
+                    :buttonClick="buttonClick">
+        </table-main>
     </div>
 
 </template>
 
 <script>
-    import LeaveTableMain from "@/components/LeaveTableMain";
+    import TableMain from "@/components/TableMain";
     import TableFilterBox from "@/components/TableFilterBox";
     export default {
         name: "leaveManagement",
-        components: {TableFilterBox, LeaveTableMain},
+        components: {TableFilterBox, TableMain},
         methods:{
+            buttonClick(row, type){
+                row.showWhat = type;
+                if (type === 'allow'){
+                    console.log(row.uid);
+                }else if(type === 'reject') {
+                    console.log(row.uid);
+                }
+            },
             willSort({ prop, order }){
                 this.filter.sort = { prop, order };
+            },
+            changeFilter(v){
+                this.filter.custom = v;
             },
             loadData(){
                 this.$message.info("i am load");
@@ -47,10 +57,7 @@
                         prop: '',
                         type: ''
                     },
-                    custom: [{
-                        prop: 'uid',
-                        content: ['aa','dd']
-                    }]
+                    custom: []
                 },
                 column: [
                     {title: "ID", prop: "uid"},{title: "学号", prop: "number"},
@@ -61,7 +68,8 @@
                     {title: "班级", prop: "class"},{title: "开始时间", prop: "startTime"},
                     {title: "结束时间", prop: "endTime"}],
                 filterArray: [
-                    {title: "请假类型", prop: "type"},
+                    {title: "请假类型", prop: "type", extra:[{title: "公假", prop: "公假"},
+                            {title: "事假", prop: "事假"},{title: "病假", prop: "病假"},]},
                     {title: "具体原因", prop: "detail"},
                     {title: "学期", prop: 'team', extra:[{title: "后端添加数据", prop: "2018-2019-1"}]},
                 ],
@@ -114,6 +122,6 @@
 <style scoped>
     .leave-management{
         overflow: hidden;
-        height: calc(100% - 1px);
+        height: calc(100% - 10px); /*适配chrome*/
     }
 </style>

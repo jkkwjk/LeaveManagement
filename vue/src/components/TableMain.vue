@@ -1,4 +1,5 @@
 <template>
+<!--    todo sort 可有可无-->
     <el-table
             :data="tableData"
             :row-class-name="tableRowClassName"
@@ -25,11 +26,11 @@
                          :key="prop" min-width="110px">
         </el-table-column>
 
-        <el-table-column fixed="right" label="操作" width="100" sortable="custom">
+        <el-table-column fixed="right" label="操作" width="100" sortable="custom" v-if="buttonClick">
             <template slot-scope="scope">
                 <div class="btn-group">
-                    <el-button type="text" size="small" v-if="scope.row.showWhat === 'button'">同意</el-button>
-                    <el-button type="text" size="small" style="color: red" v-if="scope.row.showWhat === 'button'">拒绝</el-button> <!--拒绝原因-->
+                    <el-button type="text" size="small" v-if="scope.row.showWhat === 'button'" @click="buttonClick(scope.row,'allow')">同意</el-button>
+                    <el-button type="text" size="small" style="color: red" v-if="scope.row.showWhat === 'button'" @click="buttonClick(scope.row,'reject')">拒绝</el-button> <!--拒绝原因-->
                     <span v-if="scope.row.showWhat === 'reject'" style="color: red;">已拒绝</span>
                     <span v-if="scope.row.showWhat === 'allow'" style="color: darkgreen;">已同意</span>
                 </div>
@@ -52,7 +53,8 @@
             hiddenColumn: {type: Array},
             willSort: {type: Function},
             subHeight: {type: String},
-            load: {type: Function, require: true}
+            load: {type: Function, require: true},
+            buttonClick: {type: Function}
         },
         methods: {
             tableRowClassName({row}){
