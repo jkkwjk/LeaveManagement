@@ -1,5 +1,10 @@
 <template>
     <div id="add-data">
+        <el-steps :active="active" simple process-status="finish" finish-status="success">
+            <el-step title="上传文件" icon="el-icon-upload"></el-step>
+            <el-step title="选择文件" icon="el-icon-document-add"></el-step>
+            <el-step title="填写表单" icon="el-icon-edit"></el-step>
+        </el-steps>
         <div class="step1">
             <el-upload
                     drag
@@ -23,7 +28,7 @@
                 请填写表单: {{ currentFile===null?'':currentFile.name }}
             </div>
             <div class="form">
-                <el-form label-width="100px" v-model="form">
+                <el-form label-width="130px" v-model="form">
                     <el-form-item label="导入的数据:" style="margin-top: 10px;">
                         <el-select v-model="form.type" placeholder="请选择数据类型">
                             <el-option label="学生数据" value="student"></el-option>
@@ -44,7 +49,7 @@
 </template>
 
 <script>
-    import animate from 'animate.css'
+    // import animate from 'animate.css'
     export default {
         name: "addData",
         data(){
@@ -55,7 +60,8 @@
                     clear: false
                 },
                 currentFile: null,
-                okFile: []
+                okFile: [],
+                active: 0
             }
         },
         methods: {
@@ -128,6 +134,18 @@
         watch: {
             currentFile(val){
                 this.showStep2 = val !== null;
+                if (this.showStep2){
+                    this.active = 2;
+                }else {
+                    this.active = 1;
+                }
+            },
+            okFile(){
+                if (this.okFile.length !== 0 && this.active === 0){
+                    this.active = 1;
+                }else if (this.okFile.length === 0){
+                    this.active = 0;
+                }
             }
         }
     }
@@ -136,6 +154,7 @@
 <style scoped lang="scss">
     .step1{
         text-align: center;
+        margin-top: 20px;
     }
     .step2{
         display: flex;

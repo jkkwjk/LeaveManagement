@@ -5,11 +5,13 @@
                 <Header :logout="logout" :value="value" :opened="opened" :clickItem="clickItem"></Header>
             </el-header>
             <el-container style="padding-top: 10px;background-color: #E9ECF5;">
-                <el-aside width="200px" style="">
+                <el-aside width="200px">
                     <Aside :data="aside" style="border-radius: 5px 5px 5px 5px;"></Aside>
                 </el-aside>
                 <el-main>
-                    <router-view class="router-view"></router-view>
+                    <transition tag="div" name="el-fade-in-linear" mode="out-in">
+                        <router-view class="router-view"></router-view>
+                    </transition>
                 </el-main>
             </el-container>
         </el-container>
@@ -20,6 +22,7 @@
     import Aside from "@/views/console/aside/Aside";
     import a from '@/faker/aside/AsideDatayuan.json'
     import Header from "@/views/console/header/Header";
+    import animate from 'animate.css'
     export default {
         name: "App",
         components: {Header, Aside},

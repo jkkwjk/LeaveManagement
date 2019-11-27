@@ -25,9 +25,6 @@
       "ico": "el-icon-user-solid",
       "children": [
         {
-          "title": "班级管理"
-        },
-        {
           "title": "教师管理"
         },
         {
