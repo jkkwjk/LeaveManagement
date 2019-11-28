@@ -59,18 +59,25 @@
 
         <el-table-column :label="title" :prop="prop"
                          v-for="{title, prop} in column"
-                         :key="prop" min-width="110px">
+                         :key="prop" :min-width="columnMinWidth">
         </el-table-column>
 
-        <el-table-column fixed="right" label="操作" width="100" v-if="buttonClick">
+        <el-table-column fixed="right" label="操作" :width="customButtonWidth" v-if="buttonClick">
             <template slot-scope="scope">
-                <div class="btn-group">
+                <div class="btn-group" v-if="!customButtonClick">
                     <el-button type="text" size="small" v-if="scope.row.showWhat === 'button'" @click="buttonClick(scope.row,'allow')">同意</el-button>
                     <el-button type="text" size="small" style="color: red" v-if="scope.row.showWhat === 'button'" @click="buttonClick(scope.row,'reject')">拒绝</el-button> <!--拒绝原因-->
                     <span v-if="scope.row.showWhat === 'reject'" style="color: red;">已拒绝</span>
                     <span v-if="scope.row.showWhat === 'allow'" style="color: darkgreen;">已同意</span>
                 </div>
-
+                <div class="btn-group" v-else>
+<!--                    <template v-for="{title, style, clickStyle, clickTitle} in customButtonClick">-->
+<!--                        <el-button type="text" size="small" :style="style" v-if="scope.row.showWhat === 'button' || scope.row.showWhat === undefined" @click="buttonClick(scope.row,title)">{{ title }}</el-button>-->
+<!--                        <span v-if="scope.row.showWhat === clickTitle" :style="clickStyle">{{ clickTitle }}</span>-->
+<!--                    </template>-->
+<!--                    todo 插槽-->
+                    <template slot-scope=""
+                </div>
             </template>
         </el-table-column>
     </el-table>
@@ -90,7 +97,10 @@
             willSort: {type: Function},
             subHeight: {type: String},
             load: {type: Function, require: true},
-            buttonClick: {type: Function}
+            buttonClick: {type: Function},
+            customButtonClick: {type: Array},
+            customButtonWidth: {type: String, default: '100px'},
+            columnMinWidth: {type: String, default: '110px'}
         },
         methods: {
             tableRowClassName({row}){

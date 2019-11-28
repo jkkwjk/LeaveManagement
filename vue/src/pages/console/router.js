@@ -19,6 +19,10 @@ const routes = [
     {
         path: '/我要归档',
         component: () => import('../../views/console/main/archive/Archive')
+    },
+    {
+        path: '/教师管理',
+        component: () => import('../../views/console/main/teacherManagement/TeacherManagement')
     }
 ];
 
