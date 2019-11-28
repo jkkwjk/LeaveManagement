@@ -53,7 +53,7 @@
 <script>
     import TableMain from "@/components/TableMain";
     export default {
-        name: "TeacherManagement",
+        name: "StudentManagement",
         components: {TableMain},
         methods:{
             buttonClick(row,what){

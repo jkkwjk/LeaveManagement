@@ -23,6 +23,10 @@ const routes = [
     {
         path: '/教师管理',
         component: () => import('../../views/console/main/teacherManagement/TeacherManagement')
+    },
+    {
+        path: '/学生管理',
+        component: () => import('../../views/console/main/studentManagement/StudentManagement')
     }
 ];
 
