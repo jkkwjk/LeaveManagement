@@ -1,0 +1,11 @@
+project.config.json
+# 浏览器下载组件
+*.db
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

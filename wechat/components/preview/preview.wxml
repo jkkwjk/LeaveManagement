@@ -1,0 +1,40 @@
+<view class="page">
+    <view class="page__hd"></view>
+    <view class="page__bd">
+        <view class="weui-form-preview">
+            <view class="weui-form-preview__hd">
+                <view class="weui-form-preview__item">
+                    <view class="weui-form-preview__label">请假天数</view>
+                    <view class="weui-form-preview__value_in-hd">2天</view>
+                </view>
+            </view>
+            <view class="weui-form-preview__bd">
+                <view class="weui-form-preview__item">
+                    <view class="weui-form-preview__label">开始时间</view>
+                    <view class="weui-form-preview__value">2019-12-01 23:22:44</view>
+                </view>
+                <view class="weui-form-preview__item">
+                    <view class="weui-form-preview__label">结束时间</view>
+                    <view class="weui-form-preview__value">2019-12-01 23:22:44</view>
+                </view>
+                <view class="weui-form-preview__item">
+                    <view class="weui-form-preview__label">请假类型</view>
+                    <view class="weui-form-preview__value">病假</view>
+                </view>
+                <view class="weui-form-preview__item">
+                    <view class="weui-form-preview__label">具体原因</view>
+                    <view class="weui-form-preview__value">去比赛</view>
+                </view>
+                <view class="weui-form-preview__item">
+                    <view class="weui-form-preview__label">发送时间</view>
+                    <view class="weui-form-preview__value">如果没发送 则不渲染</view>
+                </view>
+            </view>
+            <view class="weui-form-preview__ft">
+                <navigator class="weui-form-preview__btn weui-form-preview__btn_default" hover-class="weui-form-preview__btn_active">辅助操作</navigator>
+                <navigator class="weui-form-preview__btn weui-form-preview__btn_primary" hover-class="weui-form-preview__btn_active">操作</navigator>
+                <navigator class="weui-form-preview__btn weui-form-preview__btn_primary" hover-class="weui-form-preview__btn_active">操作</navigator>
+            </view>
+        </view>
+    </view>
+</view>

@@ -1,0 +1,21 @@
+<view class="page">
+    <view>
+        <table-main />
+    </view>
+    <view class="page__bd">
+      <view class="weui-tabbar">
+          <view class="weui-tabbar__item weui-bar__item_on">
+              <view style="position: relative;display:inline-block;">
+                <image src="/img/nav-list-active.png" class="weui-tabbar__icon"></image>
+              </view>
+              <view class="weui-tabbar__label">请假申请</view>
+          </view>
+          <view class="weui-tabbar__item">
+              <view style="position: relative;display:inline-block;">
+                <image src="/img/trash-bin.png" class="weui-tabbar__icon"></image>
+              </view>
+              <view class="weui-tabbar__label">回收站</view>
+          </view>
+      </view>
+    </view>
+</view>

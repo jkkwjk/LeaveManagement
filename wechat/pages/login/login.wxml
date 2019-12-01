@@ -1,0 +1,29 @@
+<view class="page">
+    <view class="weui-form">
+      <view class="weui-form__text-area">
+        <view class="weui-form__title">请先登录</view>
+      </view>
+      <view class="weui-form__control-area">
+        <view class="weui-cells__group weui-cells__group_form">
+            <view class="weui-cells weui-cells_form">
+              <view class="weui-cell">
+                <view class="weui-cell__hd"><label class="weui-label">账号</label></view>
+                <view class="weui-cell__bd">
+                    <input class="weui-input" type="number" placeholder="请输入账号"/>
+                </view>
+              </view>
+              <view class="weui-cell">
+                <view class="weui-cell__hd"><label class="weui-label">密码</label></view>
+                <view class="weui-cell__bd">
+                    <input class="weui-input" type="password" placeholder="请输入密码"/>
+                </view>
+              </view>
+            </view>
+        </view>
+      </view>
+      <view class="weui-form__opr-area">
+        <button type="primary">确定</button>
+      </view>
+      
+    </view>
+</view>

@@ -1,0 +1,4 @@
+/* components/tableMain/TableMain.wxss */
+.contain{
+  width: 100%;
+}

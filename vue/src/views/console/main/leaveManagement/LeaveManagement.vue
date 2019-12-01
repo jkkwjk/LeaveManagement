@@ -20,6 +20,7 @@
             buttonClick(row, type){
                 row.showWhat = type;
                 if (type === 'allow'){
+                    // 对多次同一理由请假的学生弹出dialog进行提醒
                     console.log(row.uid);
                 }else if(type === 'reject') {
                     console.log(row.uid);

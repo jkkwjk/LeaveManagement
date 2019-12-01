@@ -1,0 +1,4 @@
+<!--components/tableMain/TableMain.wxml-->
+<view class="contain">
+  <preview />
+</view>
