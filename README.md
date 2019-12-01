@@ -8,7 +8,7 @@
 > 4.公示给相关的任课教师
 >
 
-前端: vue+elementUI+WeUI
+前端: vue+vue-router+vuex+elementUI+WeUI
 
 后端: SpringBoot+mysql
 

@@ -14,17 +14,17 @@
                     <el-dropdown-item command="c">螺蛳粉</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
-            <UserInfo name="用户名" img="/dev/avatar.jpg" :logout="logout"></UserInfo>
+            <title-user-info name="用户名" :img="this.$store.state.avatar" :logout="logout"></title-user-info>
         </div>
     </div>
 </template>
 
 <script>
     import IcoGroup from "@/components/IcoGroup";
-    import UserInfo from "@/components/UserInfo";
+    import TitleUserInfo from "@/components/TitleUserInfo";
     export default {
         name: "Head",
-        components: {UserInfo, IcoGroup},
+        components: {TitleUserInfo, IcoGroup},
         props: {
             'logout': {type: Function},
             'value': {type: Number},

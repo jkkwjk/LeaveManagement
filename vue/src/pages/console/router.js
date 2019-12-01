@@ -27,6 +27,14 @@ const routes = [
     {
         path: '/学生管理',
         component: () => import('../../views/console/main/studentManagement/StudentManagement')
+    },
+    {
+        path: '/个人信息',
+        component: () => import('../../views/console/main/userInfo/UserInfo')
+    },
+    {
+        path: '/请假申请',
+        component: () => import('../../views/console/main/leaveApply/LeaveApply')
     }
 ];
 

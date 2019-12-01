@@ -4,8 +4,8 @@
             :row-class-name="tableRowClassName"
             v-el-table-infinite-scroll="load"
             infinite-scroll-distance="200"
-            @sort-change="willSort"
-            :height="subHeight? `calc(100% - ${subHeight})`:'100%'" class="table" v-if="willSort">
+            @sort-change="willSort? willSort: undefined"
+            :height="subHeight? `calc(100% - ${subHeight})`:'100%'" class="table">
         <el-table-column type="expand" fixed v-if="hiddenColumn">
             <template slot-scope="props">
                 <el-form label-position="left" inline class="table-expand">
@@ -21,48 +21,11 @@
 
         <el-table-column :label="title" :prop="prop"
                          v-for="{title, prop} in column"
-                         sortable="custom"
-                         :key="prop" min-width="110px">
+                         :key="prop" :sortable="willSort? 'custom': undefined"
+                         :min-width="columnMinWidth">
         </el-table-column>
 
-        <el-table-column fixed="right" label="操作" width="100" sortable="custom" v-if="buttonClick">
-            <template slot-scope="scope">
-                <div class="btn-group">
-                    <el-button type="text" size="small" v-if="scope.row.showWhat === 'button'" @click="buttonClick(scope.row,'allow')">同意</el-button>
-                    <el-button type="text" size="small" style="color: red" v-if="scope.row.showWhat === 'button'" @click="buttonClick(scope.row,'reject')">拒绝</el-button> <!--拒绝原因-->
-                    <span v-if="scope.row.showWhat === 'reject'" style="color: red;">已拒绝</span>
-                    <span v-if="scope.row.showWhat === 'allow'" style="color: darkgreen;">已同意</span>
-                </div>
-
-            </template>
-        </el-table-column>
-    </el-table>
-
-    <el-table
-            :data="tableData"
-            :row-class-name="tableRowClassName"
-            v-el-table-infinite-scroll="load"
-            infinite-scroll-distance="200"
-            :height="subHeight? `calc(100% - ${subHeight})`:'100%'" class="table" v-else>
-        <el-table-column type="expand" fixed v-if="hiddenColumn">
-            <template slot-scope="props">
-                <el-form label-position="left" inline class="table-expand">
-                    <el-form-item :label="title+':'" v-for="{title,prop} in column" :key="prop">
-                        <span>{{ props.row[prop] }}</span>
-                    </el-form-item>
-                    <el-form-item :label="title+':'" v-for="{title,prop} in hiddenColumn" :key="prop">
-                        <span>{{ props.row[prop] }}</span>
-                    </el-form-item>
-                </el-form>
-            </template>
-        </el-table-column>
-
-        <el-table-column :label="title" :prop="prop"
-                         v-for="{title, prop} in column"
-                         :key="prop" :min-width="columnMinWidth">
-        </el-table-column>
-
-        <el-table-column fixed="right" label="操作" :width="customButtonWidth" v-if="buttonClick || customButtonClick">
+        <el-table-column fixed="right" label="操作" :sortable="willSort? 'custom': undefined" :width="customButtonWidth" v-if="buttonClick || customButtonClick">
             <template slot-scope="scope">
                 <div class="btn-group" v-if="!customButtonClick">
                     <el-button type="text" size="small" v-if="scope.row.showWhat === 'button'" @click="buttonClick(scope.row,'allow')">同意</el-button>
@@ -104,6 +67,8 @@
                         return 'reject-row';
                     case "allow":
                         return 'allow-row';
+                    case "wait":
+                        return 'wait-row';
                     default:
                         return '';
                 }
@@ -117,6 +82,9 @@
     }
     .el-table /deep/ .allow-row{
         background-color: #f0f9eb;
+    }
+    .el-table /deep/ .wait-row{
+        background-color: #fff0de;
     }
 </style>
 <style scoped lang="scss">

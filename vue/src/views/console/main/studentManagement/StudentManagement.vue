@@ -1,49 +1,29 @@
 <template>
     <div class="teacher-management">
-        <table-main :tableData="tableData" :column="column" :load="loadData" customButtonClick
-                    customButtonWidth="220px" columnMinWidth="150px">
+        <table-main :tableData="data" :column="column" :load="loadData" customButtonClick
+                    customButtonWidth="100px" columnMinWidth="150px">
                 <div slot="button" slot-scope="scope">
-                    <el-button type="text" size="small" @click="buttonClick(scope.data.row,'manage')">{{ dialogButton.manage.title }}</el-button>
-                    <el-button type="text" size="small" @click="buttonClick(scope.data.row,'teach')">{{ dialogButton.teach.title }}</el-button>
+                    <el-button type="text" size="small" @click="buttonClick(scope.data.row)">{{ dialogTable.data.title }}</el-button>
                 </div>
         </table-main>
         <el-dialog :title="dialogTable.data.title" :visible.sync="dialogTable.visible" width="25%">
-            <el-form v-if="dialogTable.data.title === dialogButton.manage.title">
-                <el-form-item label="班级:">
+            <el-form>
+                <el-form-item label="选课:">
                         <el-select
                                 v-model="dialogTable.data.chooseClass"
                                 multiple
                                 filterable
                                 remote
                                 reserve-keyword
-                                placeholder="请输入班级"
-                                :remote-method="getClass"
+                                placeholder="请选择课程"
+                                :remote-method="getLesson"
                                 :loading="dialogTable.data.loading"
                                 style="width: calc(100% - 80px)">
                             <el-option v-for="item in dialogTable.data.class" :key="item" :label="item" :value="item"></el-option>
                         </el-select>
                 </el-form-item>
                 <el-form-item style="width: 100%;">
-                    <el-button type="primary" style="float: right; width: 100px;" :disabled="dialogTable.data.chooseClass.length === 0">交提</el-button>
-                </el-form-item>
-            </el-form>
-
-            <el-form v-if="dialogTable.data.title === dialogButton.teach.title">
-                <el-form-item label="课程号:">
-                    <el-select
-                            v-model="dialogTable.data.chooseClass"
-                            multiple
-                            filterable
-                            remote
-                            placeholder="请输入课程"
-                            :remote-method="getLesson"
-                            :loading="dialogTable.data.loading"
-                            style="width: calc(100% - 80px)">
-                        <el-option v-for="item in dialogTable.data.class" :key="item" :label="item" :value="item"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item style="width: 100%;">
-                    <el-button type="primary" style="float: right; width: 100px;" :disabled="dialogTable.data.chooseClass.length === 0">交提</el-button>
+                    <el-button type="primary" style="float: right; width: 100px;">交提</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
@@ -56,66 +36,43 @@
         name: "StudentManagement",
         components: {TableMain},
         methods:{
-            buttonClick(row,what){
+            buttonClick(row){
+                // 需要先从服务端获取数据
                 this.dialogTable.visible = true;
                 this.dialogTable.data.chooseClass = [];
                 this.dialogTable.data.class = [];
-                this.dialogTable.data = this.dialogButton[what];
             },
             loadData(){
                 // table 分页
             },
-            getClass(query){
+            getLesson(query){
+                // 筛选的时候要把已经筛选好的数据发送到后端, 同个时间段老师不能有两节课
                 if (query !== ''){
                     // 记得加载时要设置loading
                     this.dialogTable.data.class = ['19216','1112','7785','192216','11132','77845'];
                 }else {
                     this.dialogTable.data.class = []
                 }
-            },
-            getLesson(query){
-                // 筛选的时候要把已经筛选好的数据发送到后端, 同个时间段老师不能有两节课
-                if (query !== ''){
-                    this.dialogTable.data.class = ['19216','1112','7785','192216','11132','77845'];
-                }else {
-                    this.dialogTable.data.class = []
-                }
-            }
-        },
-        computed: {
-            tableData(){
-                return this.data.map(_=>{_.type = (_.manageClass.size!==0?"辅导员":"")+' '+(_.teachLesson.size!==0?"任课老师":""); return _;});
             }
         },
         data(){
             return {
                 column: [
-                    {title: "ID", prop: "uid"},
+                    {title: "学号", prop: "uid"},
                     {title: "姓名", prop: "name"},
-                    {title: "职位", prop: "type"}],
+                    {title: "所在班级", prop: "class"}],
                 data: [{
-                    uid: '1',
+                    uid: '189050416',
                     name: '金凯凯',
-                    type: "",
-                    manageClass: ["1944423"],
-                    teachLesson: ["22345"]
+                    class: "1944423",
                 }],
-                dialogButton: {
-                    manage: {
-                        class: [],
-                        chooseClass: [],
-                        loading: false,
-                        title: '设置管理的班级',
-                    },
-                    teach: {
-                        class: [],
-                        chooseClass: [],
-                        loading: false,
-                        title: '设置任课的课程',
-                    }
-                },
                 dialogTable: {
-                    data: {},
+                    data: {
+                        class: [],
+                        chooseClass: [],
+                        loading: false,
+                        title: '选择课程',
+                    },
                     visible: false,
                 }
             }
@@ -125,7 +82,6 @@
 
 <style scoped>
     .teacher-management{
-        background-color: red;
-        height: 100%;
+        height: calc(100% - 10px);
     }
 </style>

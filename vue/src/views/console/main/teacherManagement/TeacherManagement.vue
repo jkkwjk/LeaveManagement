@@ -24,7 +24,7 @@
                         </el-select>
                 </el-form-item>
                 <el-form-item style="width: 100%;">
-                    <el-button type="primary" style="float: right; width: 100px;" :disabled="dialogTable.data.chooseClass.length === 0">交提</el-button>
+                    <el-button type="primary" style="float: right; width: 100px;">交提</el-button>
                 </el-form-item>
             </el-form>
 
@@ -43,7 +43,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item style="width: 100%;">
-                    <el-button type="primary" style="float: right; width: 100px;" :disabled="dialogTable.data.chooseClass.length === 0">交提</el-button>
+                    <el-button type="primary" style="float: right; width: 100px;">交提</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
@@ -90,13 +90,12 @@
         data(){
             return {
                 column: [
-                    {title: "ID", prop: "uid"},
+                    {title: "工号", prop: "uid"},
                     {title: "姓名", prop: "name"},
                     {title: "职位", prop: "type"}],
                 data: [{
-                    uid: '1',
+                    uid: '199664',
                     name: '金凯凯',
-                    type: "",
                     manageClass: ["1944423"],
                     teachLesson: ["22345"]
                 }],
@@ -125,7 +124,6 @@
 
 <style scoped>
     .teacher-management{
-        background-color: red;
-        height: 100%;
+        height: calc(100% - 10px);
     }
 </style>

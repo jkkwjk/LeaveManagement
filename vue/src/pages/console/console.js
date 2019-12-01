@@ -23,7 +23,14 @@ Router.prototype.push = function push(location) {
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts;
 //end
+
+//全局变量
+import store from './store'
+Vue.prototype.$store = store
+//end
+
 new Vue({
+    store,
     router,
     render: h => h(App)
 }).$mount('#app');

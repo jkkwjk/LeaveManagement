@@ -14,8 +14,8 @@
       ]
     },
     {
-      "title": "系统设置",
-      "ico": "el-icon-menu"
+      "title": "个人信息",
+      "ico": "el-icon-user-solid"
     }
   ]
 }

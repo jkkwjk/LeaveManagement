@@ -41,5 +41,7 @@
     }
     .el-menu-item.is-active{
         border-left: 2px #1073ff solid;
+        outline: 0;
+        background-color: #ecf5ff;
     }
 </style>

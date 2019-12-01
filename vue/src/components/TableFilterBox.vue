@@ -1,18 +1,19 @@
 <template>
     <div class="table-filter-box" :style="{'height': height}">
         <div class="left">
-            <el-tag class="tag" v-for="tag in tags" :key="tag.prop+tag.content" closable type="success" @close="closeTag(tag)">
-                {{tag.prop}}: {{tag.content}}
+            <el-tag class="tag" v-for="tag in tags" :key="tag.prop+tag.content" closable type="success" @close="closeTag(tag)"
+            style="font-size: 10px;" :disable-transitions="true">
+                {{prop2title[tag.prop]}}: {{tag.content}}
             </el-tag>
         </div>
         <div class="right">
             <el-form inline>
-                <el-form-item style="width: 150px;">
+                <el-form-item style="width: 105px;">
                     <el-select v-model="form.prop" placeholder="筛选项">
                         <el-option :label="title" :value="prop" v-for="{title,prop} in column" :key="prop"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item style="width: 200px;">
+                <el-form-item style="width: 130px;">
                     <el-select v-model="form.content" placeholder="值" v-if="showSelect">
                         <el-option :label="title" :value="prop" v-for="{title, prop} in showSelect" :key="prop"></el-option>
                     </el-select>
@@ -55,6 +56,14 @@
             }
         },
         computed:{
+            prop2title(){
+                let ret = {};
+                for (let columnKey in this.column) {
+                    if(!this.column.hasOwnProperty(columnKey)) continue;
+                    ret[this.column[columnKey].prop] = this.column[columnKey].title;
+                }
+                return ret;
+            },
             showSelect(){
                 let prop = this.form.prop;
                 let ret = undefined;
