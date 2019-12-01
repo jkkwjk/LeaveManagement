@@ -2,7 +2,7 @@
     <el-table
             :data="tableData"
             :row-class-name="tableRowClassName"
-            v-el-table-infinite-scroll="load"
+            v-el-table-infinite-scroll="load? load:null"
             infinite-scroll-distance="200"
             @sort-change="willSort? willSort: undefined"
             :height="subHeight? `calc(100% - ${subHeight})`:'100%'" class="table">
@@ -54,7 +54,7 @@
             hiddenColumn: {type: Array},
             willSort: {type: Function},
             subHeight: {type: String},
-            load: {type: Function, require: true},
+            load: {type: Function},
             buttonClick: {type: Function},
             customButtonClick: {type: Boolean},
             customButtonWidth: {type: String, default: '100px'},

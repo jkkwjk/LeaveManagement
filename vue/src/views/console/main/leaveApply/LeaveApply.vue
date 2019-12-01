@@ -116,8 +116,13 @@
             buttonClick(row, type){
                 switch (type) {
                     case 'send':
-                        this.confirm.visible = true;
-                        this.confirm.data = row;
+                        if (dateUtil.fixTimezoneOffset(dateUtil.parse(row.endTime)) < new Date()){
+                            this.$message.error("请检查时间是否超出范围");
+                        }else {
+                            this.confirm.visible = true;
+                            this.confirm.data = row;
+                        }
+
                         break;
                     case 'del':
                         let index = this.data.findIndex(_=>{return _.uid===row.uid});
@@ -215,8 +220,8 @@
                         type: '公假',
                         detail: '去比赛',
                         duration: '2天',
-                        startTime: '2019-12-24 16:44:04',
-                        endTime: '2019-12-26 16:44:10',
+                        startTime: '2019-11-24 16:44:04',
+                        endTime: '2019-11-26 16:44:10',
 
                         showWhat: 'button'
                     },{

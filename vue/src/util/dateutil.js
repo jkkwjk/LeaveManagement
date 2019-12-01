@@ -419,7 +419,7 @@
       return (Array(n).join(0) + num).slice(-n);
     }
     return time.getFullYear()+'-'+
-        PrefixZero(time.getMonth()+1)+'-'+
+        PrefixZero(time.getMonth()+1,2)+'-'+
         PrefixZero(time.getDate(),2)+' '+
         PrefixZero(time.getHours(),2)+':'+
         PrefixZero(time.getMinutes(),2)+':'+

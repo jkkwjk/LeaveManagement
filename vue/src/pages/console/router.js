@@ -35,6 +35,10 @@ const routes = [
     {
         path: '/请假申请',
         component: () => import('../../views/console/main/leaveApply/LeaveApply')
+    },
+    {
+        path: '/回收站',
+        component: () => import('../../views/console/main/trashBin/TrashBin')
     }
 ];
 
