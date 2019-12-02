@@ -3,7 +3,7 @@
         <table-filter-box height="50px" :column="filterArray" :changeFilter="changeFilter">
         </table-filter-box>
 
-        <table-main :tableData="data" :column="column" :hiddenColumn="hiddenColumn"
+        <table-main :tableData="tableData" :column="column" :hiddenColumn="hiddenColumn"
                     :willSort="willSort" subHeight="50px" :load="loadData"
                     customButtonClick customButtonWidth="170px" columnMinWidth="190px">
             <div slot="button" slot-scope="scope" class="btn-group">
@@ -63,7 +63,6 @@
 </template>
 
 <script>
-//TODO 减小数据的冗余
     import TableMain from "@/components/TableMain";
     import TableFilterBox from "@/components/TableFilterBox";
 
@@ -87,9 +86,8 @@
                                 counselor: '赵雅静',
                                 type: type,
                                 detail: detail,
-                                duration: dateUtil.calcDate(time[0],time[1])+'天',
-                                startTime: dateUtil.formatChina(time[0]),
-                                endTime:  dateUtil.formatChina(time[1]),
+                                startTime: time[0],
+                                endTime:  time[1],
 
                                 showWhat: 'button'
                             });
@@ -144,7 +142,6 @@
                         break;
                     case 'wait':
                         // 显示查看进度条
-                        console.log(1);
                         this.timeline.row = row;
                         break;
                     default:
@@ -161,17 +158,31 @@
                 this.$message.info("i am load");
                 const a = new Array(20).fill({
                     uid: '1',
-                    sendTime: '2019-11-30 15:08:21',
+                    sendTime: 1575264600817,
                     counselor: '赵雅静',
                     type: '公假',
                     detail: '去比赛',
-                    duration: '2天',
-                    startTime: '2019-11-24 16:44:04',
-                    endTime: '2019-11-26 16:44:10',
+                    startTime: 1575264600817,
+                    endTime: 1575264606817,
 
                     showWhat: 'button'
                 });
                 this.data = this.data.concat(a);
+            }
+        },
+        computed: {
+            tableData(){
+                return this.data.map(_=>{
+                    const s = new Date(_.startTime);
+                    const e = new Date(_.endTime);
+                    _.duration = dateUtil.calcDate(s,e) + '天';
+                    _.startTime = dateUtil.formatChina(s);
+                    _.endTime = dateUtil.formatChina(e);
+                    if (typeof _.sendTime === "number"){
+                        _.sendTime = dateUtil.formatChina(new Date(_.sendTime));
+                    }
+                    return _;
+                });
             }
         },
         data(){
@@ -216,46 +227,42 @@
                 data: [
                     {
                         uid: '1',
-                        sendTime: '2019-11-30 15:08:21',
+                        sendTime: 1575264600817,
                         counselor: '赵雅静',
                         type: '公假',
                         detail: '去比赛',
-                        duration: '2天',
-                        startTime: '2019-11-24 16:44:04',
-                        endTime: '2019-11-26 16:44:10',
+                        startTime: 1575264600817,
+                        endTime: 1575999606817,
 
                         showWhat: 'button'
                     },{
                         uid: '2',
-                        sendTime: '2019-11-30 15:08:21',
+                        sendTime: 1575264600817,
                         counselor: '赵雅静',
                         type: '公假',
                         detail: '去比赛',
-                        duration: '2天',
-                        startTime: '2019-11-24 16:44:04',
-                        endTime: '2019-11-26 16:44:10',
+                        startTime: 1575264600817,
+                        endTime: 1575264606817,
 
                         showWhat: 'allow'
                     },{
                         uid: '3',
-                        sendTime: '2019-11-30 15:08:21',
+                        sendTime: 1575264600817,
                         counselor: '赵雅静',
                         type: '公假',
                         detail: '去比赛',
-                        duration: '2天',
-                        startTime: '2019-11-24 16:44:04',
-                        endTime: '2019-11-26 16:44:10',
+                        startTime: 1575264600817,
+                        endTime: 1575264606817,
 
                         showWhat: 'reject'
                     },{
                         uid: '4',
-                        sendTime: '2019-11-30 15:08:21',
+                        sendTime: 1575264600817,
                         counselor: '赵雅静',
                         type: '公假',
                         detail: '去比赛',
-                        duration: '2天',
-                        startTime: '2019-11-24 16:44:04',
-                        endTime: '2019-11-26 16:44:10',
+                        startTime: 1575264600817,
+                        endTime: 1575264606817,
 
                         showWhat: 'wait'
                     }]

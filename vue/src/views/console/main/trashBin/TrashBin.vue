@@ -1,6 +1,6 @@
 <template>
     <div class="trash-bin">
-        <table-main :tableData="data" :column="column" customButtonClick
+        <table-main :tableData="tableData" :column="column" customButtonClick
                     customButtonWidth="150px" columnMinWidth="160px">
             <div slot="button" slot-scope="scope">
                 <el-button type="text" size="small" @click="buttonClick(scope.data.row,'reduction')">还原</el-button>
@@ -12,11 +12,27 @@
 
 <script>
     import TableMain from "@/components/TableMain";
+    import dateUtil from "@/util/dateutil";
 
     export default {
 
         name: "TrashBin",
         components: {TableMain},
+        computed: {
+            tableData(){
+                return this.data.map(_=>{
+                    const s = new Date(_.startTime);
+                    const e = new Date(_.endTime);
+                    _.duration = dateUtil.calcDate(s,e) + '天';
+                    _.startTime = dateUtil.formatChina(s);
+                    _.endTime = dateUtil.formatChina(e);
+                    if (typeof _.sendTime === "number"){
+                        _.sendTime = dateUtil.formatChina(new Date(_.sendTime));
+                    }
+                    return _;
+                });
+            }
+        },
         methods: {
             buttonClick(row, e){
                 let index = this.data.findIndex(_=>{return _.uid===row.uid});
@@ -36,24 +52,22 @@
                     {title: "具体原因", prop: "detail"}],
                 data:[{
                     uid: '1',
-                    sendTime: '2019-11-30 15:08:21',
+                    sendTime: 1575264600817,
                     counselor: '赵雅静',
                     type: '公假',
                     detail: '去比赛',
-                    duration: '2天',
-                    startTime: '2019-11-24 16:44:04',
-                    endTime: '2019-11-26 16:44:10',
+                    startTime: 1575264600817,
+                    endTime: 1575999606817,
 
                     showWhat: 'button'
                 },{
                     uid: '2',
-                    sendTime: '2019-11-30 15:08:21',
+                    sendTime: 1575264600817,
                     counselor: '赵雅静',
                     type: '公假',
                     detail: '去比赛',
-                    duration: '2天',
-                    startTime: '2019-11-24 16:44:04',
-                    endTime: '2019-11-26 16:44:10',
+                    startTime: 1575264600817,
+                    endTime: 1575999606817,
 
                     showWhat: 'button'
                 }]
