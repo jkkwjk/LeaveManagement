@@ -54,7 +54,7 @@
         },
         mounted() {
             setTimeout(()=>{
-                    if (this.$route.path === '/') this.$router.push('/'+this.aside.active);
+                if (this.$route.path === '/') this.$router.push('/'+this.aside.active);
             }, 500);
         }
     }

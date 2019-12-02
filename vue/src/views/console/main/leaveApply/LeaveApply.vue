@@ -80,7 +80,7 @@
                         let time = this.form.data.time;
                         if (this.form.origin === undefined){
                             // 新增
-                            this.data.push({
+                            this.data.unshift({
                                 uid: '1123',
                                 sendTime: '未发送',
                                 counselor: '赵雅静',

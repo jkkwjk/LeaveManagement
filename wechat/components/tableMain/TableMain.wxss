@@ -1,4 +1,8 @@
-/* components/tableMain/TableMain.wxss */
-.contain{
+@import '/style/weui.wxss';
+.weui-form-preview{
+    margin-bottom: 25px;
+}
+.stu-table-text{
+  text-align: center;
   width: 100%;
 }

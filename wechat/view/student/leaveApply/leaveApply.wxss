@@ -1,0 +1,17 @@
+/* view/student/leaveApply/leaveApply.wxss */
+@import '/style/weui.wxss';
+
+.add-button-warp{
+  position: fixed;
+  bottom: 65px;
+  right: 5px;
+  height: 40px;
+  width: 40px;
+  z-index: 1000
+}
+.add-button{
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+}
+

@@ -1,0 +1,109 @@
+<view class="page">
+  <view class="weui-form">
+    <view class="weui-form__text-area">
+      <view class="weui-form__title">{{title}}</view>
+    </view>
+    <view class="weui-form__control-area">
+      <view class="weui-cells__group weui-cells__group_form">
+        <view class="weui-cells weui-cells_form">
+          <view class="weui-cell">
+            <view class="weui-cell__hd">
+              <label class="weui-label">请假类型: </label>
+            </view>
+            <view class="weui-cell__bd">
+              <button class="weui-btn" type="default" style="width: 100%;" bindtap="showLeaveType">{{form.type === ''?'请选择请假类型':form.type}}</button>
+            </view>
+          </view>
+          <view class="weui-cell">
+            <view class="weui-cell__hd">
+              <label class="weui-label">请假原因: </label>
+            </view>
+            <view class="weui-cell__bd">
+              <input class="weui-input" type="number" placeholder="请输入具体原因" />
+            </view>
+          </view>
+        </view>
+
+        <view class="weui-cells__group weui-cells__group_form">
+            <view class="weui-cells__title" style="margin-top:5px;">开始时间</view>
+            <view class="weui-cells weui-cells_form">
+              <view class="weui-cell">
+                <view class="weui-cell__hd">
+                  <label class="weui-label">日期: </label>
+                </view>
+                <view class="weui-cell__bd">
+                  todo
+                </view>
+              </view>
+              <view class="weui-cell">
+                <view class="weui-cell__hd">
+                  <label class="weui-label">时间: </label>
+                </view>
+                <view class="weui-cell__bd">
+                  todo
+                </view>
+              </view>
+            </view>
+          </view>
+
+          <view class="weui-cells__group weui-cells__group_form">
+            <view class="weui-cells__title" style="margin-top:5px;">结束时间</view>
+            <view class="weui-cells weui-cells_form">
+              <view class="weui-cell">
+                <view class="weui-cell__hd">
+                  <label class="weui-label">日期: </label>
+                </view>
+                <view class="weui-cell__bd">
+                  todo
+                </view>
+              </view>
+              <view class="weui-cell">
+                <view class="weui-cell__hd">
+                  <label class="weui-label">时间: </label>
+                </view>
+                <view class="weui-cell__bd">
+                  todo
+                </view>
+              </view>
+            </view>
+          </view>
+
+
+
+      </view>
+    </view>
+
+    <view class="weui-form__opr-area">
+      <button type="primary">确定</button>
+    </view>
+  </view>
+</view>
+
+
+
+
+
+
+
+
+
+<view class="weui-demo-dialog {{showLeaveType ? 'weui-demo-dialog_show' : ''}}">
+  <view class="weui-mask" bindtap="closeLeaveType"></view>
+  <view class="weui-actionsheet {{showLeaveType ? 'weui-actionsheet_toggle' : ''}}">
+    <view class="weui-actionsheet__title">
+      <view class="weui-actionsheet__title-text">请选择请假类型</view>
+    </view>
+    <view class="weui-actionsheet__menu">
+      <view class="weui-actionsheet__cell" bindtap="clickLeaveType" data-type="病假">病假</view>
+      <view class="weui-actionsheet__cell" bindtap="clickLeaveType" data-type="事假">事假</view>
+      <view class="weui-actionsheet__cell" bindtap="clickLeaveType" data-type="公假">公假</view>
+    </view>
+    <view class="weui-actionsheet__action">
+      <view class="weui-actionsheet__cell" bindtap="closeLeaveType">取消</view>
+    </view>
+  </view>
+</view>
+
+<picker mode="date" value="{{now.date}}" start="{{now.date}}" bindchange="dateChange">
+
+</picker>

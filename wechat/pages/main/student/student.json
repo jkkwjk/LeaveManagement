@@ -1,6 +1,6 @@
 {
   "usingComponents": {
-    "table-main": "/components/tableMain/TableMain"
+    "leave-apply": "/view/student/leaveApply/leaveApply"
   }
   
 }

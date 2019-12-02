@@ -114,9 +114,6 @@
                 margin-left: 5px;
             }
         }
-        .right{
-
-        }
     }
 
 </style>
