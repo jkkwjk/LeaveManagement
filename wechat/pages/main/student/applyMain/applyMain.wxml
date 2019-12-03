@@ -1,9 +1,9 @@
 <view class="page">
-  <view class="weui-form">
+  <view class="weui-form" style="padding:20px 0;">
     <view class="weui-form__text-area">
       <view class="weui-form__title">{{title}}</view>
     </view>
-    <view class="weui-form__control-area">
+    <view class="weui-form__control-area" style="margin:0px;">
       <view class="weui-cells__group weui-cells__group_form">
         <view class="weui-cells weui-cells_form">
           <view class="weui-cell">
@@ -11,7 +11,7 @@
               <label class="weui-label">请假类型: </label>
             </view>
             <view class="weui-cell__bd">
-              <button class="weui-btn" type="default" style="width: 100%;" bindtap="showLeaveType">{{form.type === ''?'请选择请假类型':form.type}}</button>
+              <button class="weui-btn" type="default" style="width: 100%;padding: 8px 20px;" bindtap="showLeaveType">{{form.type === ''?'请选择请假类型':form.type}}</button>
             </view>
           </view>
           <view class="weui-cell">
@@ -19,62 +19,75 @@
               <label class="weui-label">请假原因: </label>
             </view>
             <view class="weui-cell__bd">
-              <input class="weui-input" type="number" placeholder="请输入具体原因" />
+              <input class="weui-input" type="number" placeholder="请输入具体原因" bindinput="detailChange" value="{{form.detail}}"/>
             </view>
           </view>
         </view>
 
         <view class="weui-cells__group weui-cells__group_form">
-            <view class="weui-cells__title" style="margin-top:5px;">开始时间</view>
-            <view class="weui-cells weui-cells_form">
-              <view class="weui-cell">
-                <view class="weui-cell__hd">
-                  <label class="weui-label">日期: </label>
-                </view>
-                <view class="weui-cell__bd">
-                  todo
-                </view>
+          <view class="weui-cells__title" style="margin-top:5px;">开始时间</view>
+          <view class="weui-cells weui-cells_form">
+            <view class="weui-cell">
+              <view class="weui-cell__hd">
+                <label class="weui-label">日期: </label>
               </view>
-              <view class="weui-cell">
-                <view class="weui-cell__hd">
-                  <label class="weui-label">时间: </label>
-                </view>
-                <view class="weui-cell__bd">
-                  todo
-                </view>
+              <view class="weui-cell__bd">
+                <picker mode="date" value="{{now.date}}" start="{{now.date}}" bindchange="dateChange" data-range="start" data-what="date">
+                  <view style="width:100%">
+                    {{ form.date.start ===''?'请选择开始日期':form.date.start}}
+                  </view>
+                </picker>
+              </view>
+            </view>
+            <view class="weui-cell">
+              <view class="weui-cell__hd">
+                <label class="weui-label">时间: </label>
+              </view>
+              <view class="weui-cell__bd">
+                <picker mode="time" bindchange="dateChange" data-range="start" data-what="time">
+                  <view style="width:100%">
+                    {{ form.time.start ===''?'请选择开始时间':form.time.start}}
+                  </view>
+                </picker>
               </view>
             </view>
           </view>
+        </view>
 
-          <view class="weui-cells__group weui-cells__group_form">
-            <view class="weui-cells__title" style="margin-top:5px;">结束时间</view>
-            <view class="weui-cells weui-cells_form">
-              <view class="weui-cell">
-                <view class="weui-cell__hd">
-                  <label class="weui-label">日期: </label>
-                </view>
-                <view class="weui-cell__bd">
-                  todo
-                </view>
+        <view class="weui-cells__group weui-cells__group_form">
+          <view class="weui-cells__title" style="margin-top:5px;">结束时间</view>
+          <view class="weui-cells weui-cells_form">
+            <view class="weui-cell">
+              <view class="weui-cell__hd">
+                <label class="weui-label">日期: </label>
               </view>
-              <view class="weui-cell">
-                <view class="weui-cell__hd">
-                  <label class="weui-label">时间: </label>
-                </view>
-                <view class="weui-cell__bd">
-                  todo
-                </view>
+              <view class="weui-cell__bd">
+                <picker mode="date" value="{{now.date}}" start="{{now.date}}" bindchange="dateChange" data-range="end" data-what="date">
+                  <view style="width:100%">
+                    {{ form.date.end ===''?'请选择结束日期':form.date.end}}
+                  </view>
+                </picker>
+              </view>
+            </view>
+            <view class="weui-cell">
+              <view class="weui-cell__hd">
+                <label class="weui-label">时间: </label>
+              </view>
+              <view class="weui-cell__bd">
+                <picker mode="time" bindchange="dateChange" data-range="end" data-what="time">
+                  <view style="width:100%">
+                    {{ form.time.end ===''?'请选择开始时间':form.time.end}}
+                  </view>
+                </picker>
               </view>
             </view>
           </view>
-
-
-
+        </view>
       </view>
     </view>
 
-    <view class="weui-form__opr-area">
-      <button type="primary">确定</button>
+    <view class="weui-form__opr-area" style="margin-top: 10px;">
+      <button type="primary" bindtap="submit">确定</button>
     </view>
   </view>
 </view>
@@ -103,7 +116,3 @@
     </view>
   </view>
 </view>
-
-<picker mode="date" value="{{now.date}}" start="{{now.date}}" bindchange="dateChange">
-
-</picker>
