@@ -1,28 +1,35 @@
 <view class="page">
-    <view class="page__hd"></view>
+  <view class="page__hd"></view>
 
-    <view class="page__bd" wx:for="{{tableData}}" wx:for-item="itemData" wx:key="{{tableData.uid}}">
-        <view class="weui-form-preview">
-            <view class="weui-form-preview__bd">
-                <view class="weui-form-preview__item" wx:for="{{column}}" wx:for-item="column" wx:key="{{column.prop}}">
-                    <view class="weui-form-preview__label">{{column.title}}</view>
-                    <view class="weui-form-preview__value">{{itemData[column.prop]}}</view>
-                </view>
-            </view>
-            <view class="weui-form-preview__ft">
-<!--                 学生申请                          -->
-                <navigator class="weui-form-preview__btn weui-form-preview__btn_primary" hover-class="weui-form-preview__btn_active" wx:if="{{itemData.wxType==='apply' && itemData.showWhat==='button'}}">发送</navigator>
-                <navigator class="weui-form-preview__btn weui-form-preview__btn_default" hover-class="weui-form-preview__btn_active" wx:if="{{itemData.wxType==='apply' && itemData.showWhat==='button'}}">修改</navigator>
-                <navigator class="weui-form-preview__btn weui-form-preview__btn_default" hover-class="weui-form-preview__btn_active" wx:if="{{itemData.wxType==='apply' && itemData.showWhat==='button'}}">删除</navigator>
-                <navigator class="weui-form-preview__btn weui-form-preview__btn_primary" hover-class="weui-form-preview__btn_active" wx:if="{{itemData.wxType==='apply' && itemData.showWhat==='wait'}}">查看进度</navigator>
-                <view class="stu-table-text" wx:if="{{itemData.wxType==='apply' && itemData.showWhat==='allow'}}">已同意</view>
-                <view class="stu-table-text" wx:if="{{itemData.wxType==='apply' && itemData.showWhat==='reject'}}">被辅导员拒绝</view>
-
-<!--                 审批                          -->
-
-
-            </view>
+  <view class="page__bd" wx:for="{{tableData}}" wx:for-item="itemData" wx:key="{{tableData.uid}}">
+    <view class="weui-form-preview">
+      <view class="weui-form-preview__bd">
+        <view class="weui-form-preview__item" wx:for="{{column}}" wx:for-item="column" wx:key="{{column.prop}}">
+          <view class="weui-form-preview__label">{{column.title}}</view>
+          <view class="weui-form-preview__value">{{itemData[column.prop]}}</view>
         </view>
+      </view>
+      <view class="weui-form-preview__ft">
+        <!--                 学生申请                          -->
+        <navigator class="weui-form-preview__btn weui-form-preview__btn_primary" hover-class="weui-form-preview__btn_active" wx:if="{{itemData.wxType==='apply' && itemData.showWhat==='button'}}" data-what="send" data-row="{{itemData}}" catchtap="buttonClick"
+          url="#">发送</navigator>
+        <navigator class="weui-form-preview__btn weui-form-preview__btn_default" hover-class="weui-form-preview__btn_active" wx:if="{{itemData.wxType==='apply' && itemData.showWhat==='button'}}" data-what="edit" data-row="{{itemData}}" catchtap="buttonClick"
+          url="#">修改</navigator>
+        <navigator class="weui-form-preview__btn weui-form-preview__btn_default" hover-class="weui-form-preview__btn_active" wx:if="{{itemData.wxType==='apply' && itemData.showWhat==='button'}}" data-what="del" data-row="{{itemData}}" catchtap="buttonClick" url="#">删除</navigator>
+        <step steps="{{ apply.waitColumn }}" active="{{ itemData.waitActive }}" wx:if="{{itemData.wxType==='apply' && itemData.showWhat==='wait'}}" style="width: 100%"></step>
+        <view class="stu-table-text" wx:if="{{itemData.wxType==='apply' && itemData.showWhat==='allow'}}">已同意</view>
+        <view class="stu-table-text" wx:if="{{itemData.wxType==='apply' && itemData.showWhat==='reject'}}">被辅导员拒绝</view>
+
+        <!--                 回收站                          -->
+        <navigator class="weui-form-preview__btn weui-form-preview__btn_primary" hover-class="weui-form-preview__btn_active" wx:if="{{itemData.wxType==='trashBin'}}" data-what="reduction" data-row="{{itemData}}" catchtap="buttonClick"
+          url="#">还原</navigator>
+        <navigator class="weui-form-preview__btn weui-form-preview__btn_default" hover-class="weui-form-preview__btn_active" wx:if="{{itemData.wxType==='trashBin'}}" data-what="del" data-row="{{itemData}}" catchtap="buttonClick"
+          url="#">彻底删除</navigator>
+        
+
+
+      </view>
     </view>
-    
+  </view>
+
 </view>

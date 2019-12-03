@@ -87,7 +87,7 @@
     </view>
 
     <view class="weui-form__opr-area" style="margin-top: 10px;">
-      <button type="primary" bindtap="submit">确定</button>
+      <button type="primary" bindtap="submit" disabled="{{isSubmit}}">确定</button>
     </view>
   </view>
 </view>

@@ -22,8 +22,8 @@
     import Aside from "@/views/console/aside/Aside";
     //import a from '@/faker/aside/AsideDatafudaoyuan.json'
     //import a from '@/faker/aside/AsideDatayuan.json'
-    import a from '@/faker/aside/AsideDataStu.json'
-    //import a from '@/faker/aside/AsideDatarenke.json'
+    //import a from '@/faker/aside/AsideDataStu.json'
+    import a from '@/faker/aside/AsideDatarenke.json'
     import Header from "@/views/console/header/Header";
     import animate from 'animate.css'
     export default {

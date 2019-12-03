@@ -1,6 +1,7 @@
 {
   "usingComponents": {
-    "leave-apply": "/view/student/leaveApply/leaveApply"
+    "leave-apply": "/view/student/leaveApply/leaveApply",
+    "trash-bin": "/view/student/trashBin/trashBin"
   }
   
 }

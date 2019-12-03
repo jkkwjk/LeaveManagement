@@ -1,6 +1,7 @@
 <view class="page">
     <view>
         <leave-apply wx:if="{{router === 'apply'}}"/>
+        <trash-bin wx:if="{{router === 'trashBin'}}"/>
     </view>
     <view class="page__bd">
       <view class="weui-tabbar">

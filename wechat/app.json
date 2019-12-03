@@ -1,8 +1,8 @@
 {
   "pages": [
-    "pages/main/student/applyMain/applyMain",
     "pages/main/student/student",
-    "pages/login/login"
+    "pages/login/login",
+    "view/student/leaveApply/applyMain/applyMain"
   ],
   "window": {
     "backgroundTextStyle": "light",
