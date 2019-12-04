@@ -39,6 +39,14 @@ const routes = [
     {
         path: '/回收站',
         component: () => import('../../views/console/main/trashBin/TrashBin')
+    },
+    {
+        path: '/请假查看',
+        component: () => import('../../views/console/main/leaveCheck/LeaveCheck')
+    },
+    {
+        path: '/课程归档',
+        component: () => import('../../views/console/main/teacherArchive/TeacherArchive')
     }
 ];
 

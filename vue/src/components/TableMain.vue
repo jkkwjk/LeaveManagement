@@ -58,20 +58,24 @@
             buttonClick: {type: Function},
             customButtonClick: {type: Boolean},
             customButtonWidth: {type: String, default: '100px'},
-            columnMinWidth: {type: String, default: '110px'}
+            columnMinWidth: {type: String, default: '110px'},
+            bgcAuto: {type: Boolean, default: true}
         },
         methods: {
             tableRowClassName({row}){
-                switch (row.showWhat) {
-                    case "reject":
-                        return 'reject-row';
-                    case "allow":
-                        return 'allow-row';
-                    case "wait":
-                        return 'wait-row';
-                    default:
-                        return '';
+                if (this.bgcAuto){
+                    switch (row.showWhat) {
+                        case "reject":
+                            return 'reject-row';
+                        case "allow":
+                            return 'allow-row';
+                        case "wait":
+                            return 'wait-row';
+                        default:
+                            return '';
+                    }
                 }
+
             }
         }
     }

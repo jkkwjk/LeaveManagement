@@ -111,12 +111,6 @@
                 hiddenColumn: [
                     {title: "班级", prop: "class"},{title: "开始时间", prop: "startTime"},
                     {title: "结束时间", prop: "endTime"}],
-                filterArray: [
-                    {title: "请假类型", prop: "type", extra:[{title: "公假", prop: "公假"},
-                            {title: "事假", prop: "事假"},{title: "病假", prop: "病假"}]},
-                    {title: "具体原因", prop: "detail"},
-                    {title: "学期", prop: 'team', extra:[{title: "后端添加数据", prop: "2018-2019-1"}]},
-                ],
                 data: []
             }
         }

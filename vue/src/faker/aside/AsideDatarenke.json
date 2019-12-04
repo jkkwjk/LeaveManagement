@@ -1,15 +1,15 @@
 ﻿{
-  "active": "请假审批",
+  "active": "请假查看",
   "data": [
     {
       "title": "请假相关",
       "ico": "el-icon-location",
       "children": [
         {
-          "title": "请假审批"
+          "title": "请假查看"
         },
         {
-          "title": "我要归档"
+          "title": "课程归档"
         }
       ]
     },
