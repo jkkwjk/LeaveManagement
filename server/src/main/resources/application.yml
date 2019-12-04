@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    include: db
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+server:
+  port: 8080
+mybatis:
+  mapper-locations: classpath:mapping/**/*.xml
+logging:
+  level:
+    root: info
+    com.jkk.leave.mapper: debug
