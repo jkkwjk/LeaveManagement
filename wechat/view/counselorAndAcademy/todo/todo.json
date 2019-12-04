@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "table-main": "../components/tableMain/tableMain"
+  }
+}

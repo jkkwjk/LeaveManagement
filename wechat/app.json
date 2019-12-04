@@ -1,8 +1,11 @@
 {
   "pages": [
+    "pages/main/teacher/teacher",
+    "pages/main/counselorAndAcademy/counselorAndAcademy",
     "pages/main/student/student",
     "pages/login/login",
     "view/student/leaveApply/applyMain/applyMain"
+    
   ],
   "window": {
     "backgroundTextStyle": "light",

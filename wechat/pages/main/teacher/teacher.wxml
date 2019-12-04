@@ -1,0 +1,52 @@
+<view class="page" hidden="{{!displaySearch}}">
+  <view class="weui-form" style="padding: 0px;">
+    <view class="weui-cells weui-cells_form weui-cells__group weui-cells__group_form">
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <label class="weui-label">选择你的课程: </label>
+        </view>
+        <view class="weui-cell__bd">
+          <button class="weui-btn" type="default" style="width: 100%;padding: 8px 20px;" bindtap="openLessones">{{currentLesson.title===undefined ?'点我选择':currentLesson.title}}</button>
+        </view>
+      </view>
+      <view class="weui-form__opr-area" style="margin: 10px 0;">
+        <button type="primary" bindtap="search" disabled="{{currentLesson.prop === undefined}}">确定</button>
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class="page" hidden="{{displaySearch}}">
+  <view wx:if="{{leaveData.length === 0}}" class="no-data">
+    没有学生请假
+  </view>
+  <view wx:if="{{leaveData.length !== 0}}">
+    <table-main column="{{column}}" tableData="{{leaveData}}"/>
+  </view>
+  <view class="add-button-warp" bindtap="back">
+    <image src="/img/back.png" style="width:40px;height:40px;"></image>
+  </view>
+</view>
+
+
+
+
+
+
+<view class="weui-demo-dialog {{showLessones ? 'weui-demo-dialog_show' : ''}}">
+  <view class="weui-mask" bindtap="closeLessones"></view>
+  <view class="weui-actionsheet {{showLessones ? 'weui-actionsheet_toggle' : ''}}">
+    <view class="weui-actionsheet__title">
+      <view class="weui-actionsheet__title-text">请选择课程</view>
+    </view>
+    <view class="weui-actionsheet__menu">
+      <view class="weui-actionsheet__cell" bindtap="clickLesson" data-prop="{{item.prop}}" data-title="{{item.title}}"
+            wx:for="{{ lessones }}" wx:key="{{item.prop}}">
+        {{item.title}}
+      </view>
+    </view>
+    <view class="weui-actionsheet__action">
+      <view class="weui-actionsheet__cell" bindtap="closeLessones">取消</view>
+    </view>
+  </view>
+</view>

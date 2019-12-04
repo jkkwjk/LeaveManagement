@@ -13,7 +13,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button @click="show" type="primary">确认</el-button>
+                    <el-button @click="show" type="primary" :disabled="lesson === ''">确认</el-button>
                 </el-form-item>
             </el-form>
         </div>

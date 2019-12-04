@@ -1,0 +1,4 @@
+<!--view/student/trashBin/trashBin.wxml-->
+<view>
+  <table-main column="{{column}}" tableData="{{tableData}}" bind:buttonClick="buttonClick"/>
+</view>

@@ -1,0 +1,22 @@
+<view class="page">
+    <view>
+        <todo wx:if="{{router === 'todo'}}"/>
+        <finish wx:if="{{router === 'finish'}}" />
+    </view>
+    <view class="page__bd">
+      <view class="weui-tabbar">
+          <view class="weui-tabbar__item {{ router === 'todo'?'weui-bar__item_on':''}}" bindtap="toTodo">
+              <view style="position: relative;display:inline-block;">
+                <image src="/img/todo{{ router === 'todo'?'-active':''}}.png" class="weui-tabbar__icon"></image>
+              </view>
+              <view class="weui-tabbar__label">待审批</view>
+          </view>
+          <view class="weui-tabbar__item {{ router === 'finish'?'weui-bar__item_on':''}}" bindtap="toFinish">
+              <view style="position: relative;display:inline-block;">
+                <image src="/img/finish{{ router === 'finish'?'-active':''}}.png" class="weui-tabbar__icon"></image>
+              </view>
+              <view class="weui-tabbar__label">完成审批</view>
+          </view>
+      </view>
+    </view>
+</view>

@@ -21,13 +21,17 @@
         <view class="stu-table-text" wx:if="{{itemData.wxType==='apply' && itemData.showWhat==='reject'}}">被辅导员拒绝</view>
 
         <!--                 回收站                          -->
-        <navigator class="weui-form-preview__btn weui-form-preview__btn_primary" hover-class="weui-form-preview__btn_active" wx:if="{{itemData.wxType==='trashBin'}}" data-what="reduction" data-row="{{itemData}}" catchtap="buttonClick"
-          url="#">还原</navigator>
-        <navigator class="weui-form-preview__btn weui-form-preview__btn_default" hover-class="weui-form-preview__btn_active" wx:if="{{itemData.wxType==='trashBin'}}" data-what="del" data-row="{{itemData}}" catchtap="buttonClick"
-          url="#">彻底删除</navigator>
-        
+        <navigator class="weui-form-preview__btn weui-form-preview__btn_primary" hover-class="weui-form-preview__btn_active" wx:if="{{itemData.wxType==='trashBin'}}" data-what="reduction" data-row="{{itemData}}" catchtap="buttonClick" url="#">还原</navigator>
+        <navigator class="weui-form-preview__btn weui-form-preview__btn_default" hover-class="weui-form-preview__btn_active" wx:if="{{itemData.wxType==='trashBin'}}" data-what="del" data-row="{{itemData}}" catchtap="buttonClick" url="#">彻底删除</navigator>
 
 
+        <!--                 请假审批                          -->
+        <navigator class="weui-form-preview__btn weui-form-preview__btn_primary" hover-class="weui-form-preview__btn_active" wx:if="{{itemData.wxType==='leaveManagement'}}" data-what="allow" data-row="{{itemData}}" catchtap="buttonClick" url="#">同意</navigator>
+        <navigator class="weui-form-preview__btn weui-form-preview__btn_default" hover-class="weui-form-preview__btn_active" wx:if="{{itemData.wxType==='leaveManagement'}}" data-what="reject" data-row="{{itemData}}" catchtap="buttonClick" url="#">拒绝</navigator>
+
+        <!--                 请假审批查看                          -->
+        <view class="stu-table-text" wx:if="{{itemData.wxType==='finish' && itemData.showWhat==='allow'}}">已同意</view>
+        <view class="stu-table-text" wx:if="{{itemData.wxType==='finish' && itemData.showWhat==='reject'}}">已拒绝</view>
       </view>
     </view>
   </view>
