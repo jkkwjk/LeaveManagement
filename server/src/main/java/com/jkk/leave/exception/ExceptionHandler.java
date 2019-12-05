@@ -11,7 +11,7 @@ public class ExceptionHandler {
 	@org.springframework.web.bind.annotation.ExceptionHandler(value = Exception.class)
 	public Map defaultExceptionHandler(HttpServletRequest request, Exception e) throws Exception{
 		Map<String, String> map = new HashMap<>();
-		//e.printStackTrace();
+		e.printStackTrace();
 		map.put("error", "i am handler");
 		return map;
 	}

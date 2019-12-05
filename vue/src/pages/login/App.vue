@@ -34,7 +34,12 @@
                         duration: 2000
                     });
                 }else {
-                    //执行登录操作
+                    this.$http.post("/user/login",{
+                        id: user,
+                        password: pwd
+                    }).then(res=>{
+                        console.log(res);
+                    });
                 }
             }
         }
