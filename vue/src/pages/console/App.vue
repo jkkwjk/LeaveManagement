@@ -20,10 +20,12 @@
 
 <script>
     import Aside from "@/views/console/aside/Aside";
-    //import a from '@/faker/aside/AsideDatafudaoyuan.json'
-    //import a from '@/faker/aside/AsideDatayuan.json'
-    //import a from '@/faker/aside/AsideDataStu.json'
-    import a from '@/faker/aside/AsideDatarenke.json'
+
+    import counselor from '@/assets/aside/AsideDataCounselor.json'
+    import college from '@/assets/aside/AsideDataCollege.json'
+    import stu from '@/assets/aside/AsideDataStu.json'
+    import teacher from '@/assets/aside/AsideDataTeacher.json'
+
     import Header from "@/views/console/header/Header";
     import animate from 'animate.css'
     export default {
@@ -50,7 +52,20 @@
             }
         },
         created() {
-            this.aside = a;
+            switch(this.$store.state.authType){
+                case '学生':
+                    this.aside = stu;
+                    break;
+                case '教师':
+                    this.aside = teacher;
+                    break;
+                case '辅导员':
+                    this.aside = counselor;
+                    break;
+                case '院领导':
+                    this.aside = college;
+                    break;
+            }
         },
         mounted() {
             setTimeout(()=>{

@@ -28,5 +28,9 @@ public class RestfulRes<T> {
 	public static <T> RestfulRes<T> fail(String msg){
 		return new RestfulRes<T>(msg);
 	}
-
+	public static <T> RestfulRes<T> fail(){
+		RestfulRes restfulRes = new RestfulRes<T>();
+		restfulRes.setCode(505);
+		return restfulRes;
+	}
 }

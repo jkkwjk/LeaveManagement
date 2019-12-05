@@ -11,7 +11,6 @@ instance.interceptors.request.use(function (config) {
     if (config.headers['Content-Type'] === 'application/x-www-form-urlencoded'){
         config.data = Qs.stringify(config.data);
     }
-    console.log(config);
     return config;
   }, function (error) {
     return Promise.reject(error);

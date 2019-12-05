@@ -1,4 +1,5 @@
 // pages/login/login.js
+import '../../http/weapp-cookie/index'
 Page({
 
   /**
@@ -35,32 +36,42 @@ Page({
   onHide: function () {
 
   },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  submit(e){
+    const detail = e.detail.value;
+    wx.request({
+      url: 'http://localhost:8080/api/user/login',
+      method: 'get',
+      data: {
+        id: detail.id,
+        password: detail.pwd,
+      },
+      success(res){
+        if (res.data.code === 200){
+          wx.request({
+            url: 'http://localhost:8080/api/auth',
+            success(res){
+              let url = '';
+              switch(res.data.name){
+                case '学生':
+                  url = '../main/student/student'
+                  break;
+                case '教师' || '院领导':
+                  url = '../main/teacher/teacher'
+                  break;
+                case '辅导员':
+                  url = '../main/counselorAndAcademy/counselorAndAcademy'
+                  break;
+              }
+              wx.navigateTo({
+                url: url
+              });
+            }
+          })
+        }else{
+          console.log(res.data.msg);
+        }
+      }
+    })
+    
   }
 })

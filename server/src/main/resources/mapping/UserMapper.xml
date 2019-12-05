@@ -16,8 +16,8 @@
     from user
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="isLogin" resultType="java.lang.Boolean">
-    select id from user where id=#{id} and password=#{password}
+  <select id="isLogin" resultType="com.jkk.leave.entity.POJO.User">
+    select * from user where id=#{id} and password=#{password}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from user

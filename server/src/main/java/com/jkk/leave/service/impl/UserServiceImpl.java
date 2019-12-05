@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean isLogin(User user) {
+	public User isLogin(User user) {
 		return userMapper.isLogin(user);
 	}
 

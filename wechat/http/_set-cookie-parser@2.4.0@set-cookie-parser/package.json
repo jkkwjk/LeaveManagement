@@ -1,0 +1,42 @@
+{
+  "name": "set-cookie-parser",
+  "version": "2.4.0",
+  "description": "Parses set-cookie headers into objects",
+  "homepage": "https://github.com/nfriedly/set-cookie-parser",
+  "repository": "nfriedly/set-cookie-parser",
+  "author": {
+    "name": "Nathan Friedly",
+    "email": "",
+    "url": "http://nfriedly.com/"
+  },
+  "files": [
+    "lib"
+  ],
+  "main": "./lib/set-cookie.js",
+  "keywords": [
+    "set-cookie",
+    "set",
+    "cookie",
+    "cookies",
+    "header",
+    "parser"
+  ],
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "husky": "^3.0.0",
+    "mocha": "^6.1.4",
+    "prettier": "^1.18.2",
+    "pretty-quick": "^1.11.1"
+  },
+  "scripts": {
+    "test": "eslint . --ignore-pattern '!.eslintrc.js' && mocha",
+    "precommit": "npm test"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "__npminstall_done": "Thu Dec 05 2019 21:55:11 GMT+0800 (GMT+08:00)",
+  "_from": "set-cookie-parser@2.4.0",
+  "_resolved": "https://registry.npm.taobao.org/set-cookie-parser/download/set-cookie-parser-2.4.0.tgz"
+}

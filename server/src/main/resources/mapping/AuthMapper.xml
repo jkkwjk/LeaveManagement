@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jkk.leave.mapper.AuthMapper">
+  <resultMap id="BaseResultMap" type="com.jkk.leave.entity.DO.AuthDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="value" jdbcType="INTEGER" property="value" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    `id`, `name`, `key`, `value`
+  </sql>
+  <select id="getAuthById" resultType="com.jkk.leave.entity.DO.AuthDO">
+    select * from auth where id=#{id}
+  </select>
+
+
+</mapper>

@@ -34,11 +34,13 @@
                         duration: 2000
                     });
                 }else {
-                    this.$http.post("/user/login",{
-                        id: user,
-                        password: pwd
+                    this.$http.get("/user/login",{
+                        params: {
+                            id: user,
+                            password: pwd
+                        }
                     }).then(res=>{
-                        console.log(res);
+                        res.data.code === 200? window.location.href = 'console.html':this.$message.error(res.data.msg);
                     });
                 }
             }

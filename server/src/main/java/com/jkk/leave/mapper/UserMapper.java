@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserMapper extends MyBatisBaseDao<User, Integer> {
-	boolean isLogin(User user);
+	User isLogin(User user);
 }

@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "weapp-cookie": "^1.4.5"
+  }
+}

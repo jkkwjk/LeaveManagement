@@ -5,7 +5,9 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
-        avatar: '/dev/avatar.jpg'
+        avatar: '/dev/avatar.jpg',
+        auth: [],
+        authType: '',
     },
     mutations: {
         update(state,[key,value]){
