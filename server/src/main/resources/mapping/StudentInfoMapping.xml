@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jkk.leave.mapper.StudentInfoMapper">
+
+  <select id="getCounselorId" resultType="java.lang.Integer">
+    select c.counselor_id from student_info as s, class as c where s.class_id=c.id and s.id=#{studentId};
+  </select>
+  <select id="getClass" resultType="java.lang.Integer">
+    select class_id from student_info where id=#{studentId}
+  </select>
+</mapper>

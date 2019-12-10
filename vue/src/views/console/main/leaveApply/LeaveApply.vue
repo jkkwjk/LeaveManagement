@@ -5,7 +5,7 @@
 
         <table-main :tableData="tableData" :column="column" :hiddenColumn="hiddenColumn"
                     :willSort="willSort" subHeight="50px" :load="loadData"
-                    customButtonClick customButtonWidth="170px" columnMinWidth="190px">
+                    customButtonClick customButtonWidth="170px" columnMinWidth="190px" ref="table-main">
             <div slot="button" slot-scope="scope" class="btn-group">
                 <el-button type="text" size="small" @click="buttonClick(scope.data.row,'send')" v-if="scope.data.row.showWhat === 'button'">发送</el-button>
                 <el-button type="text" size="small" @click="buttonClick(scope.data.row,'edit')" v-if="scope.data.row.showWhat === 'button'">编辑</el-button>
@@ -71,6 +71,17 @@
     export default {
         name: "leaveApply",
         components: {LeaveApplyTimeLine, TableFilterBox, TableMain},
+        watch: {
+            filter:{
+                handler(val){
+                    this.page = 1;
+                    this.data = [];
+                    this.hasNext = true;
+                    this.loadData();
+                },
+                deep: true
+            }
+        },
         methods:{
             addOrChangeLeave(formName){
                 this.$refs[formName].validate((valid) => {
@@ -79,24 +90,42 @@
                         let detail = this.form.data.detail;
                         let time = this.form.data.time;
                         if (this.form.origin === undefined){
-                            // 新增
-                            this.data.unshift({
-                                uid: '1123',
-                                sendTime: '未发送',
-                                counselor: '赵雅静',
-                                type: type,
-                                detail: detail,
-                                startTime: time[0],
-                                endTime:  time[1],
-
-                                showWhat: 'button'
+                            this.$http.post('/stu/add',{
+                                type: this.form.data.type,
+                                detail: this.form.data.detail,
+                                startTime: this.form.data.time[0].getTime(),
+                                endTime: this.form.data.time[1].getTime(),
+                            }).then(res=>{
+                                const data = res.data;
+                                if (data.code === 200){
+                                    this.$message.success("添加成功");
+                                    this.data.unshift(data.data);
+                                }else {
+                                    this.$message.error(data.msg);
+                                }
                             });
                         }else {
-                            this.form.origin.type = type;
-                            this.form.origin.detail = detail;
-                            this.form.origin.startTime = dateUtil.formatChina(time[0]);
-                            this.form.origin.endTime = dateUtil.formatChina(time[1]);
-                            this.form.origin.duration = dateUtil.calcDate(time[0],time[1])+'天';
+                            this.$http.post('/stu/modify',{
+                                id: this.form.origin.id,
+                                detail: detail,
+                                type: type,
+                                startTime: time[0].getTime(),
+                                endTime: time[1].getTime()
+                            }).then(res=>{
+                                const data = res.data;
+                                if(data.code === 200){
+                                    this.$message.success("修改成功");
+                                    this.form.origin.type = type;
+                                    this.form.origin.detail = detail;
+                                    this.form.origin.startTime = dateUtil.formatChina(time[0]);
+                                    this.form.origin.endTime = dateUtil.formatChina(time[1]);
+                                    this.form.origin.duration = dateUtil.calcDate(time[0],time[1])+'天';
+                                }else {
+                                    this.$$message.error(data.msg);
+                                }
+                            });
+                            
+
                         }
                         this.form.visible = false;
                     } else {
@@ -109,7 +138,17 @@
                 this.form.origin = undefined;
             },
             confirm__(){
-                this.confirm.data.showWhat = 'wait';
+                this.$http.post('/stu/send',{
+                    id: this.confirm.data.id
+                }).then(res=>{
+                    const data = res.data;
+                    if (data.code === 200){
+                        this.$message.success("发送成功");
+                        this.confirm.data.showWhat = 'wait';
+                    }else {
+                        this.$message.error(data.msg);
+                    }
+                });
                 this.confirm.visible = false;
             },
             buttonClick(row, type){
@@ -121,16 +160,24 @@
                             this.confirm.visible = true;
                             this.confirm.data = row;
                         }
-
                         break;
                     case 'del':
-                        let index = this.data.findIndex(_=>{return _.uid===row.uid});
-                        this.data.splice(index,1);
+                        this.$http.post('/stu/toTrash',{
+                            id: row.id
+                        }).then(res=>{
+                            const data = res.data;
+                            if (data.code === 200){
+                                let index = this.data.findIndex(_=>{return _.id===row.id});
+                                this.data.splice(index,1);
+                                if (this.data.length <= 20)
+                                    this.loadData();
 
-                        if (this.data.length <= 20)
-                            this.loadData();
-
-                        this.$message.success("成功放入回收站");
+                                this.$message.success("成功放入回收站");
+                            }else {
+                                this.$message.error(data.msg);
+                            }
+                        });
+                        
                         break;
                     case 'edit':
                         this.form.origin = row;
@@ -155,19 +202,25 @@
                 this.filter.custom = v;
             },
             loadData(){
-                this.$message.info("i am load");
-                const a = new Array(20).fill({
-                    uid: '1',
-                    sendTime: 1575264600817,
-                    counselor: '赵雅静',
-                    type: '公假',
-                    detail: '去比赛',
-                    startTime: 1575264600817,
-                    endTime: 1575264606817,
-
-                    showWhat: 'button'
-                });
-                this.data = this.data.concat(a);
+                if(this.hasNext && !this.lock){
+                    this.lock = true;
+                    this.$http.post('/stu',{
+                        page: this.page,
+                        num: 10,
+                        custom: JSON.stringify(this.filter)
+                    }).then(res=>{
+                        const list = res.data.data;
+                        if (list.length < 10){
+                            this.hasNext = false;
+                        }else {
+                            this.page++;
+                        }
+                        this.lock = false;
+                        this.data = this.data.concat(list);
+                    }).catch(res=>{
+                        this.lock = false;
+                    });
+                }
             }
         },
         computed: {
@@ -180,6 +233,8 @@
                     _.endTime = dateUtil.formatChina(e);
                     if (typeof _.sendTime === "number"){
                         _.sendTime = dateUtil.formatChina(new Date(_.sendTime));
+                    }else {
+                        _.sendTime = '未发送';
                     }
                     return _;
                 });
@@ -187,6 +242,9 @@
         },
         data(){
             return{
+                page: 1,
+                hasNext: true,
+                lock: false, // fix loadData可能会调用多次的问题
                 timeline: {
                     row: null
                 },
@@ -207,7 +265,7 @@
                 filter: {
                     sort: {
                         prop: '',
-                        type: ''
+                        order: ''
                     },
                     custom: []
                 },
@@ -224,48 +282,7 @@
                     {title: "具体原因", prop: "detail"},
                     {title: "学期", prop: 'team', extra:[{title: "后端添加数据", prop: "2018-2019-1"}]},
                 ],
-                data: [
-                    {
-                        uid: '1',
-                        sendTime: 1575264600817,
-                        counselor: '赵雅静',
-                        type: '公假',
-                        detail: '去比赛',
-                        startTime: 1575264600817,
-                        endTime: 1575999606817,
-
-                        showWhat: 'button'
-                    },{
-                        uid: '2',
-                        sendTime: 1575264600817,
-                        counselor: '赵雅静',
-                        type: '公假',
-                        detail: '去比赛',
-                        startTime: 1575264600817,
-                        endTime: 1575264606817,
-
-                        showWhat: 'allow'
-                    },{
-                        uid: '3',
-                        sendTime: 1575264600817,
-                        counselor: '赵雅静',
-                        type: '公假',
-                        detail: '去比赛',
-                        startTime: 1575264600817,
-                        endTime: 1575264606817,
-
-                        showWhat: 'reject'
-                    },{
-                        uid: '4',
-                        sendTime: 1575264600817,
-                        counselor: '赵雅静',
-                        type: '公假',
-                        detail: '去比赛',
-                        startTime: 1575264600817,
-                        endTime: 1575264606817,
-
-                        showWhat: 'wait'
-                    }]
+                data: []
             }
         }
     }

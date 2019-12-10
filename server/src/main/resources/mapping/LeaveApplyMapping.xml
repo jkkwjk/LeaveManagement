@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jkk.leave.mapper.LeaveApplyMapper">
+  <resultMap id="BaseResultMap" type="com.jkk.leave.entity.DO.LeaveApplyDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="send_time" jdbcType="BIGINT" property="sendTime" />
+    <result column="start_time" jdbcType="BIGINT" property="startTime" />
+    <result column="end_time" jdbcType="BIGINT" property="endTime" />
+    <result column="stu_id" jdbcType="INTEGER" property="studentId" />
+    <result column="del_status" jdbcType="INTEGER" property="delStatus" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="detail" jdbcType="VARCHAR" property="detail" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, send_time, start_time, end_time, stu_id, del_status, `type`, detail, status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from leave_list
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from leave_list
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.jkk.leave.entity.DO.LeaveApplyDO" useGeneratedKeys="true">
+    insert into leave_list (send_time, start_time, end_time,
+      stu_id, del_status, `type`,
+      detail, status)
+    values (#{sendTime,jdbcType=BIGINT}, #{startTime,jdbcType=BIGINT}, #{endTime,jdbcType=BIGINT},
+      #{studentId,jdbcType=INTEGER}, #{delStatus,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR},
+      #{detail,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.jkk.leave.entity.DO.LeaveApplyDO" useGeneratedKeys="true">
+    insert into leave_list
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sendTime != null">
+        send_time,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="studentId != null">
+        stu_id,
+      </if>
+      <if test="delStatus != null">
+        del_status,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="detail != null">
+        detail,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=BIGINT},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=BIGINT},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=BIGINT},
+      </if>
+      <if test="studentId != null">
+        #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="delStatus != null">
+        #{delStatus,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null">
+        #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jkk.leave.entity.DO.LeaveApplyDO">
+    update leave_list
+    <set>
+      <if test="sendTime != null">
+        send_time = #{sendTime,jdbcType=BIGINT},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=BIGINT},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=BIGINT},
+      </if>
+      <if test="studentId != null">
+        stu_id = #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="delStatus != null">
+        del_status = #{delStatus,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null">
+        detail = #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jkk.leave.entity.DO.LeaveApplyDO">
+    update leave_list
+    set send_time = #{sendTime,jdbcType=BIGINT},
+      start_time = #{startTime,jdbcType=BIGINT},
+      end_time = #{endTime,jdbcType=BIGINT},
+      stu_id = #{studentId,jdbcType=INTEGER},
+      del_status = #{delStatus,jdbcType=INTEGER},
+      `type` = #{type,jdbcType=VARCHAR},
+      detail = #{detail,jdbcType=VARCHAR}
+      status = #{status,jdbcType=INTEGER},
+
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+
+  <update id="updateByPrimaryKeyAndStuIdSelective" parameterType="com.jkk.leave.entity.DO.LeaveApplyDO">
+    update leave_list
+    <set>
+      <if test="sendTime != null">
+        send_time = #{sendTime,jdbcType=BIGINT},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=BIGINT},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=BIGINT},
+      </if>
+      <if test="delStatus != null">
+        del_status = #{delStatus,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null">
+        detail = #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER} and stu_id = #{studentId,jdbcType=INTEGER}
+  </update>
+
+  <delete id="deleteByPrimaryKeyAndStuId" parameterType="com.jkk.leave.entity.DO.LeaveApplyDO">
+    delete from leave_list
+    where id = #{id,jdbcType=INTEGER} and stu_id = #{studentId,jdbcType=INTEGER}
+  </delete>
+
+  <select id="selectCustom" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from leave_list
+    where stu_id = #{studentId} and del_status = #{isDel}
+    <if test="filters != null and filters.map != null">
+      <foreach collection="filters.map.entrySet()" separator=" and " open=" and " item="value" index="key">
+        <foreach collection="value" item="item" separator=" or " open="(" close=")">
+          ${key} = #{item}
+        </foreach>
+      </foreach>
+    </if>
+    <if test="sorter != null">
+      order by ${sorter.prop} <if test="sorter.desc == 1"> DESC </if>
+    </if>
+  </select>
+</mapper>

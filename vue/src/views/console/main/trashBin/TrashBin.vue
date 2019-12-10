@@ -18,6 +18,14 @@
 
         name: "TrashBin",
         components: {TableMain},
+        created(){
+            this.$http.get('/stu').then(res=>{
+                const data = res.data;
+                if (data.code === 200){
+                    this.data = data.data;
+                }
+            });
+        },
         computed: {
             tableData(){
                 return this.data.map(_=>{
@@ -35,12 +43,34 @@
         },
         methods: {
             buttonClick(row, e){
-                let index = this.data.findIndex(_=>{return _.uid===row.uid});
-                this.data.splice(index,1);
+                
                 if (e === 'reduction'){
-                    this.$message.success("还原成功");
+                    this.$http.post('stu/reduction',{
+                        id: row.id
+                    }).then(res=>{
+                        const data = res.data;
+                        if (data.code === 200){
+                            let index = this.data.findIndex(_=>{return _.id===row.id});
+                            this.data.splice(index,1);
+                            this.$message.success("还原成功");
+                        }else {
+                            this.$message.error(data.msg);
+                        }
+                    });
+                    
                 }else if (e === 'del'){
-                    this.$message.success("删除成功");
+                    this.$http.post('stu/del',{
+                        id: row.id
+                    }).then(res=>{
+                        const data = res.data;
+                        if (data.code === 200){
+                            let index = this.data.findIndex(_=>{return _.id===row.id});
+                            this.data.splice(index,1);
+                            this.$message.success("删除成功");
+                        }else {
+                            this.$message.error(data.msg);
+                        }
+                    });
                 }
             }
         },
@@ -50,27 +80,7 @@
                     {title: "开始时间", prop: "startTime"},{title: "结束时间", prop: "endTime"},
                     {title: "请假天数", prop: "duration"}, {title: "请假类型", prop: "type"},
                     {title: "具体原因", prop: "detail"}],
-                data:[{
-                    uid: '1',
-                    sendTime: 1575264600817,
-                    counselor: '赵雅静',
-                    type: '公假',
-                    detail: '去比赛',
-                    startTime: 1575264600817,
-                    endTime: 1575999606817,
-
-                    showWhat: 'button'
-                },{
-                    uid: '2',
-                    sendTime: 1575264600817,
-                    counselor: '赵雅静',
-                    type: '公假',
-                    detail: '去比赛',
-                    startTime: 1575264600817,
-                    endTime: 1575999606817,
-
-                    showWhat: 'button'
-                }]
+                data:[]
             }
         }
     }

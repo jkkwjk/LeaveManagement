@@ -4,7 +4,7 @@
             :row-class-name="tableRowClassName"
             v-el-table-infinite-scroll="load? load:null"
             infinite-scroll-distance="200"
-            @sort-change="willSort? willSort: undefined"
+            @sort-change="willSort__inter"
             :height="subHeight? `calc(100% - ${subHeight})`:'100%'" class="table">
         <el-table-column type="expand" fixed v-if="hiddenColumn">
             <template slot-scope="props">
@@ -21,11 +21,11 @@
 
         <el-table-column :label="title" :prop="prop"
                          v-for="{title, prop} in column"
-                         :key="prop" :sortable="willSort? 'custom': undefined"
+                         :key="prop" :sortable="willSort && prop!=='duration' && prop!=='counselor'? 'custom': undefined"
                          :min-width="columnMinWidth">
         </el-table-column>
 
-        <el-table-column fixed="right" label="操作" :sortable="willSort? 'custom': undefined" :width="customButtonWidth" v-if="buttonClick || customButtonClick">
+        <el-table-column fixed="right" label="操作" prop="showWhat" :sortable="willSort? 'custom': undefined" :width="customButtonWidth" v-if="buttonClick || customButtonClick">
             <template slot-scope="scope">
                 <div class="btn-group" v-if="!customButtonClick">
                     <el-button type="text" size="small" v-if="scope.row.showWhat === 'button'" @click="buttonClick(scope.row,'allow')">同意</el-button>
@@ -62,6 +62,9 @@
             bgcAuto: {type: Boolean, default: true}
         },
         methods: {
+            willSort__inter({ prop, order }){
+                this.willSort({ prop, order });
+            },
             tableRowClassName({row}){
                 if (this.bgcAuto){
                     switch (row.showWhat) {
@@ -92,9 +95,6 @@
     }
 </style>
 <style scoped lang="scss">
-    .el-table{
-
-    }
     .table{
         width: 100%;
     }

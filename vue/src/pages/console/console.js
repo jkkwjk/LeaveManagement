@@ -30,26 +30,34 @@ Vue.prototype.$http = axios;
 //end
 
 //权限校验
-axios.get('auth').then(res => {
-    const data = res.data;
-    store.commit('update',['authType',data.name]);
-    store.commit('update',['auth',data.data.router]);
-
-    router.beforeEach((to, from, next) => {
-        const path = to.path.substr(1);
-        if(store.state.auth.some(_=>{return path === _}) || path === ''){
-            next();
-        }else {
-            next(false);
-        }
+axios.get("/user/login",{
+    params: {
+        id: 1,
+        password: 1
+    }
+}).then(()=>{
+    axios.get('auth').then(res => {
+        const data = res.data;
+        store.commit('update',['authType',data.name]);
+        store.commit('update',['auth',data.data.router]);
+    
+        router.beforeEach((to, from, next) => {
+            const path = to.path.substr(1);
+            if(store.state.auth.some(_=>{return path === _}) || path === ''){
+                next();
+            }else {
+                next(false);
+            }
+        });
+    
+        new Vue({
+            store,
+            router,
+            render: h => h(App)
+        }).$mount('#app');
+    }).catch(res => {
+        window.location.href = "login.html";
     });
-
-    new Vue({
-        store,
-        router,
-        render: h => h(App)
-    }).$mount('#app');
-}).catch(res => {
-    window.location.href = "login.html";
 });
+
 //end

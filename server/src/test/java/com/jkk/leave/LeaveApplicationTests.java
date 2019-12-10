@@ -18,18 +18,14 @@ class LeaveApplicationTests {
 	private MockMvc mockMvc;
 	private MockHttpSession session;
 
-	@Before()
-	public void setUp(){
-		session = new MockHttpSession();
-	}
 	@Test
 	public void getAuthTest() throws Exception{
 		session = new MockHttpSession();
-		RequestBuilder login = MockMvcRequestBuilders.get("/api/user/login")
+		RequestBuilder login = MockMvcRequestBuilders.get("/user/login")
 				.param("id","1")
 				.param("password","1")
 				.session(session);
-		RequestBuilder getAuth = MockMvcRequestBuilders.get("/api/auth")
+		RequestBuilder getAuth = MockMvcRequestBuilders.get("/auth")
 				.session(session);
 		mockMvc.perform(login);
 
