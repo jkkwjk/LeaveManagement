@@ -18,6 +18,32 @@
     export default {
         name: "leaveManagement",
         components: {TableFilterBox, TableMain},
+        created(){
+            if (this.$store.state.authType === '辅导员'){
+                // 如果是辅导员的话, 删除辅导员列
+                const index = this.column.findIndex(_=>{return _.prop === 'counselor'})
+                this.column.splice(index,1);
+            }
+            this.$http.post('/sys/getTeam').then(res=>{
+                const data = res.data;
+                if (data.code === 200){
+                    let template = {title: "学期", prop: 'team', extra:[]};
+                    data.data.map(_=>{ template.extra.push({title: _, prop: _}) });
+                    this.filterArray.push(template);
+                }
+            })
+        },
+        watch: {
+            filter:{
+                handler(val){
+                    this.page = 1;
+                    this.data = [];
+                    this.hasNext = true;
+                    this.loadData();
+                },
+                deep: true
+            }
+        },
         computed: {
             tableData(){
                 return this.data.map(_=>{
@@ -38,9 +64,25 @@
                 row.showWhat = type;
                 if (type === 'allow'){
                     // 对多次同一理由请假的学生弹出dialog进行提醒
-                    console.log(row.uid);
+                    this.$http.post(`/con/allow/${row.id}`).then(res=>{
+                        const data = res.data;
+                        if (data.code === 200){
+                            this.$message.success("已同意申请");
+                        }else {
+                            this.$message.error(data.msg);
+                        }
+                    })
                 }else if(type === 'reject') {
-                    console.log(row.uid);
+                    this.$http.post(`/con/reject/${row.id}`,{
+                        id: row.id
+                    }).then(res=>{
+                        const data = res.data;
+                        if (data.code === 200){
+                            this.$message.success("已拒绝申请");
+                        }else {
+                            this.$message.error(data.msg);
+                        }
+                    })
                 }
             },
             willSort({ prop, order }){
@@ -50,26 +92,32 @@
                 this.filter.custom = v;
             },
             loadData(){
-                this.$message.info("i am load");
-                const a = new Array(20).fill({
-                    uid: '1',
-                    name: '金凯凯',
-                    number: '189050416',
-                    sendTime: 1575264600817,
-                    counselor: '赵雅静',
-                    class: '189050113',
-                    type: '公假',
-                    detail: '去比赛',
-                    startTime: 1575264600817,
-                    endTime: 1575999606817,
-
-                    showWhat: 'button'
-                });
-                this.data = this.data.concat(a);
+                if(this.hasNext && !this.lock){
+                    this.lock = true;
+                    this.$http.post('/con',{
+                        page: this.page,
+                        num: 10,
+                        custom: JSON.stringify(this.filter)
+                    }).then(res=>{
+                        const list = res.data.data;
+                        if (list.length < 10){
+                            this.hasNext = false;
+                        }else {
+                            this.page++;
+                        }
+                        this.lock = false;
+                        this.data = this.data.concat(list);
+                    }).catch(res=>{
+                        this.lock = false;
+                    });
+                }
             }
         },
         data(){
             return{
+                page: 1,
+                hasNext: true,
+                lock: false,
                 filter: {
                     sort: {
                         prop: '',
@@ -88,50 +136,9 @@
                 filterArray: [
                     {title: "请假类型", prop: "type", extra:[{title: "公假", prop: "公假"},
                             {title: "事假", prop: "事假"},{title: "病假", prop: "病假"},]},
-                    {title: "具体原因", prop: "detail"},
-                    {title: "学期", prop: 'team', extra:[{title: "后端添加数据", prop: "2018-2019-1"}]},
+                    {title: "具体原因", prop: "detail"}
                 ],
-                data: [
-                    {
-                    uid: '1',
-                    name: '金凯凯',
-                    number: '189050416',
-                    sendTime: 1575264600817,
-                    counselor: '赵雅静',
-                    class: '189050113',
-                    type: '公假',
-                    detail: '去比赛',
-                    startTime: 1575264600817,
-                    endTime: 1575999606817,
-
-                    showWhat: 'button'
-                },{
-                    uid: '2',
-                    name: '金凯凯',
-                    number: '189050416',
-                    sendTime: 1575264600817,
-                    counselor: '赵雅静',
-                    class: '189050113',
-                    type: '公假',
-                    detail: '去比赛',
-                    startTime: 1575264600817,
-                    endTime: 1575999606817,
-
-                    showWhat: 'allow'
-                },{
-                    uid: '3',
-                    name: '金凯凯',
-                    number: '189050416',
-                    sendTime: 1575264600817,
-                    counselor: '赵雅静',
-                    class: '189050113',
-                    type: '公假',
-                    detail: '去比赛',
-                    startTime: 1575264600817,
-                    endTime: 1575999606817,
-
-                    showWhat: 'reject'
-                }]
+                data: []
             }
         }
     }

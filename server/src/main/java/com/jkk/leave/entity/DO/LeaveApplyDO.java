@@ -15,4 +15,5 @@ public class LeaveApplyDO {
 	private String type;
 	private String detail;
 	private Integer status;
+	private String team;
 }

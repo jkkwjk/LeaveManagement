@@ -11,9 +11,10 @@
     <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="detail" jdbcType="VARCHAR" property="detail" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="team" jdbcType="VARCHAR" property="team" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, send_time, start_time, end_time, stu_id, del_status, `type`, detail, status
+    id, send_time, start_time, end_time, stu_id, del_status, `type`, detail, status, team
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
@@ -28,10 +29,10 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.jkk.leave.entity.DO.LeaveApplyDO" useGeneratedKeys="true">
     insert into leave_list (send_time, start_time, end_time,
       stu_id, del_status, `type`,
-      detail, status)
+      detail, status, team)
     values (#{sendTime,jdbcType=BIGINT}, #{startTime,jdbcType=BIGINT}, #{endTime,jdbcType=BIGINT},
       #{studentId,jdbcType=INTEGER}, #{delStatus,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR},
-      #{detail,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
+      #{detail,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}), #{team,jdbcType=VARCHAR}
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.jkk.leave.entity.DO.LeaveApplyDO" useGeneratedKeys="true">
     insert into leave_list
@@ -60,6 +61,9 @@
       <if test="status != null">
         status,
       </if>
+      <if test="team != null">
+        team,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="sendTime != null">
@@ -85,6 +89,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="team != null">
+        #{team,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -115,6 +122,9 @@
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
+      <if test="team != null">
+        team = #{team,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -126,9 +136,9 @@
       stu_id = #{studentId,jdbcType=INTEGER},
       del_status = #{delStatus,jdbcType=INTEGER},
       `type` = #{type,jdbcType=VARCHAR},
-      detail = #{detail,jdbcType=VARCHAR}
+      detail = #{detail,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
-
+      team = #{team,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -158,6 +168,9 @@
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
+      <if test="team != null">
+        team = #{team,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER} and stu_id = #{studentId,jdbcType=INTEGER}
   </update>
@@ -182,5 +195,8 @@
     <if test="sorter != null">
       order by ${sorter.prop} <if test="sorter.desc == 1"> DESC </if>
     </if>
+  </select>
+  <select id="selectAllTeam" resultType="java.lang.String">
+    select distinct team from leave_list;
   </select>
 </mapper>

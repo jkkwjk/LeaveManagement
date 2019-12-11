@@ -21,7 +21,7 @@
 
         <el-table-column :label="title" :prop="prop"
                          v-for="{title, prop} in column"
-                         :key="prop" :sortable="willSort && prop!=='duration' && prop!=='counselor'? 'custom': undefined"
+                         :key="prop" :sortable="willSort && prop!=='duration' && prop!=='counselor' && prop!=='name'? 'custom': undefined"
                          :min-width="columnMinWidth">
         </el-table-column>
 

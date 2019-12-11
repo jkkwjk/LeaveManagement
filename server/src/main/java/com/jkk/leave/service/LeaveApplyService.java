@@ -29,4 +29,6 @@ public interface LeaveApplyService {
 	List<LeaveApplyVO> getApplyListInTrashBin(User user);
 
 	LeaveApplyVO getApplyById(Integer id, User user);
+
+	List<String> getTeam();
 }

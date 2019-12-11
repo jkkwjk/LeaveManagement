@@ -8,9 +8,10 @@ import com.jkk.leave.entity.POJO.base.Filter;
 import com.jkk.leave.entity.POJO.base.Sorter;
 import com.jkk.leave.entity.VO.LeaveApplyVO;
 import com.jkk.leave.service.LeaveApplyService;
-import com.jkk.leave.utils.ColumnMap;
+import com.jkk.leave.tools.ColumnMapTool;
+import com.jkk.leave.tools.FilterSorterParse;
 import com.jkk.leave.utils.RestfulRes;
-import com.jkk.leave.utils.TimeUtil;
+import com.jkk.leave.tools.TimeTool;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,22 +35,8 @@ public class LeaveApplyController {
 	 */
 	@PostMapping
 	public RestfulRes<List<LeaveApplyVO>> getLeaveApply(@SessionAttribute("user")User user, Integer page, Integer num,String custom){
-		Map<String, Object> root = (Map)JSON.parse(custom);
-		JSONObject sort = (JSONObject) root.get("sort");
-		JSONArray filterArray = (JSONArray) root.get("custom");
-
-		Sorter sorter = null;
-		if (!sort.get("prop").equals("") && sort.get("order") != null){
-			sorter = new Sorter(ColumnMap.map.get(sort.getString("prop")),
-					sort.get(("order")).equals("ascending")? 0:1);
-		}else {
-			sorter = new Sorter(ColumnMap.map.get("sendTime"), 0);
-		}
-		Filter filter = new Filter();
-		for (Object o : filterArray) {
-			JSONObject obj = (JSONObject) o;
-			filter.addFilter(obj.getString("prop"), obj.getString("content"));
-		}
+		Sorter sorter = FilterSorterParse.parseSorter(custom, "sendTime");
+		Filter filter = FilterSorterParse.parseFilter(custom);
 
 		return RestfulRes.success(leaveApplyService.getApplyList(user, page, num, filter, sorter));
 	}
@@ -71,7 +58,7 @@ public class LeaveApplyController {
 	 */
 	@PostMapping("add")
 	public RestfulRes<LeaveApplyVO> addLeaveApply(LeaveApplyVO leaveApplyVO, @SessionAttribute("user")User user){
-		if (TimeUtil.effectiveTime(leaveApplyVO.getStartTime(), leaveApplyVO.getEndTime())){
+		if (TimeTool.effectiveTime(leaveApplyVO.getStartTime(), leaveApplyVO.getEndTime())){
 			int id = leaveApplyService.addLeaveApply(leaveApplyVO,user);
 			if (id != 0){
 				return RestfulRes.success(leaveApplyService.getApplyById(id,user));
@@ -86,7 +73,7 @@ public class LeaveApplyController {
 
 	@PostMapping("modify")
 	public RestfulRes modifyLeaveApply(LeaveApplyVO leaveApplyVO, @SessionAttribute("user")User user){
-		if (TimeUtil.effectiveTime(leaveApplyVO.getStartTime(), leaveApplyVO.getEndTime())){
+		if (TimeTool.effectiveTime(leaveApplyVO.getStartTime(), leaveApplyVO.getEndTime())){
 			if (leaveApplyService.modifyApply(leaveApplyVO, user) != 0){
 				return RestfulRes.success();
 			}else {
@@ -111,7 +98,7 @@ public class LeaveApplyController {
 	public RestfulRes sendLeaveApply(LeaveApplyVO leaveApplyVO, @SessionAttribute("user")User user){
 		leaveApplyVO = leaveApplyService.getApplyById(leaveApplyVO.getId(), user);
 
-		if (TimeUtil.effectiveTime(leaveApplyVO.getStartTime(), leaveApplyVO.getEndTime())){
+		if (TimeTool.effectiveTime(leaveApplyVO.getStartTime(), leaveApplyVO.getEndTime())){
 			if (leaveApplyService.sendApply(leaveApplyVO, user) != 0){
 				return RestfulRes.success();
 			}else {

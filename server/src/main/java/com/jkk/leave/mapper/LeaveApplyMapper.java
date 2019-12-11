@@ -17,4 +17,6 @@ public interface LeaveApplyMapper extends MyBatisBaseDao<LeaveApplyDO, Integer> 
 	int deleteByPrimaryKeyAndStuId(LeaveApplyDO leaveApplyDO);
 
 	List<LeaveApplyDO> selectCustom(@Param("studentId") Integer userId, @Param("filters") Filter filters, @Param("sorter") Sorter sorter, @Param("isDel")Boolean isDel);
+
+	List<String> selectAllTeam();
 }

@@ -1,7 +1,7 @@
 package com.jkk.leave.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.jkk.leave.entity.DO.CounselorLeaveListDO;
+import com.jkk.leave.entity.DO.CounselorLeaveListBaseDO;
 import com.jkk.leave.entity.DO.LeaveApplyDO;
 import com.jkk.leave.entity.POJO.User;
 import com.jkk.leave.entity.POJO.base.Filter;
@@ -12,6 +12,7 @@ import com.jkk.leave.mapper.LeaveApplyMapper;
 import com.jkk.leave.mapper.StudentInfoMapper;
 import com.jkk.leave.mapper.UserMapper;
 import com.jkk.leave.service.LeaveApplyService;
+import com.jkk.leave.tools.TimeTool;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +48,7 @@ public class LeaveApplyServiceImpl implements LeaveApplyService {
 				.type(leaveApplyVO.getType())
 				.detail(leaveApplyVO.getDetail())
 				.status(0)
+				.team(TimeTool.getThisTeam())
 				.build();
 		int num = leaveApplyMapper.insertSelective(leaveApplyDO);
 		if (num == 1){
@@ -132,12 +134,12 @@ public class LeaveApplyServiceImpl implements LeaveApplyService {
 							.build();
 
 			if (leaveApplyMapper.updateByPrimaryKeyAndStuIdSelective(leaveApplyDO) == 1){
-				CounselorLeaveListDO counselorLeaveListDO =
-						CounselorLeaveListDO.builder()
+				CounselorLeaveListBaseDO counselorLeaveListBaseDO =
+						CounselorLeaveListBaseDO.builder()
 						.id(leaveApplyVO.getId())
 						.looked(false)
 						.build();
-				resNum = counselorLeaveListMapper.insert(counselorLeaveListDO);
+				resNum = counselorLeaveListMapper.insert(counselorLeaveListBaseDO);
 			}
 
 		}
@@ -221,12 +223,17 @@ public class LeaveApplyServiceImpl implements LeaveApplyService {
 
 	}
 
+	@Override
+	public List<String> getTeam() {
+		return leaveApplyMapper.selectAllTeam();
+	}
+
 	private String parseShowWhat(int status){
 		String showWhat = null;
 		switch (status){
 			case 0: showWhat = "button"; break;
 			case 1: showWhat = "wait"; break;
-			case 2: showWhat = "agree"; break;
+			case 2: showWhat = "allow"; break;
 			case 3: showWhat = "reject"; break;
 		}
 		return showWhat;
