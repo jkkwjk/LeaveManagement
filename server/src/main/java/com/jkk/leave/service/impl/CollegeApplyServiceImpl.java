@@ -3,7 +3,7 @@ package com.jkk.leave.service.impl;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.github.pagehelper.PageHelper;
-import com.jkk.leave.entity.DO.LessonDO;
+import com.jkk.leave.entity.POJO.Lesson;
 import com.jkk.leave.entity.DO.ManageLeaveListBaseDO;
 import com.jkk.leave.entity.DO.LeaveApplyDO;
 import com.jkk.leave.entity.DO.TeacherLeaveListBaseDO;
@@ -28,12 +28,14 @@ public class CollegeApplyServiceImpl implements CollegeApplyService {
 	private final LeaveApplyMapper leaveApplyMapper;
 	private final TeacherLeaveListMapper teacherLeaveListMapper;
 	private final StudentInfoMapper studentInfoMapper;
-	public CollegeApplyServiceImpl(CollegeLeaveListMapper collegeLeaveListMapper, UserMapper userMapper, LeaveApplyMapper leaveApplyMapper, TeacherLeaveListMapper teacherLeaveListMapper, StudentInfoMapper studentInfoMapper) {
+	private final LessonMapper lessonMapper;
+	public CollegeApplyServiceImpl(CollegeLeaveListMapper collegeLeaveListMapper, UserMapper userMapper, LeaveApplyMapper leaveApplyMapper, TeacherLeaveListMapper teacherLeaveListMapper, StudentInfoMapper studentInfoMapper, LessonMapper lessonMapper) {
 		this.collegeLeaveListMapper = collegeLeaveListMapper;
 		this.userMapper = userMapper;
 		this.leaveApplyMapper = leaveApplyMapper;
 		this.teacherLeaveListMapper = teacherLeaveListMapper;
 		this.studentInfoMapper = studentInfoMapper;
+		this.lessonMapper = lessonMapper;
 	}
 
 
@@ -91,15 +93,15 @@ public class CollegeApplyServiceImpl implements CollegeApplyService {
 				num = 1;
 				String team = TimeTool.getThisTeam();
 				LeaveApplyDO selectLeaveApply = leaveApplyMapper.selectByPrimaryKey(leaveId);
-				List<LessonDO> allLesson = studentInfoMapper.getAllLesson(selectLeaveApply.getStudentId(), team);
-				ConcurrentHashMap<Integer, List<LessonDO>> lessonMap = new ConcurrentHashMap<>();
+				List<Lesson> allLesson = lessonMapper.getStudentAllLesson(selectLeaveApply.getStudentId(), team);
+				ConcurrentHashMap<Integer, List<Lesson>> lessonMap = new ConcurrentHashMap<>();
 				for (int i=1; i<=7; ++i)
 					lessonMap.put(i,new ArrayList<>());
-				for (LessonDO lesson : allLesson) {
+				for (Lesson lesson : allLesson) {
 					lessonMap.get(lesson.getWeek()).add(lesson);
 				}
 
-				List<LessonDO> lessons;
+				List<Lesson> lessons;
 				Date startTime = new Date(selectLeaveApply.getStartTime());
 				Date endTime = new Date(selectLeaveApply.getEndTime());
 				DateTime nextDay = DateUtil.beginOfDay(DateUtil.offsetDay(startTime,1));
@@ -110,7 +112,7 @@ public class CollegeApplyServiceImpl implements CollegeApplyService {
 					int chineseWeek = TimeTool.getChineseWeek(time);
 					if (lessonMap.get(chineseWeek) != null && lessonMap.get(chineseWeek).size() != 0){
 						// 存在教课的老师
-						for (LessonDO lesson : lessonMap.get(chineseWeek)) {
+						for (Lesson lesson : lessonMap.get(chineseWeek)) {
 							TeacherLeaveListBaseDO teacherLeaveListBaseDO =
 									TeacherLeaveListBaseDO.builder()
 									.applyId(leaveId)
@@ -127,7 +129,7 @@ public class CollegeApplyServiceImpl implements CollegeApplyService {
 				}
 
 				lessons = lessonMap.get(TimeTool.getChineseWeek(startTime.getTime()));
-				for (LessonDO lesson : lessons) {
+				for (Lesson lesson : lessons) {
 					int week = TimeTool.getWeekOfYear(team, startTime.getTime());
 					Date lessonEndTime = DateUtil.parse(DateUtil.format(startTime, "YYYY-MM-dd")+" "+lesson.getEndTime()+":00");
 
@@ -146,7 +148,7 @@ public class CollegeApplyServiceImpl implements CollegeApplyService {
 				}
 
 				lessons = lessonMap.get(TimeTool.getChineseWeek(endTime.getTime()));
-				for (LessonDO lesson : lessons) {
+				for (Lesson lesson : lessons) {
 					int week = TimeTool.getWeekOfYear(team, endTime.getTime());
 					Date lessonStartTime = DateUtil.parse(DateUtil.format(endTime, "YYYY-MM-dd")+" "+lesson.getStartTime()+":00");
 

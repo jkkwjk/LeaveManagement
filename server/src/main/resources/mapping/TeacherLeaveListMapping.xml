@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jkk.leave.mapper.TeacherLeaveListMapper">
   <resultMap id="BaseResultMap" type="com.jkk.leave.entity.DO.TeacherLeaveListBaseDO">
-    <id column="apply_id" jdbcType="INTEGER" property="applyId" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="apply_id" jdbcType="INTEGER" property="applyId" />
     <result column="teacher_id" jdbcType="INTEGER" property="teacherId" />
     <result column="looked" jdbcType="INTEGER" property="looked" />
     <result column="lesson_id" jdbcType="VARCHAR" property="lessonId" />
     <result column="week_num" jdbcType="INTEGER" property="weekNum" />
     <result column="year" jdbcType="INTEGER" property="year" />
-    <result column="id" jdbcType="INTEGER" property="id" />
   </resultMap>
   <sql id="Base_Column_List">
     apply_id, teacher_id, looked, lesson_id, week_num, `year`, id
@@ -17,11 +17,11 @@
     select
     <include refid="Base_Column_List" />
     from teacher_leave_list
-    where apply_id = #{applyId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from teacher_leave_list
-    where apply_id = #{applyId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.jkk.leave.entity.DO.TeacherLeaveListBaseDO" useGeneratedKeys="true">
     insert into teacher_leave_list (apply_id, teacher_id, looked,
@@ -92,11 +92,11 @@
       <if test="year != null">
         `year` = #{year,jdbcType=INTEGER},
       </if>
-      <if test="id != null">
-        id = #{id,jdbcType=INTEGER},
+      <if test="applyId != null">
+        apply_id = #{applyId,jdbcType=INTEGER},
       </if>
     </set>
-    where apply_id = #{applyId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jkk.leave.entity.DO.TeacherLeaveListBaseDO">
     update teacher_leave_list
@@ -105,7 +105,23 @@
       lesson_id = #{lessonId,jdbcType=VARCHAR},
       week_num = #{weekNum,jdbcType=INTEGER},
       `year` = #{year,jdbcType=INTEGER},
-      id = #{id,jdbcType=INTEGER}
-    where apply_id = #{applyId,jdbcType=INTEGER}
+      apply_id = #{applyId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <resultMap id="MainResultMap" type="com.jkk.leave.entity.POJO.TeacherLeaveList">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="looked" jdbcType="INTEGER" property="looked" />
+    <result column="stu_id" jdbcType="INTEGER" property="studentId" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="detail" jdbcType="VARCHAR" property="detail" />
+    <result column="name" jdbcType="VARCHAR" property="studentName" />
+  </resultMap>
+  <select id="selectCustom" resultMap="MainResultMap">
+    SELECT distinct u.name,tli.id,tli.looked,ll.stu_id,ll.type,ll.detail
+    FROM `user` as u, teacher_leave_list as tli,leave_list as ll
+    WHERE tli.week_num = #{week} and year = #{year} and tli.lesson_id = #{lesson} and tli.teacher_id = #{teacherId}
+    and ll.id = tli.apply_id and ll.stu_id = u.id
+  </select>
+
 </mapper>

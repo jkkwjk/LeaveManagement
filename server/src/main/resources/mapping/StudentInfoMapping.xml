@@ -8,10 +8,4 @@
   <select id="getClass" resultType="java.lang.Integer">
     select class_id from student_info where id=#{studentId}
   </select>
-  <select id="getAllLesson" resultType="com.jkk.leave.entity.DO.LessonDO">
-    SELECT l.*,lt.start_time, lt.end_time
-    FROM `user` as u,lesson as l, lesson_time as lt, student_lesson as sl
-    WHERE u.id = #{studentId} and l.team = #{team}
-    and sl.student_id = u.id and sl.lesson_id = l.id and l.time_id = lt.id
-  </select>
 </mapper>
