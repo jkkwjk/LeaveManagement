@@ -20,9 +20,12 @@
         components: {TableFilterBox, TableMain},
         created(){
             if (this.$store.state.authType === '辅导员'){
+                this.baseUrl = 'cou';
                 // 如果是辅导员的话, 删除辅导员列
                 const index = this.column.findIndex(_=>{return _.prop === 'counselor'})
                 this.column.splice(index,1);
+            }else if(this.$store.state.authType === '院领导'){
+                this.baseUrl = 'col';
             }
             this.$http.post('/sys/getTeam').then(res=>{
                 const data = res.data;
@@ -52,8 +55,10 @@
                     _.duration = dateUtil.calcDate(s,e) + '天';
                     _.startTime = dateUtil.formatChina(s);
                     _.endTime = dateUtil.formatChina(e);
-                    if (typeof _.sendTime === "number"){
+                    if (_.sendTime !== null && _.sendTime !== '未发送'){
                         _.sendTime = dateUtil.formatChina(new Date(_.sendTime));
+                    }else {
+                        _.sendTime = '未发送';
                     }
                     return _;
                 });
@@ -61,23 +66,24 @@
         },
         methods:{
             buttonClick(row, type){
-                row.showWhat = type;
                 if (type === 'allow'){
                     // 对多次同一理由请假的学生弹出dialog进行提醒
-                    this.$http.post(`/con/allow/${row.id}`).then(res=>{
+                    this.$http.post(`/${this.baseUrl}/allow/${row.id}`).then(res=>{
                         const data = res.data;
                         if (data.code === 200){
+                            row.showWhat = type;
                             this.$message.success("已同意申请");
                         }else {
                             this.$message.error(data.msg);
                         }
                     })
                 }else if(type === 'reject') {
-                    this.$http.post(`/con/reject/${row.id}`,{
+                    this.$http.post(`/${this.baseUrl}/reject/${row.id}`,{
                         id: row.id
                     }).then(res=>{
                         const data = res.data;
                         if (data.code === 200){
+                            row.showWhat = type;
                             this.$message.success("已拒绝申请");
                         }else {
                             this.$message.error(data.msg);
@@ -94,7 +100,7 @@
             loadData(){
                 if(this.hasNext && !this.lock){
                     this.lock = true;
-                    this.$http.post('/con',{
+                    this.$http.post(`/${this.baseUrl}`,{
                         page: this.page,
                         num: 10,
                         custom: JSON.stringify(this.filter)
@@ -115,6 +121,7 @@
         },
         data(){
             return{
+                baseUrl: '',
                 page: 1,
                 hasNext: true,
                 lock: false,

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CounselorLeaveListBaseDO {
+public class ManageLeaveListBaseDO {
 	private Integer id;
 	private Boolean looked;
 	private Boolean allow;

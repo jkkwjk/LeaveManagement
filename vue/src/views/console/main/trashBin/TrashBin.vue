@@ -34,8 +34,10 @@
                     _.duration = dateUtil.calcDate(s,e) + '天';
                     _.startTime = dateUtil.formatChina(s);
                     _.endTime = dateUtil.formatChina(e);
-                    if (typeof _.sendTime === "number"){
+                    if (_.sendTime !== null && _.sendTime !== '未发送'){
                         _.sendTime = dateUtil.formatChina(new Date(_.sendTime));
+                    }else {
+                        _.sendTime = '未发送';
                     }
                     return _;
                 });

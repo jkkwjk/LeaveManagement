@@ -1,8 +1,8 @@
 package com.jkk.leave.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.jkk.leave.entity.DO.CounselorLeaveListBaseDO;
 import com.jkk.leave.entity.DO.LeaveApplyDO;
+import com.jkk.leave.entity.DO.ManageLeaveListBaseDO;
 import com.jkk.leave.entity.POJO.User;
 import com.jkk.leave.entity.POJO.base.Filter;
 import com.jkk.leave.entity.POJO.base.Sorter;
@@ -134,12 +134,12 @@ public class LeaveApplyServiceImpl implements LeaveApplyService {
 							.build();
 
 			if (leaveApplyMapper.updateByPrimaryKeyAndStuIdSelective(leaveApplyDO) == 1){
-				CounselorLeaveListBaseDO counselorLeaveListBaseDO =
-						CounselorLeaveListBaseDO.builder()
+				ManageLeaveListBaseDO manageLeaveListBaseDO =
+						ManageLeaveListBaseDO.builder()
 						.id(leaveApplyVO.getId())
 						.looked(false)
 						.build();
-				resNum = counselorLeaveListMapper.insert(counselorLeaveListBaseDO);
+				resNum = counselorLeaveListMapper.insert(manageLeaveListBaseDO);
 			}
 
 		}

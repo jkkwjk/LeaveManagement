@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jkk.leave.mapper.CounselorLeaveListMapper">
+<mapper namespace="com.jkk.leave.mapper.CollegeLeaveListMapper">
   <resultMap id="BaseResultMap" type="com.jkk.leave.entity.DO.ManageLeaveListBaseDO">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="looked" jdbcType="INTEGER" property="looked" />
@@ -12,19 +12,19 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from counselor_leave_list
+    from college_leave_list
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from counselor_leave_list
+    delete from college_leave_list
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.jkk.leave.entity.DO.ManageLeaveListBaseDO">
-    insert into counselor_leave_list (id, looked, allow)
+    insert into college_leave_list (id, looked, allow)
     values (#{id,jdbcType=INTEGER}, #{looked,jdbcType=INTEGER}, #{allow,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.jkk.leave.entity.DO.ManageLeaveListBaseDO">
-    insert into counselor_leave_list
+    insert into college_leave_list
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -49,7 +49,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.jkk.leave.entity.DO.ManageLeaveListBaseDO">
-    update counselor_leave_list
+    update college_leave_list
     <set>
       <if test="looked != null">
         looked = #{looked,jdbcType=INTEGER},
@@ -61,12 +61,11 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jkk.leave.entity.DO.ManageLeaveListBaseDO">
-    update counselor_leave_list
+    update college_leave_list
     set looked = #{looked,jdbcType=INTEGER},
       allow = #{allow,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
   <resultMap id="MainResultMap" type="com.jkk.leave.entity.POJO.ManageLeaveList">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="looked" jdbcType="INTEGER" property="looked" />
@@ -79,37 +78,15 @@
     <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="detail" jdbcType="VARCHAR" property="detail" />
   </resultMap>
-  <sql id="baseSafeSQL">
-    and u.id = c.counselor_id and c.id = s.class_id and s.id = l.stu_id and l.id = co.id
-  </sql>
   <sql id="allDO">
-    counselor_leave_list as co,user as u, class as c,student_info as s, leave_list as l
+    college_leave_list as co, leave_list as l
   </sql>
-  <update id="updateByPrimaryKeySelectiveSafe">
-    UPDATE <include refid="allDO" />
-    <set>
-      <if test="data.looked != null">
-        co.looked = #{data.looked,jdbcType=INTEGER},
-      </if>
-      <if test="data.allow != null">
-        co.allow = #{data.allow,jdbcType=INTEGER},
-      </if>
-    </set>
-    where co.id = #{data.id,jdbcType=INTEGER} and u.id = #{userId,jdbcType=INTEGER}
-    <include refid="baseSafeSQL" />
-  </update>
-
-  <select id="selectByPrimaryKeySafe" resultMap="MainResultMap">
-    SELECT l.*,co.looked,co.allow FROM <include refid="allDO" />
-    where co.id = #{id,jdbcType=INTEGER} and u.id = #{userId,jdbcType=INTEGER}
-    <include refid="baseSafeSQL" />
-  </select>
 
   <select id="selectCustom" resultMap="MainResultMap">
     select
     l.*,co.looked,co.allow
     from <include refid="allDO" />
-    where u.id = #{userId} <include refid="baseSafeSQL" />
+    where co.id = l.id
     <if test="filters != null and filters.map != null">
       <foreach collection="filters.map.entrySet()" separator=" and " open=" and " item="value" index="key">
         <foreach collection="value" item="item" separator=" or " open="(" close=")">
@@ -127,6 +104,7 @@
       </if>
     </if>
   </select>
+
 
 
 </mapper>

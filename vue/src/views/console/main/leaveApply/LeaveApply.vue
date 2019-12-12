@@ -71,6 +71,16 @@
     export default {
         name: "leaveApply",
         components: {LeaveApplyTimeLine, TableFilterBox, TableMain},
+        created(){
+            this.$http.post('/sys/getTeam').then(res=>{
+                const data = res.data;
+                if (data.code === 200){
+                    let template = {title: "学期", prop: 'team', extra:[]};
+                    data.data.map(_=>{ template.extra.push({title: _, prop: _}) });
+                    this.filterArray.push(template);
+                }
+            })
+        },
         watch: {
             filter:{
                 handler(val){
@@ -145,6 +155,7 @@
                     if (data.code === 200){
                         this.$message.success("发送成功");
                         this.confirm.data.showWhat = 'wait';
+                        this.confirm.data.sendTime = new Date().getTime();
                     }else {
                         this.$message.error(data.msg);
                     }
@@ -231,7 +242,7 @@
                     _.duration = dateUtil.calcDate(s,e) + '天';
                     _.startTime = dateUtil.formatChina(s);
                     _.endTime = dateUtil.formatChina(e);
-                    if (typeof _.sendTime === "number"){
+                    if (_.sendTime !== null && _.sendTime !== '未发送'){
                         _.sendTime = dateUtil.formatChina(new Date(_.sendTime));
                     }else {
                         _.sendTime = '未发送';
@@ -280,7 +291,6 @@
                     {title: "请假类型", prop: "type", extra:[{title: "公假", prop: "公假"},
                             {title: "事假", prop: "事假"},{title: "病假", prop: "病假"},]},
                     {title: "具体原因", prop: "detail"},
-                    {title: "学期", prop: 'team', extra:[{title: "后端添加数据", prop: "2018-2019-1"}]},
                 ],
                 data: []
             }
