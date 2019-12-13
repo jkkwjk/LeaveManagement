@@ -11,6 +11,10 @@ Component({
       { title: "班级", prop: "class" }, { title: "请假类型", prop: "type" },
       { title: "具体原因", prop: "detail" },{ title: "请假天数", prop: "duration" }, 
       { title: "开始时间", prop: "startTime" },{ title: "结束时间", prop: "endTime" }],
+    baseUrl: '',
+    page: 1,
+    num: 10,
+    hasNext: true
   },
 
   /**
@@ -18,75 +22,104 @@ Component({
    */
   methods: {
     getData() {
-      let testData = [{
-        uid: '1',
-        name: '金凯凯',
-        number: '189050416',
-        sendTime: 1575264600817,
-        counselor: '赵雅静',
-        class: '189050113',
-        type: '公假',
-        detail: '去比赛',
-        startTime: 1575264600817,
-        endTime: 1575999606817,
-        showWhat: 'button'
-      }, {
-          uid: '2',
-          name: '金凯凯',
-          number: '189050416',
-          sendTime: 1575264600817,
-          counselor: '赵雅静',
-          class: '189050113',
-          type: '公假',
-          detail: '去比赛',
-          startTime: 1575264600817,
-          endTime: 1575999606817,
-
-        showWhat: 'allow'
-      }, {
-          uid: '3',
-          name: '金凯凯',
-          number: '189050416',
-          sendTime: 1575264600817,
-          counselor: '赵雅静',
-          class: '189050113',
-          type: '公假',
-          detail: '去比赛',
-          startTime: 1575264600817,
-          endTime: 1575999606817,
-
-        showWhat: 'reject'
-      }];
-      testData.map(_ => {
-        const s = new Date(_.startTime);
-        const e = new Date(_.endTime);
-        _.duration = dateUtil.calcDate(s, e) + '天';
-        _.startTime = dateUtil.formatChina(s);
-        _.endTime = dateUtil.formatChina(e);
-        if (typeof _.sendTime === "number") {
-          _.sendTime = dateUtil.formatChina(new Date(_.sendTime));
-        }
-        _.wxType = "leaveManagement";
-        return _;
-      });
+      if (this.data.hasNext){
+        let data = [];
+        var _this = this;
+        wx.request({
+          url: `http://localhost:8080/api/${_this.data.baseUrl}`,
+          method: "post",
+          header: { 'content-type': 'application/x-www-form-urlencoded' },
+          data: {
+            page: this.data.page,
+            num: this.data.num,
+            custom: '{"sort":{"prop":"","type":""},"custom":[{"prop":"showWhat","content":"null"}]}'
+          },
+          success(res) {
+            if (res.data.code === 200) {
+              let tableData = res.data.data;
+              _this.setData({
+                page: _this.data.page + 1,
+                hasNext: tableData.length == _this.data.num
+              });
+              tableData.map(_ => {
+                const s = new Date(_.startTime);
+                const e = new Date(_.endTime);
+                _.duration = dateUtil.calcDate(s, e) + '天';
+                _.startTime = dateUtil.formatChina(s);
+                _.endTime = dateUtil.formatChina(e);
+                if (typeof _.sendTime === "number") {
+                  _.sendTime = dateUtil.formatChina(new Date(_.sendTime));
+                }
+                _.wxType = "leaveManagement";
+                return _;
+              });
+              _this.setData({
+                tableData: tableData
+              });
+            }
+            
+          }
+        });
+      }
+    },
+    reset() {
       this.setData({
-        tableData: testData
+        page: 1,
+        hasNext: true,
+        tableData: []
       });
+      this.getData();
     },
     allowClick(row){
-      wx.showModal({
-        title: '同意',
-        content: '已同意该请假申请',
-        showCancel: false
-      });
-      // 获取数据的代码写在外层
+      var _this = this;
+      wx.request({
+        url: `http://localhost:8080/api/${_this.data.baseUrl}/allow/${row.id}`,
+        method: "post",
+        header: { 'content-type': 'application/x-www-form-urlencoded' },
+        success(res){
+          const data = res.data;
+          if (data.code === 200){
+            wx.showModal({
+              title: '同意',
+              content: '已同意该请假申请',
+              showCancel: false
+            });
+            _this.reset();
+          }else {
+            wx.showModal({
+              title: '错误',
+              content: data.msg,
+              showCancel: false,
+            });
+          }
+        }
+      })
     },
     rejectClick(row) {
-      wx.showModal({
-        title: '拒绝',
-        content: '已拒绝该请假申请',
-        showCancel: false
-      });
+      var _this = this;
+      wx.request({
+        url: `http://localhost:8080/api/${_this.data.baseUrl}/reject/${row.id}`,
+        method: "post",
+        header: { 'content-type': 'application/x-www-form-urlencoded' },
+        success(res) {
+          const data = res.data;
+          if (data.code === 200) {
+            wx.showModal({
+              title: '拒绝',
+              content: '已拒绝该请假申请',
+              showCancel: false
+            });
+            _this.reset();
+          } else {
+            wx.showModal({
+              title: '错误',
+              content: data.msg,
+              showCancel: false,
+            });
+          }
+        }
+      })
+      
     },
     buttonClick(e){
       switch(e.detail.what){
@@ -101,7 +134,20 @@ Component({
   },
   lifetimes: {
     attached() {
+      if (wx.getStorageSync("authType") === '辅导员'){
+        let tmp = this.data.column;
+        tmp.splice(tmp.findIndex(_ => { return _.prop === 'counselor' }), 1);
+        this.setData({
+          baseUrl: 'cou',
+          column: tmp
+        });
+      } else if(wx.getStorageSync("authType") === '院领导'){
+        this.setData({
+          baseUrl: 'col'
+        });
+      }
       this.getData();
+
     }
   },
 })

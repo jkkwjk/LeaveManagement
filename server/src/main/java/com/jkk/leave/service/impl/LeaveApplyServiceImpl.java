@@ -2,14 +2,17 @@ package com.jkk.leave.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.jkk.leave.entity.DO.LeaveApplyDO;
+import com.jkk.leave.entity.DO.WaitStatusDO;
 import com.jkk.leave.entity.POJO.User;
 import com.jkk.leave.entity.POJO.base.Filter;
 import com.jkk.leave.entity.POJO.base.Sorter;
 import com.jkk.leave.entity.VO.LeaveApplyVO;
+import com.jkk.leave.entity.VO.WaitStatusVO;
 import com.jkk.leave.mapper.LeaveApplyMapper;
 import com.jkk.leave.service.CounselorApplyService;
 import com.jkk.leave.service.LeaveApplyService;
 import com.jkk.leave.service.StudentInfoService;
+import com.jkk.leave.service.UserService;
 import com.jkk.leave.tools.ApplyStatus;
 import com.jkk.leave.tools.TimeTool;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 可以确保 userID一定是student
@@ -27,11 +32,12 @@ public class LeaveApplyServiceImpl implements LeaveApplyService {
 	private final LeaveApplyMapper leaveApplyMapper;
 	private final CounselorApplyService counselorApplyService;
 	private final StudentInfoService studentInfoService;
-
-	public LeaveApplyServiceImpl(LeaveApplyMapper leaveApplyMapper, CounselorApplyService counselorApplyService, StudentInfoService studentInfoService) {
+	private final UserService userService;
+	public LeaveApplyServiceImpl(LeaveApplyMapper leaveApplyMapper, CounselorApplyService counselorApplyService, StudentInfoService studentInfoService, UserService userService) {
 		this.leaveApplyMapper = leaveApplyMapper;
 		this.counselorApplyService = counselorApplyService;
 		this.studentInfoService = studentInfoService;
+		this.userService = userService;
 	}
 
 	@Override
@@ -218,6 +224,44 @@ public class LeaveApplyServiceImpl implements LeaveApplyService {
 	@Override
 	public List<String> getTeam() {
 		return leaveApplyMapper.selectAllTeam();
+	}
+
+	@Override
+	public WaitStatusVO getLeaveStatus(Integer applyId, User user) {
+		WaitStatusDO waitStatusDO = leaveApplyMapper.selectApplyStatus(user.getId(), applyId);
+		int active = 1;
+		if (waitStatusDO.getCounselorActive() != null){
+			active++;
+		}
+		if (waitStatusDO.getCollegeActive() != null){
+			active++;
+		}
+		List<WaitStatusVO.TeacherActive> list = null;
+		if (waitStatusDO.getTeacherActive().size() != 0){
+			list = new ArrayList<>();
+			active++;
+			Map<Integer, Boolean> idToLooked = new ConcurrentHashMap<>();
+			for (WaitStatusDO.TeacherActive teacherActive : waitStatusDO.getTeacherActive()) {
+				int teacherId = teacherActive.getTeacherId();
+				if (idToLooked.containsKey(teacherId)){
+					if (idToLooked.get(teacherId)){
+						idToLooked.put(teacherId,true);
+					}
+				}else {
+					idToLooked.put(teacherId,true);
+				}
+			}
+			for (Integer integer : idToLooked.keySet()) {
+				WaitStatusVO.TeacherActive teacherActive = new WaitStatusVO.TeacherActive();
+				teacherActive.setLooked(idToLooked.get(integer));
+				teacherActive.setName(userService.getUserName(integer));
+			}
+		}
+
+		return WaitStatusVO.builder()
+		.active(active)
+		.teachers(list)
+		.build();
 	}
 
 	private String parseShowWhat(int status){

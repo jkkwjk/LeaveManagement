@@ -36,5 +36,15 @@ Page({
    */
   onShow: function () {
 
+  },
+  onReachBottom: function () {
+    if (this.data.router === 'todo') {
+      const leaveApply = this.selectComponent("#todo");
+      leaveApply.getData();
+    } else if (this.data.router === 'finish') {
+      const leaveApply = this.selectComponent("#finish");
+      leaveApply.getData();
+    }
   }
+  
 })

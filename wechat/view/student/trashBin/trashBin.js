@@ -15,75 +15,96 @@ Component({
    */
   methods: {
     getData() {
-      let testData = [{
-        uid: '1',
-        sendTime: 1575264600817,
-        counselor: '赵雅静',
-        type: '公假',
-        detail: '去比赛',
-        startTime: 1575264600817,
-        endTime: 1575999606817,
-        showWhat: 'button'
-      }, {
-        uid: '2',
-        sendTime: 1575264600817,
-        counselor: '赵雅静',
-        type: '公假',
-        detail: '去比赛',
-        startTime: 1575264600817,
-        endTime: 1575264606817,
+      let tableData = [];
+      var _this = this;
+      wx.request({
+        url: 'http://localhost:8080/api/stu',
+        method: "get",
+        header: { 'content-type': 'application/x-www-form-urlencoded' },
+        success(res){
+          let data = res.data.data;
+          data.map(_ => {
+            const s = new Date(_.startTime);
+            const e = new Date(_.endTime);
+            _.duration = dateUtil.calcDate(s, e) + '天';
+            _.startTime = dateUtil.formatChina(s);
+            _.endTime = dateUtil.formatChina(e);
+            _.wxType = "trashBin";
+            return _;
+          });
 
-        showWhat: 'allow'
-      }, {
-        uid: '3',
-        sendTime: 1575264600817,
-        counselor: '赵雅静',
-        type: '公假',
-        detail: '去比赛',
-        startTime: 1575264600817,
-        endTime: 1575264606817,
-
-        showWhat: 'reject'
-      }, {
-        uid: '4',
-        sendTime: 1575264600817,
-        counselor: '赵雅静',
-        type: '公假',
-        detail: '去比赛',
-        startTime: 1575264600817,
-        endTime: 1575264606817,
-        waitActive: 2,
-        showWhat: 'wait'
-      }];
-      testData.map(_ => {
-        const s = new Date(_.startTime);
-        const e = new Date(_.endTime);
-        _.duration = dateUtil.calcDate(s, e) + '天';
-        _.startTime = dateUtil.formatChina(s);
-        _.endTime = dateUtil.formatChina(e);
-        if (typeof _.sendTime === "number") {
-          _.sendTime = dateUtil.formatChina(new Date(_.sendTime));
+          _this.setData({
+            tableData: data
+          });
         }
-        _.wxType = "trashBin";
-        return _;
       });
-      this.setData({
-        tableData: testData
-      });
+      
+      
     },
     reductionClick(row){
-      wx.showModal({
-        title: '成功',
-        content: '还原成功',
-        showCancel: false
+      var _this = this;
+      wx.request({
+        url: 'http://localhost:8080/api/stu/reduction',
+        method: "post",
+        header: { 'content-type': 'application/x-www-form-urlencoded' },
+        data: {
+          id: row.id
+        },
+        success(res){
+          const data = res.data;
+          if (data.code === 200){
+            let tmp = _this.data.tableData;
+            tmp.splice(tmp.findIndex(_ => { return _.id === row.id }), 1);
+            _this.setData({
+              tableData: tmp
+            });
+
+            wx.showModal({
+              title: '成功',
+              content: '还原成功',
+              showCancel: false
+            });
+          } else {
+            wx.showModal({
+              title: '错误',
+              content: data.msg,
+              showCancel: false,
+            });
+          }
+        }
       });
-      // 获取数据的代码写在外层
     },
     delClick(row) {
-      wx.showModal({
-        title: '成功',
-        content: '删除成功',
-        showCancel: false
+      var _this = this;
+      wx.request({
+        url: 'http://localhost:8080/api/stu/del',
+        method: "post",
+        header: { 'content-type': 'application/x-www-form-urlencoded' },
+        data: {
+          id: row.id
+        },
+        success(res) {
+          const data = res.data;
+          if (data.code === 200) {
+            let tmp = _this.data.tableData;
+            tmp.splice(tmp.findIndex(_ => { return _.id === row.id }), 1);
+            _this.setData({
+              tableData: tmp
+            });
+
+            wx.showModal({
+              title: '成功',
+              content: '删除成功',
+              showCancel: false
+            });
+          } else {
+            wx.showModal({
+              title: '错误',
+              content: data.msg,
+              showCancel: false,
+            });
+          }
+        }
       });
     },
     buttonClick(e){

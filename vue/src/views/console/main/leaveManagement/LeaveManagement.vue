@@ -78,9 +78,7 @@
                         }
                     })
                 }else if(type === 'reject') {
-                    this.$http.post(`/${this.baseUrl}/reject/${row.id}`,{
-                        id: row.id
-                    }).then(res=>{
+                    this.$http.post(`/${this.baseUrl}/reject/${row.id}`).then(res=>{
                         const data = res.data;
                         if (data.code === 200){
                             row.showWhat = type;

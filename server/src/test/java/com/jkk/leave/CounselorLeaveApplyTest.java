@@ -26,11 +26,11 @@ public class CounselorLeaveApplyTest {
 				.param("id", "2")
 				.param("password", "2")
 				.session(session);
-		RequestBuilder getAuth = MockMvcRequestBuilders.post("/con")
+		RequestBuilder getAuth = MockMvcRequestBuilders.post("/cou")
 				.param("page","1")
 				.param("num","20")
-				//.param("custom","{\"sort\":{\"prop\":\"start_time\",\"order\":\"1\"},\"custom\":[{\"prop\":\"type\",\"content\":\"公假\"},{\"prop\":\"type\",\"content\":\"病假\"}]}")
-				.param("custom","{\"sort\":{\"prop\": \"\",\"order\": \"\"},\"custom\":[]}")
+				//.param("custom","{\"sort\":{\"prop\":\"startTime\",\"order\":\"1\"},\"custom\":[{\"prop\":\"type\",\"content\":\"公假\"},{\"prop\":\"type\",\"content\":\"病假\"}]}")
+				.param("custom","{\"sort\":{\"prop\":\"\",\"type\":\"\"},\"custom\":[{\"prop\":\"showWhat\",\"content\":\"null\"}]}")
 				.session(session);
 		mockMvc.perform(login);
 

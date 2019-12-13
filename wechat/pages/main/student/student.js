@@ -36,5 +36,11 @@ Page({
    */
   onShow: function() {
 
+  },
+  onReachBottom: function() {
+    if (this.data.router === 'apply'){
+      const leaveApply = this.selectComponent("#leaveApply");
+      leaveApply.getData();
+    }
   }
 })

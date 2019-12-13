@@ -90,7 +90,12 @@
     <if test="filters != null and filters.map != null">
       <foreach collection="filters.map.entrySet()" separator=" and " open=" and " item="value" index="key">
         <foreach collection="value" item="item" separator=" or " open="(" close=")">
-          l.${key} = #{item}
+          <if test="key == 'status'">
+            co.allow <if test="item == 'null'">is null</if> <if test="item != 'null'">=#{item}</if>
+          </if>
+          <if test="key != 'status'">
+            l.${key} = #{item}
+          </if>
         </foreach>
       </foreach>
     </if>

@@ -7,8 +7,10 @@ import com.jkk.leave.entity.POJO.User;
 import com.jkk.leave.entity.POJO.base.Filter;
 import com.jkk.leave.entity.POJO.base.Sorter;
 import com.jkk.leave.entity.VO.LeaveApplyVO;
+import com.jkk.leave.entity.VO.WaitStatusVO;
 import com.jkk.leave.service.LeaveApplyService;
 import com.jkk.leave.tools.ColumnMapTool;
+import com.jkk.leave.tools.DataTool;
 import com.jkk.leave.tools.FilterSorterParse;
 import com.jkk.leave.utils.RestfulRes;
 import com.jkk.leave.tools.TimeTool;
@@ -58,7 +60,7 @@ public class LeaveApplyController {
 	 */
 	@PostMapping("add")
 	public RestfulRes<LeaveApplyVO> addLeaveApply(LeaveApplyVO leaveApplyVO, @SessionAttribute("user")User user){
-		if (TimeTool.effectiveTime(leaveApplyVO.getStartTime(), leaveApplyVO.getEndTime())){
+		if (TimeTool.effectiveTime(leaveApplyVO.getStartTime(), leaveApplyVO.getEndTime()) && DataTool.effectiveType(leaveApplyVO.getType())){
 			int id = leaveApplyService.addLeaveApply(leaveApplyVO,user);
 			if (id != 0){
 				return RestfulRes.success(leaveApplyService.getApplyById(id,user));
@@ -66,21 +68,21 @@ public class LeaveApplyController {
 				return RestfulRes.fail("添加失败");
 			}
 		}else {
-			return RestfulRes.fail("时间无效");
+			return RestfulRes.fail("字段无效");
 		}
 
 	}
 
 	@PostMapping("modify")
 	public RestfulRes modifyLeaveApply(LeaveApplyVO leaveApplyVO, @SessionAttribute("user")User user){
-		if (TimeTool.effectiveTime(leaveApplyVO.getStartTime(), leaveApplyVO.getEndTime())){
+		if (TimeTool.effectiveTime(leaveApplyVO.getStartTime(), leaveApplyVO.getEndTime()) && DataTool.effectiveType(leaveApplyVO.getType())){
 			if (leaveApplyService.modifyApply(leaveApplyVO, user) != 0){
 				return RestfulRes.success();
 			}else {
 				return RestfulRes.fail("修改失败");
 			}
 		}else {
-			return RestfulRes.fail("时间无效");
+			return RestfulRes.fail("字段无效");
 		}
 
 	}
@@ -126,5 +128,10 @@ public class LeaveApplyController {
 		}else {
 			return RestfulRes.fail("还原失败");
 		}
+	}
+
+	@PostMapping("getStatus")
+	public RestfulRes<WaitStatusVO> getLeaveApplyStatus(LeaveApplyVO leaveApplyVO, @SessionAttribute("user")User user){
+		return RestfulRes.success(leaveApplyService.getLeaveStatus(leaveApplyVO.getId(), user));
 	}
 }

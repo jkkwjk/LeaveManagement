@@ -9,8 +9,16 @@
           <button class="weui-btn" type="default" style="width: 100%;padding: 8px 20px;" bindtap="openLessones">{{currentLesson.title===undefined ?'点我选择':currentLesson.title}}</button>
         </view>
       </view>
+      <view class="weui-cell">
+        <view class="weui-cell__hd">
+          <label class="weui-label">选择第几周: </label>
+        </view>
+        <view class="weui-cell__bd">
+          <button class="weui-btn" type="default" style="width: 100%;padding: 8px 20px;" bindtap="openWeeks">{{week.title===undefined ?'点我选择':week.title}}</button>
+        </view>
+      </view>
       <view class="weui-form__opr-area" style="margin: 10px 0;">
-        <button type="primary" bindtap="search" disabled="{{currentLesson.prop === undefined}}">确定</button>
+        <button type="primary" bindtap="search" disabled="{{currentLesson.prop === undefined || week.prop === undefined}}">确定</button>
       </view>
     </view>
   </view>
@@ -47,6 +55,23 @@
     </view>
     <view class="weui-actionsheet__action">
       <view class="weui-actionsheet__cell" bindtap="closeLessones">取消</view>
+    </view>
+  </view>
+</view>
+
+<view class="weui-demo-dialog {{showWeeks ? 'weui-demo-dialog_show' : ''}}">
+  <view class="weui-mask" bindtap="closeWeeks"></view>
+  <view class="weui-actionsheet {{showWeeks ? 'weui-actionsheet_toggle' : ''}}">
+    <view class="weui-actionsheet__title">
+      <view class="weui-actionsheet__title-text">请选择星期</view>
+    </view>
+    <view class="weui-actionsheet__menu">
+      <view class="weui-actionsheet__cell" bindtap="clickWeek" data-prop="0" data-title="本周">本周</view>
+      <view class="weui-actionsheet__cell" bindtap="clickWeek" data-prop="-1" data-title="上周">上周</view>
+      <view class="weui-actionsheet__cell" bindtap="clickWeek" data-prop="1" data-title="下周">下周</view>
+    </view>
+    <view class="weui-actionsheet__action">
+      <view class="weui-actionsheet__cell" bindtap="showWeeks">取消</view>
     </view>
   </view>
 </view>

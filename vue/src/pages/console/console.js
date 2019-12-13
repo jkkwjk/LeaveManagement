@@ -32,8 +32,8 @@ Vue.prototype.$http = axios;
 //权限校验
 axios.get("/user/login",{
     params: {
-        id: 4,
-        password: 4
+        id: 2,
+        password: 2
     }
 }).then(()=>{
     axios.get('auth').then(res => {

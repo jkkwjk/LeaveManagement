@@ -114,19 +114,56 @@ Page({
    * 表单交提
    */
   submit() {
+    var _this = this;
     this.setData({
       isSubmit: true,
     });
     const tip = this.verifyForm();
     if (tip === undefined) {
-      wx.showToast({
-        title: this.data.title.substr(0, 2) + '成功',
-        success() {setTimeout(() => {wx.navigateBack({delta: 1});}, 1500)}
-      });
-      if (this.data.row.uid === undefined){
-        console.log('新增');
+      const type = this.data.form.type;
+      const detail = this.data.form.detail;
+      const startTime = this.data.form.date.start + " " + this.data.form.time.start + ":00";
+      const endTime = this.data.form.date.end + " " + this.data.form.time.end + ":00";
+      if (this.data.row.id === undefined){
+        wx.request({
+          url: 'http://localhost:8080/api/stu/add',
+          method: "post",
+          header: { 'content-type': 'application/x-www-form-urlencoded' },
+          data: {
+            type: type, detail: detail,
+            startTime: dateUtil.fixTimezoneOffset(dateUtil.parse(startTime)).getTime(),
+            endTime: dateUtil.fixTimezoneOffset(dateUtil.parse(endTime)).getTime()
+          },
+          success(res){
+            const data = res.data
+            if (data.code === 200){
+              wx.showToast({
+                title: _this.data.title.substr(0, 2) + '成功',
+                success() { setTimeout(() => { wx.navigateBack({ delta: 1 }); }, 1500) }
+              });
+            }
+          }
+        })
       }else{
-        console.log(this.data.row.uid);
+        wx.request({
+          url: 'http://localhost:8080/api/stu/modify',
+          method: "post",
+          header: { 'content-type': 'application/x-www-form-urlencoded' },
+          data: {
+            id: _this.data.row.id, type: type, detail: detail,
+            startTime: dateUtil.fixTimezoneOffset(dateUtil.parse(startTime)).getTime(),
+            endTime: dateUtil.fixTimezoneOffset(dateUtil.parse(endTime)).getTime()
+          },
+          success(res) {
+            const data = res.data
+            if (data.code === 200) {
+              wx.showToast({
+                title: _this.data.title.substr(0, 2) + '成功',
+                success() { setTimeout(() => { wx.navigateBack({ delta: 1 }); }, 1500) }
+              });
+            }
+          }
+        })
       }
     } else {
       wx.showModal({

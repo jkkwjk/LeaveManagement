@@ -55,10 +55,12 @@ Page({
                 case '学生':
                   url = '../main/student/student'
                   break;
-                case '教师' || '院领导':
+                case '教师':
                   url = '../main/teacher/teacher'
                   break;
+                case '院领导':
                 case '辅导员':
+                  wx.setStorageSync("authType", res.data.name);
                   url = '../main/counselorAndAcademy/counselorAndAcademy'
                   break;
               }
@@ -68,7 +70,11 @@ Page({
             }
           })
         }else{
-          console.log(res.data.msg);
+          wx.showModal({
+            title: '错误',
+            content: res.data.msg,
+            showCancel: false,
+          });
         }
       }
     })

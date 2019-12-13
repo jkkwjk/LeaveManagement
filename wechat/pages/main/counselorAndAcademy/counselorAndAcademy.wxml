@@ -1,7 +1,7 @@
 <view class="page">
     <view>
-        <todo wx:if="{{router === 'todo'}}"/>
-        <finish wx:if="{{router === 'finish'}}" />
+        <todo wx:if="{{router === 'todo'}}" id="todo"/>
+        <finish wx:if="{{router === 'finish'}}" id="finish"/>
     </view>
     <view class="page__bd">
       <view class="weui-tabbar">

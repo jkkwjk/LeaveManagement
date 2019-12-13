@@ -11,6 +11,7 @@ public final class ColumnMapTool {
 		map.put("endTime", "end_time");
 		map.put("type", "type");
 		map.put("detail", "detail");
+		map.put("team", "team");
 		map.put("number", "stu_id");
 		map.put("name", "name");
 		map.put("showWhat", "status");

@@ -16,7 +16,7 @@ public final class FilterSorterParse {
 		Filter filter = new Filter();
 		for (Object o : filterArray) {
 			JSONObject obj = (JSONObject) o;
-			filter.addFilter(obj.getString("prop"), obj.getString("content"));
+			filter.addFilter(ColumnMapTool.map.get(obj.getString("prop")), obj.getString("content"));
 		}
 		return filter;
 	}

@@ -199,4 +199,22 @@
   <select id="selectAllTeam" resultType="java.lang.String">
     select distinct team from leave_list;
   </select>
+
+  <resultMap id="WaitResultMap" type="com.jkk.leave.entity.DO.WaitStatusDO">
+    <result column="college_active" jdbcType="BIGINT" property="collegeActive" />
+    <result column="counselor_active" jdbcType="BIGINT" property="counselorActive" />
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <collection property="teacherActive" ofType="com.jkk.leave.entity.DO.WaitStatusDO$TeacherActive">
+      <result column="looked" jdbcType="BIGINT" property="looked" />
+      <result column="teacher_id" jdbcType="BIGINT" property="teacherId" />
+    </collection>
+  </resultMap>
+  <select id="selectApplyStatus" resultMap="WaitResultMap">
+    SELECT ll.id,crll.allow as 'counselor_active',cell.allow as 'college_active',tll.teacher_id,tll.looked
+    FROM leave_list as ll	,
+    (counselor_leave_list as crll LEFT JOIN college_leave_list as cell on crll.id=cell.id) LEFT JOIN teacher_leave_list as tll on tll.apply_id=crll.id,
+    `user` as u
+    WHERE u.id=ll.stu_id and crll.id=ll.id
+    and u.id = #{studentId} and ll.id=#{applyId}
+  </select>
 </mapper>

@@ -96,15 +96,15 @@
             addOrChangeLeave(formName){
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let type = this.form.data.type;
-                        let detail = this.form.data.detail;
-                        let time = this.form.data.time;
+                        const type = this.form.data.type;
+                        const detail = this.form.data.detail;
+                        const time = this.form.data.time;
                         if (this.form.origin === undefined){
                             this.$http.post('/stu/add',{
-                                type: this.form.data.type,
-                                detail: this.form.data.detail,
-                                startTime: this.form.data.time[0].getTime(),
-                                endTime: this.form.data.time[1].getTime(),
+                                type: type,
+                                detail: detail,
+                                startTime: time[0].getTime(),
+                                endTime: time[1].getTime(),
                             }).then(res=>{
                                 const data = res.data;
                                 if (data.code === 200){

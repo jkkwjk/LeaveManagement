@@ -39,8 +39,4 @@ public class TimeTest {
 
 		//System.out.println(DateUtil.format(endTime, "YYYY-MM-dd HH:mm:ss"));
 	}
-	@Test
-	synchronized public void AA() throws Exception {
-		System.out.println(ApplyStatus.UN_SEND);
-	}
 }

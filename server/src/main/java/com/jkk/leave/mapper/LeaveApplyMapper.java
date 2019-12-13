@@ -1,6 +1,7 @@
 package com.jkk.leave.mapper;
 
 import com.jkk.leave.entity.DO.LeaveApplyDO;
+import com.jkk.leave.entity.DO.WaitStatusDO;
 import com.jkk.leave.entity.POJO.base.Filter;
 import com.jkk.leave.entity.POJO.base.Sorter;
 import com.jkk.leave.mapper.base.MyBatisBaseDao;
@@ -19,4 +20,6 @@ public interface LeaveApplyMapper extends MyBatisBaseDao<LeaveApplyDO, Integer> 
 	List<LeaveApplyDO> selectCustom(@Param("studentId") Integer userId, @Param("filters") Filter filters, @Param("sorter") Sorter sorter, @Param("isDel")Boolean isDel);
 
 	List<String> selectAllTeam();
+
+	WaitStatusDO selectApplyStatus(@Param("studentId")Integer studentId,@Param("applyId")Integer applyId);
 }

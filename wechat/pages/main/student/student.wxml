@@ -1,6 +1,6 @@
 <view class="page">
     <view>
-        <leave-apply wx:if="{{router === 'apply'}}"/>
+        <leave-apply wx:if="{{router === 'apply'}}" id="leaveApply"/>
         <trash-bin wx:if="{{router === 'trashBin'}}"/>
     </view>
     <view class="page__bd">
