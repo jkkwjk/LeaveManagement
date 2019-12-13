@@ -2,16 +2,15 @@ package com.jkk.leave.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.jkk.leave.entity.DO.LeaveApplyDO;
-import com.jkk.leave.entity.DO.ManageLeaveListBaseDO;
 import com.jkk.leave.entity.POJO.User;
 import com.jkk.leave.entity.POJO.base.Filter;
 import com.jkk.leave.entity.POJO.base.Sorter;
 import com.jkk.leave.entity.VO.LeaveApplyVO;
-import com.jkk.leave.mapper.CounselorLeaveListMapper;
 import com.jkk.leave.mapper.LeaveApplyMapper;
-import com.jkk.leave.mapper.StudentInfoMapper;
-import com.jkk.leave.mapper.UserMapper;
+import com.jkk.leave.service.CounselorApplyService;
 import com.jkk.leave.service.LeaveApplyService;
+import com.jkk.leave.service.StudentInfoService;
+import com.jkk.leave.tools.ApplyStatus;
 import com.jkk.leave.tools.TimeTool;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,15 +25,13 @@ import java.util.List;
 @Service
 public class LeaveApplyServiceImpl implements LeaveApplyService {
 	private final LeaveApplyMapper leaveApplyMapper;
-	private final UserMapper userMapper;
-	private final StudentInfoMapper studentInfoMapper;
-	private final CounselorLeaveListMapper counselorLeaveListMapper;
+	private final CounselorApplyService counselorApplyService;
+	private final StudentInfoService studentInfoService;
 
-	public LeaveApplyServiceImpl(LeaveApplyMapper leaveApplyMapper, UserMapper userMapper, StudentInfoMapper studentInfoMapper, CounselorLeaveListMapper counselorLeaveListMapper) {
+	public LeaveApplyServiceImpl(LeaveApplyMapper leaveApplyMapper, CounselorApplyService counselorApplyService, StudentInfoService studentInfoService) {
 		this.leaveApplyMapper = leaveApplyMapper;
-		this.userMapper = userMapper;
-		this.studentInfoMapper = studentInfoMapper;
-		this.counselorLeaveListMapper = counselorLeaveListMapper;
+		this.counselorApplyService = counselorApplyService;
+		this.studentInfoService = studentInfoService;
 	}
 
 	@Override
@@ -47,7 +44,7 @@ public class LeaveApplyServiceImpl implements LeaveApplyService {
 				.delStatus(false)
 				.type(leaveApplyVO.getType())
 				.detail(leaveApplyVO.getDetail())
-				.status(0)
+				.status(ApplyStatus.UN_SEND.getStatus())
 				.team(TimeTool.getThisTeam())
 				.build();
 		int num = leaveApplyMapper.insertSelective(leaveApplyDO);
@@ -130,16 +127,11 @@ public class LeaveApplyServiceImpl implements LeaveApplyService {
 							.id(leaveApplyVO.getId())
 							.studentId(user.getId())
 							.sendTime(new Date().getTime())
-							.status(1)
+							.status(ApplyStatus.WAIT.getStatus())
 							.build();
 
 			if (leaveApplyMapper.updateByPrimaryKeyAndStuIdSelective(leaveApplyDO) == 1){
-				ManageLeaveListBaseDO manageLeaveListBaseDO =
-						ManageLeaveListBaseDO.builder()
-						.id(leaveApplyVO.getId())
-						.looked(false)
-						.build();
-				resNum = counselorLeaveListMapper.insert(manageLeaveListBaseDO);
+				resNum = counselorApplyService.addApply(leaveApplyVO.getId());
 			}
 
 		}
@@ -173,7 +165,7 @@ public class LeaveApplyServiceImpl implements LeaveApplyService {
 					.endTime(leaveApplyDO.getEndTime())
 					.type(leaveApplyDO.getType())
 					.detail(leaveApplyDO.getDetail())
-					.counselor(userMapper.getUserInfoById(studentInfoMapper.getCounselorId(leaveApplyDO.getStudentId())).getName())
+					.counselor(studentInfoService.getStudentCounselorName(leaveApplyDO.getStudentId()))
 					.showWhat(parseShowWhat(leaveApplyDO.getStatus()))
 					.build();
 
@@ -214,7 +206,7 @@ public class LeaveApplyServiceImpl implements LeaveApplyService {
 					.endTime(leaveApplyDO.getEndTime())
 					.type(leaveApplyDO.getType())
 					.detail(leaveApplyDO.getDetail())
-					.counselor(userMapper.getUserInfoById(studentInfoMapper.getCounselorId(leaveApplyDO.getStudentId())).getName())
+					.counselor(studentInfoService.getStudentCounselorName(leaveApplyDO.getStudentId()))
 					.showWhat(parseShowWhat(leaveApplyDO.getStatus()))
 					.build();
 		}else {

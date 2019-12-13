@@ -31,4 +31,15 @@ public class ManageLeaveList {
 	@JsonIgnore
 	private String team;
 
+	public ManageLeaveList parseShowWhat(){
+		if (this.getAllow() == null){
+			this.setShowWhat("button");
+		}else if (this.getAllow()){
+			this.setShowWhat("allow");
+		}else {
+			this.setShowWhat("reject");
+		}
+		return this;
+	}
+
 }

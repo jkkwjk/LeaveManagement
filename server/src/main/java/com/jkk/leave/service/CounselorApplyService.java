@@ -13,4 +13,6 @@ public interface CounselorApplyService {
 	int allowApply(ManageLeaveList manageLeaveList, User user);
 
 	int rejectApply(ManageLeaveList manageLeaveList, User user);
+
+	int addApply(Integer applyId);
 }

@@ -2,13 +2,13 @@ package com.jkk.leave.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.jkk.leave.entity.DO.ManageLeaveListBaseDO;
-import com.jkk.leave.entity.DO.LeaveApplyDO;
 import com.jkk.leave.entity.POJO.ManageLeaveList;
 import com.jkk.leave.entity.POJO.User;
 import com.jkk.leave.entity.POJO.base.Filter;
 import com.jkk.leave.entity.POJO.base.Sorter;
 import com.jkk.leave.mapper.*;
-import com.jkk.leave.service.CounselorApplyService;
+import com.jkk.leave.service.*;
+import com.jkk.leave.tools.ApplyStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,17 +16,18 @@ import java.util.List;
 
 @Service
 public class CounselorApplyServiceImpl implements CounselorApplyService {
+	private final CollegeApplyService collegeApplyService;
+	private final LeaveApplyBaseService leaveApplyBaseService;
+	private final StudentInfoService studentInfoService;
+	private final UserService userService;
+
 	private final CounselorLeaveListMapper counselorLeaveListMapper;
-	private final UserMapper userMapper;
-	private final CollegeLeaveListMapper collegeLeaveListMapper;
-	private final LeaveApplyMapper leaveApplyMapper;
-	private final StudentInfoMapper studentInfoMapper;
-	public CounselorApplyServiceImpl(CounselorLeaveListMapper counselorLeaveListMapper, UserMapper userMapper, CollegeLeaveListMapper collegeLeaveListMapper, LeaveApplyMapper leaveApplyMapper, StudentInfoMapper studentInfoMapper) {
+	public CounselorApplyServiceImpl(CounselorLeaveListMapper counselorLeaveListMapper, UserService userService, CollegeApplyService collegeApplyService, LeaveApplyBaseService leaveApplyBaseService, StudentInfoService studentInfoService) {
 		this.counselorLeaveListMapper = counselorLeaveListMapper;
-		this.userMapper = userMapper;
-		this.collegeLeaveListMapper = collegeLeaveListMapper;
-		this.leaveApplyMapper = leaveApplyMapper;
-		this.studentInfoMapper = studentInfoMapper;
+		this.userService = userService;
+		this.collegeApplyService = collegeApplyService;
+		this.leaveApplyBaseService = leaveApplyBaseService;
+		this.studentInfoService = studentInfoService;
 	}
 
 	@Override
@@ -36,16 +37,10 @@ public class CounselorApplyServiceImpl implements CounselorApplyService {
 		List<ManageLeaveList> manageLeaveLists = counselorLeaveListMapper.selectCustom(user.getId(), filter, sorter);
 
 		for (ManageLeaveList manageLeaveList : manageLeaveLists) {
-			if (manageLeaveList.getAllow() == null){
-				manageLeaveList.setShowWhat("button");
-			}else if (manageLeaveList.getAllow()){
-				manageLeaveList.setShowWhat("allow");
-			}else {
-				manageLeaveList.setShowWhat("reject");
-			}
+			manageLeaveList = manageLeaveList.parseShowWhat();
 
-			manageLeaveList.setStudentName(userMapper.getUserInfoById(manageLeaveList.getStudentId()).getName());
-			manageLeaveList.setClasses(studentInfoMapper.getClass(manageLeaveList.getStudentId()));
+			manageLeaveList.setStudentName(userService.getUserName(manageLeaveList.getStudentId()));
+			manageLeaveList.setClasses(studentInfoService.getStudentClass(manageLeaveList.getStudentId()));
 			// 已查看
 			if (!manageLeaveList.getLooked()){
 				manageLeaveList.setLooked(true);
@@ -61,13 +56,7 @@ public class CounselorApplyServiceImpl implements CounselorApplyService {
 		int num = 0;
 		manageLeaveList.setAllow(true);
 		if (counselorLeaveListMapper.updateByPrimaryKeySelectiveSafe(manageLeaveList, user.getId()) == 1){
-			// 进行下一步操作
-			ManageLeaveListBaseDO manageLeaveListBaseDO =
-					ManageLeaveListBaseDO.builder()
-					.id(manageLeaveList.getId())
-					.looked(false)
-					.build();
-			num = collegeLeaveListMapper.insert(manageLeaveListBaseDO);
+			num = collegeApplyService.addApply(manageLeaveList.getId());
 		}
 		return num;
 	}
@@ -78,13 +67,18 @@ public class CounselorApplyServiceImpl implements CounselorApplyService {
 		int num = 0;
 		manageLeaveList.setAllow(false);
 		if (counselorLeaveListMapper.updateByPrimaryKeySelectiveSafe(manageLeaveList, user.getId()) == 1){
-			LeaveApplyDO leaveApplyDO =
-					LeaveApplyDO.builder()
-					.id(manageLeaveList.getId())
-					.status(3)
-					.build();
-			num = leaveApplyMapper.updateByPrimaryKeySelective(leaveApplyDO);
+			num = leaveApplyBaseService.setStatusById(manageLeaveList.getId(), ApplyStatus.REJECT);
 		}
 		return num;
+	}
+
+	@Override
+	public int addApply(Integer applyId) {
+		ManageLeaveListBaseDO manageLeaveListBaseDO =
+				ManageLeaveListBaseDO.builder()
+						.id(applyId)
+						.looked(false)
+						.build();
+		return counselorLeaveListMapper.insert(manageLeaveListBaseDO);
 	}
 }

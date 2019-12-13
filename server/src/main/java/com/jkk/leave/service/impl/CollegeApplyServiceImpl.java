@@ -11,7 +11,8 @@ import com.jkk.leave.entity.POJO.ManageLeaveList;
 import com.jkk.leave.entity.POJO.base.Filter;
 import com.jkk.leave.entity.POJO.base.Sorter;
 import com.jkk.leave.mapper.*;
-import com.jkk.leave.service.CollegeApplyService;
+import com.jkk.leave.service.*;
+import com.jkk.leave.tools.ApplyStatus;
 import com.jkk.leave.tools.TimeTool;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,19 +24,20 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class CollegeApplyServiceImpl implements CollegeApplyService {
+	private final LeaveApplyBaseService leaveApplyBaseService;
+	private final TeacherApplyService teacherApplyService;
+	private final LessonService lessonService;
+	private final StudentInfoService studentInfoService;
+	private final UserService userService;
+
 	private final CollegeLeaveListMapper collegeLeaveListMapper;
-	private final UserMapper userMapper;
-	private final LeaveApplyMapper leaveApplyMapper;
-	private final TeacherLeaveListMapper teacherLeaveListMapper;
-	private final StudentInfoMapper studentInfoMapper;
-	private final LessonMapper lessonMapper;
-	public CollegeApplyServiceImpl(CollegeLeaveListMapper collegeLeaveListMapper, UserMapper userMapper, LeaveApplyMapper leaveApplyMapper, TeacherLeaveListMapper teacherLeaveListMapper, StudentInfoMapper studentInfoMapper, LessonMapper lessonMapper) {
+	public CollegeApplyServiceImpl(LeaveApplyBaseService leaveApplyBaseService, CollegeLeaveListMapper collegeLeaveListMapper, TeacherApplyService teacherApplyService, StudentInfoService studentInfoService, UserService userService, LessonService lessonService) {
+		this.leaveApplyBaseService = leaveApplyBaseService;
 		this.collegeLeaveListMapper = collegeLeaveListMapper;
-		this.userMapper = userMapper;
-		this.leaveApplyMapper = leaveApplyMapper;
-		this.teacherLeaveListMapper = teacherLeaveListMapper;
-		this.studentInfoMapper = studentInfoMapper;
-		this.lessonMapper = lessonMapper;
+		this.teacherApplyService = teacherApplyService;
+		this.studentInfoService = studentInfoService;
+		this.userService = userService;
+		this.lessonService = lessonService;
 	}
 
 
@@ -46,17 +48,11 @@ public class CollegeApplyServiceImpl implements CollegeApplyService {
 		List<ManageLeaveList> manageLeaveLists = collegeLeaveListMapper.selectCustom(filter, sorter);
 
 		for (ManageLeaveList manageLeaveList : manageLeaveLists) {
-			if (manageLeaveList.getAllow() == null){
-				manageLeaveList.setShowWhat("button");
-			}else if (manageLeaveList.getAllow()){
-				manageLeaveList.setShowWhat("allow");
-			}else {
-				manageLeaveList.setShowWhat("reject");
-			}
+			manageLeaveList = manageLeaveList.parseShowWhat();
 
-			manageLeaveList.setStudentName(userMapper.getUserInfoById(manageLeaveList.getStudentId()).getName());
-			manageLeaveList.setClasses(studentInfoMapper.getClass(manageLeaveList.getStudentId()));
-			manageLeaveList.setCounselorName(userMapper.getUserInfoById(studentInfoMapper.getCounselorId(manageLeaveList.getStudentId())).getName());
+			manageLeaveList.setStudentName(userService.getUserName(manageLeaveList.getStudentId()));
+			manageLeaveList.setClasses(studentInfoService.getStudentClass(manageLeaveList.getStudentId()));
+			manageLeaveList.setCounselorName(studentInfoService.getStudentCounselorName(manageLeaveList.getStudentId()));
 			// 已查看
 			if (!manageLeaveList.getLooked()){
 				ManageLeaveListBaseDO manageLeaveListBaseDO =
@@ -83,17 +79,12 @@ public class CollegeApplyServiceImpl implements CollegeApplyService {
 
 		if (collegeLeaveListMapper.updateByPrimaryKeySelective(manageLeaveListBaseDO) == 1){
 			//设置主申请表 状态为同意
-			LeaveApplyDO updateLeaveApply =
-					LeaveApplyDO.builder()
-					.id(leaveId)
-					.status(2)
-					.build();
-			if (leaveApplyMapper.updateByPrimaryKeySelective(updateLeaveApply) == 1){
+			if (leaveApplyBaseService.setStatusById(leaveId, ApplyStatus.AGREE) == 1){
 				// 添加到课程老师中
 				num = 1;
 				String team = TimeTool.getThisTeam();
-				LeaveApplyDO selectLeaveApply = leaveApplyMapper.selectByPrimaryKey(leaveId);
-				List<Lesson> allLesson = lessonMapper.getStudentAllLesson(selectLeaveApply.getStudentId(), team);
+				LeaveApplyDO selectLeaveApply = leaveApplyBaseService.getApplyByIdUnSafe(leaveId);
+				List<Lesson> allLesson = lessonService.getStudentLessonInTeam(selectLeaveApply.getStudentId(), team);
 				ConcurrentHashMap<Integer, List<Lesson>> lessonMap = new ConcurrentHashMap<>();
 				for (int i=1; i<=7; ++i)
 					lessonMap.put(i,new ArrayList<>());
@@ -122,7 +113,7 @@ public class CollegeApplyServiceImpl implements CollegeApplyService {
 									.weekNum(weekOfYear)
 									.year(Integer.parseInt(team.split("-")[0]))
 									.build();
-							teacherLeaveListMapper.insert(teacherLeaveListBaseDO);
+							teacherApplyService.addApply(teacherLeaveListBaseDO);
 						}
 
 					}
@@ -143,7 +134,7 @@ public class CollegeApplyServiceImpl implements CollegeApplyService {
 								.weekNum(week)
 								.year(Integer.parseInt(team.split("-")[0]))
 								.build();
-						teacherLeaveListMapper.insert(teacherLeaveListBaseDO);
+						teacherApplyService.addApply(teacherLeaveListBaseDO);
 					}
 				}
 
@@ -162,7 +153,7 @@ public class CollegeApplyServiceImpl implements CollegeApplyService {
 										.weekNum(week)
 										.year(Integer.parseInt(team.split("-")[0]))
 										.build();
-						teacherLeaveListMapper.insert(teacherLeaveListBaseDO);
+						teacherApplyService.addApply(teacherLeaveListBaseDO);
 					}
 				}
 			}
@@ -180,13 +171,19 @@ public class CollegeApplyServiceImpl implements CollegeApplyService {
 						.allow(false)
 						.build();
 		if (collegeLeaveListMapper.updateByPrimaryKeySelective(manageLeaveListBaseDO) == 1){
-			LeaveApplyDO leaveApplyDO =
-					LeaveApplyDO.builder()
-					.id(manageLeaveList.getId())
-					.status(3)
-					.build();
-			num = leaveApplyMapper.updateByPrimaryKeySelective(leaveApplyDO);
+			num = leaveApplyBaseService.setStatusById(manageLeaveList.getId(), ApplyStatus.REJECT);
 		}
+
 		return num;
+	}
+
+	@Override
+	public int addApply(Integer applyId) {
+		ManageLeaveListBaseDO manageLeaveListBaseDO =
+				ManageLeaveListBaseDO.builder()
+						.id(applyId)
+						.looked(false)
+						.build();
+		return collegeLeaveListMapper.insert(manageLeaveListBaseDO);
 	}
 }

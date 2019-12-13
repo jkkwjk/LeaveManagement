@@ -2,6 +2,7 @@ package com.jkk.leave;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import com.jkk.leave.tools.ApplyStatus;
 import com.jkk.leave.tools.TimeTool;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,8 @@ public class TimeTest {
 
 		//System.out.println(DateUtil.format(endTime, "YYYY-MM-dd HH:mm:ss"));
 	}
-
+	@Test
+	synchronized public void AA() throws Exception {
+		System.out.println(ApplyStatus.UN_SEND);
+	}
 }

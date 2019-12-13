@@ -97,15 +97,24 @@
     where id = #{id,jdbcType=VARCHAR}
   </update>
 
-
-  <select id="getStudentAllLesson" resultType="com.jkk.leave.entity.POJO.Lesson">
+  <resultMap id="MainResultMap" type="com.jkk.leave.entity.POJO.Lesson">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="team" jdbcType="VARCHAR" property="team" />
+    <result column="teacher_id" jdbcType="INTEGER" property="teacherId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="week" jdbcType="INTEGER" property="week" />
+    <result column="time_id" jdbcType="INTEGER" property="timeId" />
+    <result column="start_time" jdbcType="VARCHAR" property="startTime" />
+    <result column="end_time" jdbcType="VARCHAR" property="endTime" />
+  </resultMap>
+  <select id="getStudentAllLesson" resultMap="MainResultMap">
     SELECT l.*,lt.start_time, lt.end_time
     FROM `user` as u,lesson as l, lesson_time as lt, student_lesson as sl
     WHERE u.id = #{studentId} and l.team = #{team}
     and sl.student_id = u.id and sl.lesson_id = l.id and l.time_id = lt.id
   </select>
 
-  <select id="getTeacherAllLesson" resultType="com.jkk.leave.entity.POJO.Lesson">
+  <select id="getTeacherAllLesson" resultMap="MainResultMap">
     SELECT l.*,lt.start_time, lt.end_time
     FROM lesson as l, lesson_time as lt
     WHERE l.teacher_id=#{teacherId} and l.team = #{team} and l.time_id=lt.id

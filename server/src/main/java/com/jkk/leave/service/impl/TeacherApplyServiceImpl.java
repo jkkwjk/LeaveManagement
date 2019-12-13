@@ -5,9 +5,9 @@ import com.jkk.leave.entity.POJO.Lesson;
 import com.jkk.leave.entity.POJO.TeacherLeaveList;
 import com.jkk.leave.entity.POJO.User;
 import com.jkk.leave.mapper.LessonMapper;
-import com.jkk.leave.mapper.StudentInfoMapper;
 import com.jkk.leave.mapper.TeacherLeaveListMapper;
-import com.jkk.leave.mapper.UserMapper;
+import com.jkk.leave.service.LessonService;
+import com.jkk.leave.service.StudentInfoService;
 import com.jkk.leave.service.TeacherApplyService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,20 +16,18 @@ import java.util.List;
 
 @Service
 public class TeacherApplyServiceImpl implements TeacherApplyService {
-	private final LessonMapper lessonMapper;
 	private final TeacherLeaveListMapper teacherLeaveListMapper;
-	private final StudentInfoMapper studentInfoMapper;
-	private final UserMapper userMapper;
-	public TeacherApplyServiceImpl(LessonMapper lessonMapper, TeacherLeaveListMapper teacherLeaveListMapper, StudentInfoMapper studentInfoMapper, UserMapper userMapper) {
-		this.lessonMapper = lessonMapper;
+	private final LessonService lessonService;
+	private final StudentInfoService studentInfoService;
+	public TeacherApplyServiceImpl(LessonService lessonService, TeacherLeaveListMapper teacherLeaveListMapper, StudentInfoService studentInfoService) {
+		this.lessonService = lessonService;
 		this.teacherLeaveListMapper = teacherLeaveListMapper;
-		this.studentInfoMapper = studentInfoMapper;
-		this.userMapper = userMapper;
+		this.studentInfoService = studentInfoService;
 	}
 
 	@Override
 	public List<Lesson> getLessons(User teacher, String team) {
-		return lessonMapper.getTeacherAllLesson(teacher.getId(), team);
+		return lessonService.getTeacherLessonInTeam(teacher.getId(), team);
 	}
 
 	@Override
@@ -38,8 +36,8 @@ public class TeacherApplyServiceImpl implements TeacherApplyService {
 		List<TeacherLeaveList> teacherLeaveLists = teacherLeaveListMapper.selectCustom(week,year,lessonId,teacher.getId());
 
 		for (TeacherLeaveList teacherLeaveList : teacherLeaveLists) {
-			teacherLeaveList.setClasses(studentInfoMapper.getClass(teacherLeaveList.getStudentId()));
-			teacherLeaveList.setCounselorName(userMapper.getUserInfoById(studentInfoMapper.getCounselorId(teacherLeaveList.getStudentId())).getName());
+			teacherLeaveList.setClasses(studentInfoService.getStudentClass(teacherLeaveList.getStudentId()));
+			teacherLeaveList.setCounselorName(studentInfoService.getStudentCounselorName(teacherLeaveList.getStudentId()));
 
 			if (!teacherLeaveList.getLooked()){
 				TeacherLeaveListBaseDO teacherLeaveListBaseDO =
@@ -52,6 +50,11 @@ public class TeacherApplyServiceImpl implements TeacherApplyService {
 		}
 
 		return teacherLeaveLists;
+	}
+
+	@Override
+	public int addApply(TeacherLeaveListBaseDO teacherLeaveListBaseDO) {
+		return teacherLeaveListMapper.insertSelective(teacherLeaveListBaseDO);
 	}
 
 }

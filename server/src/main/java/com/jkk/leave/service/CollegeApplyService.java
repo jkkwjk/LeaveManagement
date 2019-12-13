@@ -1,5 +1,6 @@
 package com.jkk.leave.service;
 
+import com.jkk.leave.entity.DO.ManageLeaveListBaseDO;
 import com.jkk.leave.entity.POJO.ManageLeaveList;
 import com.jkk.leave.entity.POJO.User;
 import com.jkk.leave.entity.POJO.base.Filter;
@@ -13,4 +14,6 @@ public interface CollegeApplyService {
 	int allowApply(ManageLeaveList manageLeaveList);
 
 	int rejectApply(ManageLeaveList manageLeaveList);
+
+	int addApply(Integer applyId);
 }
