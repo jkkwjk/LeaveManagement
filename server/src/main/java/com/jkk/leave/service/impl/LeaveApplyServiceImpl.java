@@ -1,5 +1,6 @@
 package com.jkk.leave.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.github.pagehelper.PageHelper;
 import com.jkk.leave.entity.DO.LeaveApplyDO;
 import com.jkk.leave.entity.DO.WaitStatusDO;
@@ -7,6 +8,7 @@ import com.jkk.leave.entity.POJO.User;
 import com.jkk.leave.entity.POJO.base.Filter;
 import com.jkk.leave.entity.POJO.base.Sorter;
 import com.jkk.leave.entity.VO.LeaveApplyVO;
+import com.jkk.leave.entity.VO.ArchiveVO;
 import com.jkk.leave.entity.VO.WaitStatusVO;
 import com.jkk.leave.mapper.LeaveApplyMapper;
 import com.jkk.leave.service.CounselorApplyService;
@@ -262,6 +264,33 @@ public class LeaveApplyServiceImpl implements LeaveApplyService {
 		.active(active)
 		.teachers(list)
 		.build();
+	}
+
+	@Override
+	public List<ArchiveVO> getArchive(Long startTime, Long endTime, User user , Integer page, Integer num) {
+		PageHelper.startPage(page, num);
+		List<LeaveApplyDO> leaveApplyDOList = leaveApplyMapper.selectArchive(user.getId(), startTime, endTime);
+
+		List<ArchiveVO> ret = new ArrayList<>();
+		for (LeaveApplyDO leaveApplyDO : leaveApplyDOList) {
+			Integer studentId = leaveApplyDO.getStudentId();
+			ArchiveVO archiveVO =
+					ArchiveVO.builder()
+					.studentId(studentId)
+					.studentName(userService.getUserName(studentId))
+					.counselor(studentInfoService.getStudentCounselorName(studentId))
+					.classes(studentInfoService.getStudentClass(studentId))
+					.detail(leaveApplyDO.getDetail())
+					.type(leaveApplyDO.getType())
+					.showWhat(this.parseShowWhat(leaveApplyDO.getStatus()))
+					.sendTime(DateUtil.format(new Date(leaveApplyDO.getSendTime()),"yyyy-MM-dd HH:mm:ss"))
+					.startTime(DateUtil.format(new Date(leaveApplyDO.getStartTime()),"yyyy-MM-dd HH:mm:ss"))
+					.endTime(DateUtil.format(new Date(leaveApplyDO.getEndTime()),"yyyy-MM-dd HH:mm:ss"))
+					.build();
+			ret.add(archiveVO);
+		}
+
+		return ret;
 	}
 
 	private String parseShowWhat(int status){

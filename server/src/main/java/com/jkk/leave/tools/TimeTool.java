@@ -3,8 +3,11 @@ package com.jkk.leave.tools;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.http.HttpUtil;
 
+import javax.xml.crypto.Data;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public final class TimeTool {
 	private static boolean time1MoreTime2(Long time1, Long time2){
@@ -38,7 +41,38 @@ public final class TimeTool {
 		return DateUtil.weekCount(calendar.getTime(),new Date(time));
 	}
 
-	public static Boolean isInTime(Long startTime, Long endTime){
-		return false;
+	public static List<Long[]> getOffsetTime(Date time){
+		List<Long[]> ret = new ArrayList<>();
+		ret.add(new Long[]{DateUtil.beginOfDay(time).getTime(),DateUtil.endOfDay(time).getTime()}); // time当天
+
+		Date yesterday = DateUtil.offsetDay(time,-1);
+		ret.add(new Long[]{DateUtil.beginOfDay(yesterday).getTime(),DateUtil.endOfDay(yesterday).getTime()}); // time昨天
+
+		Date weekBegin = DateUtil.beginOfWeek(time);
+		Date weekEnd = DateUtil.endOfWeek(time);
+		ret.add(new Long[]{DateUtil.beginOfDay(weekBegin).getTime(),DateUtil.endOfDay(weekEnd).getTime()}); // time当周
+
+		Date tmp = DateUtil.offsetWeek(time,-1);
+		weekBegin = DateUtil.beginOfWeek(tmp);
+		weekEnd = DateUtil.endOfWeek(tmp);
+		ret.add(new Long[]{DateUtil.beginOfDay(weekBegin).getTime(),DateUtil.endOfDay(weekEnd).getTime()}); // time上周
+
+		return ret;
+	}
+
+	public static Long[] getThisMonth(){
+		Date date = new Date();
+		Long[] ret = new Long[2];
+		ret[0] = DateUtil.beginOfMonth(date).getTime();
+		ret[1] = DateUtil.endOfDay(date).getTime();
+		return ret;
+	}
+
+	public static Long[] getThisYear(){
+		Date date = new Date();
+		Long[] ret = new Long[2];
+		ret[0] = DateUtil.beginOfYear(date).getTime();
+		ret[1] = DateUtil.endOfYear(date).getTime();
+		return ret;
 	}
 }

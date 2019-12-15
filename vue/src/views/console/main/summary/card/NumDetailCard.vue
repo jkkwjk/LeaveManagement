@@ -15,13 +15,16 @@
 <script>
     import DetailCardHeader from "../DetailCardHeader";
     import getOptions from './NumChart';
-    import f from './NumChart.json';
     export default {
         components: {DetailCardHeader},
+        props: {
+            baseUrl: {type: String, required: true}
+        },
         data(){
             return {
                 buttonText: ['本月','全年','所有'],
                 buttonClick: [this.theMouth,this.theYear,this.all],
+                numChart: undefined
             }
         },
         computed: {
@@ -38,20 +41,32 @@
         },
         methods: {
             theMouth(e){
-                this.$message.info("mouth2");
+                this.getOptions__inter('month');
             },
             theYear(){
-                this.$message.info("year2");
+                this.getOptions__inter('year');
             },
             all(){
-                this.$message.info("all2");
+                this.getOptions__inter('all');
+            },
+            getOptions__inter(str){
+                this.$http.post(`/${this.baseUrl}/getNumChart`,{
+                    strTime: str
+                }).then(res=>{
+                    const data = res.data;
+                    if (data.code === 200){
+                        this.numChart.setOption(getOptions(data.data));
+                    }else {
+                        this.$message.error(data.msg);
+                    }
+                });
             }
         },
         mounted() {
-            const numChart = this.$echarts.init(this.$refs.numChart);
-            numChart.setOption(getOptions(f));
+            this.numChart = this.$echarts.init(this.$refs.numChart);
+            this.getOptions__inter('month');
             window.addEventListener("resize", () => {
-                numChart.resize();
+                this.numChart.resize();
             });
         }
     }

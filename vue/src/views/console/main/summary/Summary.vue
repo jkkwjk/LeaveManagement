@@ -16,16 +16,16 @@
             </el-col>
         </el-row>
         <el-row :gutter="20" style="margin-top: 20px;">
-            <el-col :span="12">
-                <detail-card-map></detail-card-map>
+            <el-col :span="24">
+                <detail-card-map :base-url="baseUrl"></detail-card-map>
             </el-col>
-            <el-col :span="12">
+            <!-- <el-col :span="12">
                 <detail-card-value></detail-card-value>
-            </el-col>
+            </el-col> -->
         </el-row>
         <el-row :gutter="20" style="margin-top: 20px;">
             <el-col :span="24">
-                <num-detail-card></num-detail-card>
+                <num-detail-card :base-url="baseUrl"></num-detail-card>
             </el-col>
         </el-row>
     </div>
@@ -39,13 +39,31 @@
     export default {
         name: "Summary",
         components: {NumDetailCard, DetailCardValue, DetailCardMap, SummaryCard},
+        created(){
+            if (this.$store.state.authType === '辅导员'){
+                this.baseUrl = 'cou';
+            }else if(this.$store.state.authType === '院领导'){
+                this.baseUrl = 'col';
+            }
+            
+            this.$http.post(`/${this.baseUrl}/getSummary`).then(res=>{
+                const data = res.data;
+                if (data.code === 200){
+                    this.summary.todayLeave = data.data[0];
+                    this.summary.yesterdayLeave = data.data[1];
+                    this.summary.weekLeave = data.data[2];
+                    this.summary.lastWeekLeave = data.data[3];
+                }
+            })
+        },
         data(){
             return {
+                baseUrl: '',
                 summary: {
-                    todayLeave: 1,
-                    yesterdayLeave: 2,
-                    weekLeave: 3,
-                    lastWeekLeave: 4,
+                    todayLeave: 0,
+                    yesterdayLeave: 0,
+                    weekLeave: 0,
+                    lastWeekLeave: 0,
                 },
 
             }
@@ -54,9 +72,6 @@
 </script>
 
 <style scoped lang="scss">
-    #summary{
-
-    }
     .title{
         height: 100px;
         display: flex;
@@ -65,6 +80,5 @@
         font-size: 30px;
         color: #666;
         font-weight: 900;
-
     }
 </style>

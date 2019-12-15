@@ -22,4 +22,6 @@ public interface LeaveApplyMapper extends MyBatisBaseDao<LeaveApplyDO, Integer> 
 	List<String> selectAllTeam();
 
 	WaitStatusDO selectApplyStatus(@Param("studentId")Integer studentId,@Param("applyId")Integer applyId);
+
+	List<LeaveApplyDO> selectArchive(@Param("studentId")Integer studentId, @Param("start_time")Long startTime, @Param("end_time")Long endTime);
 }

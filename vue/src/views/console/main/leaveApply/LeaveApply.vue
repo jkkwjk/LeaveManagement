@@ -217,11 +217,11 @@
                     this.lock = true;
                     this.$http.post('/stu',{
                         page: this.page,
-                        num: 10,
+                        num: this.num,
                         custom: JSON.stringify(this.filter)
                     }).then(res=>{
                         const list = res.data.data;
-                        if (list.length < 10){
+                        if (list.length < this.num){
                             this.hasNext = false;
                         }else {
                             this.page++;
@@ -255,6 +255,7 @@
             return{
                 page: 1,
                 hasNext: true,
+                num: 10,
                 lock: false, // fix loadData可能会调用多次的问题
                 timeline: {
                     row: null

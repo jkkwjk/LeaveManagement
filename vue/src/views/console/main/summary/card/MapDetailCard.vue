@@ -15,15 +15,18 @@
 <script>
     import DetailCardHeader from "../DetailCardHeader";
     import getOptions from './MapChart';
-    import f from './MapChart.json';
 
     export default {
         name: "DetailCardMap",
         components: {DetailCardHeader},
+        props: {
+            baseUrl: {type: String, required: true}
+        },
         data(){
             return {
                 buttonText: ['本月','全年','所有'],
                 buttonClick: [this.theMouth,this.theYear,this.all],
+                mapChart: undefined
             }
         },
         computed: {
@@ -40,20 +43,32 @@
         },
         methods: {
             theMouth(e){
-                this.$message.info("mouth");
+                this.getOptions__inter('month');
             },
             theYear(){
-                this.$message.info("year");
+                this.getOptions__inter('year');
             },
             all(){
-                this.$message.info("all");
+                this.getOptions__inter('all');
+            },
+            getOptions__inter(str){
+                this.$http.post(`/${this.baseUrl}/getMapChart`,{
+                    strTime: str
+                }).then(res=>{
+                    const data = res.data;
+                    if (data.code === 200){
+                        this.mapChart.setOption(getOptions(data.data));
+                    }else {
+                        this.$message.error(data.msg);
+                    }
+                });
             }
         },
         mounted() {
-            const mapChart = this.$echarts.init(this.$refs.positionChart);
-            mapChart.setOption(getOptions(f));
+            this.mapChart = this.$echarts.init(this.$refs.positionChart);
+            this.getOptions__inter('month');
             window.addEventListener("resize", () => {
-                mapChart.resize();
+                this.mapChart.resize();
             });
         }
     }

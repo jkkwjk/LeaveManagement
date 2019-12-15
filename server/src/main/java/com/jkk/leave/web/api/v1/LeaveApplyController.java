@@ -1,15 +1,12 @@
 package com.jkk.leave.web.api.v1;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.jkk.leave.entity.POJO.User;
 import com.jkk.leave.entity.POJO.base.Filter;
 import com.jkk.leave.entity.POJO.base.Sorter;
 import com.jkk.leave.entity.VO.LeaveApplyVO;
+import com.jkk.leave.entity.VO.ArchiveVO;
 import com.jkk.leave.entity.VO.WaitStatusVO;
 import com.jkk.leave.service.LeaveApplyService;
-import com.jkk.leave.tools.ColumnMapTool;
 import com.jkk.leave.tools.DataTool;
 import com.jkk.leave.tools.FilterSorterParse;
 import com.jkk.leave.utils.RestfulRes;
@@ -17,7 +14,6 @@ import com.jkk.leave.tools.TimeTool;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/stu")
@@ -133,5 +129,10 @@ public class LeaveApplyController {
 	@PostMapping("getStatus")
 	public RestfulRes<WaitStatusVO> getLeaveApplyStatus(LeaveApplyVO leaveApplyVO, @SessionAttribute("user")User user){
 		return RestfulRes.success(leaveApplyService.getLeaveStatus(leaveApplyVO.getId(), user));
+	}
+
+	@PostMapping("getArchive")
+	public RestfulRes<List<ArchiveVO>> getArchive(Integer page, Integer num, Long startTime, Long endTime, @SessionAttribute("user")User user){
+		return RestfulRes.success(leaveApplyService.getArchive(startTime, endTime, user, page, num));
 	}
 }

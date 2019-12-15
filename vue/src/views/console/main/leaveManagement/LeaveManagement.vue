@@ -100,11 +100,11 @@
                     this.lock = true;
                     this.$http.post(`/${this.baseUrl}`,{
                         page: this.page,
-                        num: 10,
+                        num: this.num,
                         custom: JSON.stringify(this.filter)
                     }).then(res=>{
                         const list = res.data.data;
-                        if (list.length < 10){
+                        if (list.length < this.num){
                             this.hasNext = false;
                         }else {
                             this.page++;
@@ -121,6 +121,7 @@
             return{
                 baseUrl: '',
                 page: 1,
+                num: 10,
                 hasNext: true,
                 lock: false,
                 filter: {

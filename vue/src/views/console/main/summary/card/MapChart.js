@@ -11,11 +11,12 @@ let template = {
     legend: {
         orient: 'vertical',
         left: 'left',
+        padding: [5,0,0,25],
         data: []
     },
     series : [
         {
-            name: '访问来源',
+            name: '请假人数',
             type: 'pie',
             radius : '55%',
             center: ['50%', '60%'],
@@ -37,7 +38,7 @@ function getOptions(f) {
         let data = f[i];
         if (data.n!==0){
             options.legend.data.push(data.p);
-            options.series[0].data.push({value:(data.n/data.a).toFixed(2),name:data.p});
+            options.series[0].data.push({value:data.n,name:data.p});
         }
     }
     return options;

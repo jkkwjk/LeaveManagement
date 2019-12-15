@@ -1,6 +1,9 @@
 package com.jkk.leave;
 
+import com.alibaba.fastjson.JSON;
+import com.jkk.leave.entity.POJO.ManageLeaveList;
 import com.jkk.leave.entity.POJO.User;
+import com.jkk.leave.mapper.CounselorLeaveListMapper;
 import com.jkk.leave.service.LeaveApplyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,36 +15,18 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Date;
+import java.util.List;
 
 @SpringBootTest
-@AutoConfigureMockMvc
 public class LeaveApplyStatusTest {
 
 	@Autowired
-	private MockMvc mockMvc;
-	private MockHttpSession session;
-
-	@Autowired
-	private LeaveApplyService leaveApplyService;
-
+	private CounselorLeaveListMapper counselorLeaveListMapper;
 	@Test
 	public void getApplyList() throws Exception {
-//		session = new MockHttpSession();
-//		RequestBuilder login = MockMvcRequestBuilders.get("/user/login")
-//				.param("id", "1")
-//				.param("password", "1")
-//				.session(session);
-//		RequestBuilder getAuth = MockMvcRequestBuilders.post("/stu")
-//				.param("page","1")
-//				.param("num","20")
-//				.param("custom","{\"sort\":{\"prop\":\"start_time\",\"order\":\"1\"},\"custom\":[{\"prop\":\"type\",\"content\":\"公假\"},{\"prop\":\"type\",\"content\":\"病假\"}]}")
-//				.session(session);
-//		mockMvc.perform(login);
-//
-//		System.out.println(mockMvc.perform(getAuth).andReturn().getResponse().getContentAsString());
-		User user = new User();
-		user.setId(1);
-		leaveApplyService.getLeaveStatus(28,user);
+		List<ManageLeaveList> ret = counselorLeaveListMapper.selectArchive(2,1575179503000L,1577771503000L);
+
+		int a = 1;
 
 	}
 

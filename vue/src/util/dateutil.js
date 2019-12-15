@@ -280,7 +280,7 @@
 
   // return the number of days in a date's month
   __global__.daysInMonth = function ( dt ) {
-    var m = dt.getUTCMonth();
+    var m = dt.getMonth();
     if ( m === 1 ) {
       return __global__.isLeapYear( dt ) ? 29 : 28;
     }

@@ -47,7 +47,4 @@
 </script>
 
 <style scoped>
-    .leave-apply-process{
-
-    }
 </style>

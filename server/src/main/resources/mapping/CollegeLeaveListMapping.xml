@@ -109,7 +109,38 @@
       </if>
     </if>
   </select>
+  <select id="selectArchive" resultMap="MainResultMap">
+    SELECT l.*,co.looked,co.allow
+    from <include refid="allDO" />
+    where co.id = l.id and co.allow is not null
+    and NOT ( (l.end_time &lt; #{start_time} OR l.start_time &gt; #{end_time}) )
+  </select>
 
+  <!-- 将获得全校的数据, 包括辅导员拒绝的数据 不包括未发送的 -->
+  <select id="getCountBetweenTime" resultType="java.lang.Integer">
+    SELECT count(id) from leave_list
+    WHERE send_time &lt; #{end_time} and send_time &gt; #{start_time} and send_time is not null
+  </select>
+  <select id="getMapChartBetWeenTime" resultType="com.jkk.leave.entity.POJO.ChartMap">
+    SELECT s.area as 'position', count(s.area) as 'leaveNum'
+    from leave_list as l, student_info as s
+    where l.send_time is not null
+    <if test="start_time != null and end_time != null">
+      and l.send_time &lt; #{end_time} and l.send_time &gt; #{start_time}
+    </if>
+    and s.id = l.stu_id GROUP BY s.area;
+  </select>
+  <select id="getNumChartBetWeenTime" resultType="com.jkk.leave.entity.DO.ChartNumDO">
+    SELECT select1.`week`,select1.type,count(select1.`week`) as num from
+    (
+    SELECT date_format(from_unixtime(l.send_time/1000),'%w') as 'week', l.type from leave_list as l
+    where l.send_time is not null
+    <if test="start_time != null and end_time != null">
+      and l.send_time &lt; #{end_time} and l.send_time &gt; #{start_time}
+    </if>
+    )
+    as select1 GROUP BY select1.`week`,select1.type
+  </select>
 
 
 </mapper>

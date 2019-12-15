@@ -3,7 +3,6 @@
         <el-date-picker
                 v-model="time"
                 type="monthrange"
-                unlink-panels
                 range-separator="至"
                 start-placeholder="开始月份"
                 end-placeholder="结束月份"

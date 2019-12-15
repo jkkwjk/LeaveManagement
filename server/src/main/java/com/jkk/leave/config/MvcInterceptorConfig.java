@@ -1,9 +1,6 @@
 package com.jkk.leave.config;
 
-import com.jkk.leave.handler.CollegeApplyInterceptor;
-import com.jkk.leave.handler.CounselorApplyInterceptor;
-import com.jkk.leave.handler.StudentApplyInterceptor;
-import com.jkk.leave.handler.TeacherApplyInterceptor;
+import com.jkk.leave.handler.*;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -14,15 +11,21 @@ public class MvcInterceptorConfig implements WebMvcConfigurer {
 	private final CounselorApplyInterceptor counselorApplyInterceptor;
 	private final CollegeApplyInterceptor collegeApplyInterceptor;
 	private final TeacherApplyInterceptor teacherApplyInterceptor;
-	public MvcInterceptorConfig(StudentApplyInterceptor studentApplyInterceptor, CounselorApplyInterceptor counselorApplyInterceptor, CollegeApplyInterceptor collegeApplyInterceptor, TeacherApplyInterceptor teacherApplyInterceptor) {
+	private final LoginInterceptor loginInterceptor;
+	public MvcInterceptorConfig(StudentApplyInterceptor studentApplyInterceptor, CounselorApplyInterceptor counselorApplyInterceptor, CollegeApplyInterceptor collegeApplyInterceptor, TeacherApplyInterceptor teacherApplyInterceptor, LoginInterceptor loginInterceptor) {
 		this.studentApplyInterceptor = studentApplyInterceptor;
 		this.counselorApplyInterceptor = counselorApplyInterceptor;
 		this.collegeApplyInterceptor = collegeApplyInterceptor;
 		this.teacherApplyInterceptor = teacherApplyInterceptor;
+		this.loginInterceptor = loginInterceptor;
 	}
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(loginInterceptor)
+				.addPathPatterns("/**")
+				.excludePathPatterns("/user/login");
+
 		registry.addInterceptor(studentApplyInterceptor)
 				.addPathPatterns("/stu/**");
 		registry.addInterceptor(counselorApplyInterceptor)

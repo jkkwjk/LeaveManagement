@@ -132,6 +132,39 @@
       </if>
     </if>
   </select>
+  <select id="selectArchive" resultMap="MainResultMap">
+    SELECT l.*,co.looked,co.allow
+    from <include refid="allDO" />
+    where u.id = #{counselorId} and co.allow is not null
+    and NOT ( (l.end_time &lt; #{start_time} OR l.start_time &gt; #{end_time}) )
+    <include refid="baseSafeSQL" />
+  </select>
+  <select id="getCountBetweenTime" resultType="java.lang.Integer">
+    select count(l.id) from <include refid="allDO" />
+    where l.send_time is not null and l.send_time &lt; #{end_time} and l.send_time &gt; #{start_time}
+    <include refid="baseSafeSQL" /> and u.id = #{counselorId}
+  </select>
+  <select id="getMapChartBetWeenTime" resultType="com.jkk.leave.entity.POJO.ChartMap">
+    SELECT s.area as 'position', count(s.area) as 'leaveNum'
+    from <include refid="allDO" />
+    where l.send_time is not null
+    <if test="start_time != null and end_time != null">
+      and l.send_time &lt; #{end_time} and l.send_time &gt; #{start_time}
+    </if>
+    <include refid="baseSafeSQL" /> and u.id = #{counselorId} GROUP BY s.area;
+  </select>
+  <select id="getNumChartBetWeenTime" resultType="com.jkk.leave.entity.DO.ChartNumDO">
+    SELECT select1.`week`,select1.type,count(select1.`week`) as num from
+    (
+    SELECT date_format(from_unixtime(l.send_time/1000),'%w') as 'week', l.type from <include refid="allDO" />
+    where l.send_time is not null and u.id = 2
+    <if test="start_time != null and end_time != null">
+      and l.send_time &lt; #{end_time} and l.send_time &gt; #{start_time}
+    </if>
+    <include refid="baseSafeSQL" />
+    )
+    as select1 GROUP BY select1.`week`,select1.type
+  </select>
 
 
 </mapper>

@@ -217,4 +217,10 @@
     WHERE u.id=ll.stu_id and crll.id=ll.id
     and u.id = #{studentId} and ll.id=#{applyId}
   </select>
+  <select id="selectArchive" resultType="com.jkk.leave.entity.DO.LeaveApplyDO">
+    SELECT <include refid="Base_Column_List" />
+    from leave_list
+    where stu_id = #{studentId} and (status = 2 or status = 3)
+    and NOT ( (end_time &lt; #{start_time} OR start_time &gt; #{end_time}) )
+  </select>
 </mapper>
