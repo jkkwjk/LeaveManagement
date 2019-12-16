@@ -17,6 +17,7 @@ import com.jkk.leave.entity.VO.ChartNumVO;
 import com.jkk.leave.mapper.*;
 import com.jkk.leave.service.*;
 import com.jkk.leave.tools.ApplyStatus;
+import com.jkk.leave.tools.MailTool;
 import com.jkk.leave.tools.TimeTool;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -184,17 +185,26 @@ public class CollegeApplyServiceImpl implements CollegeApplyService {
 
 	@Override
 	public int addApply(Integer applyId) {
+		int num = 0;
 		ManageLeaveListBaseDO manageLeaveListBaseDO =
 				ManageLeaveListBaseDO.builder()
 						.id(applyId)
 						.looked(false)
 						.build();
-		return collegeLeaveListMapper.insert(manageLeaveListBaseDO);
+		if (collegeLeaveListMapper.insert(manageLeaveListBaseDO) == 1){
+			LeaveApplyDO leaveApplyDO = leaveApplyBaseService.getApplyByIdUnSafe(applyId);
+			num = MailTool.sendEmail(userService.getUserById(
+					studentInfoService.getStudentCounselorId(leaveApplyDO.getStudentId())
+			).getEMail(), leaveApplyDO);
+		}
+		return num;
 	}
 
 	@Override
 	public List<ArchiveVO> getArchive(Long startTime, Long endTime, Integer page, Integer num) {
-		PageHelper.startPage(page, num);
+		if (page != null && num != null){
+			PageHelper.startPage(page, num);
+		}
 		List<ManageLeaveList> manageLeaveLists = collegeLeaveListMapper.selectArchive(startTime, endTime);
 
 		List<ArchiveVO> ret = new ArrayList<>();

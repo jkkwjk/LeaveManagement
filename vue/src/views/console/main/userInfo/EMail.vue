@@ -28,7 +28,7 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert('submit!');
+                        this.changeEmail(this.form.email);
                     } else {
                         return false;
                     }

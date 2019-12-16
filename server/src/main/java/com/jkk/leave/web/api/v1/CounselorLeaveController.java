@@ -1,5 +1,6 @@
 package com.jkk.leave.web.api.v1;
 
+import cn.hutool.core.date.DateUtil;
 import com.jkk.leave.entity.POJO.ManageLeaveList;
 import com.jkk.leave.entity.POJO.User;
 import com.jkk.leave.entity.POJO.base.Filter;
@@ -8,11 +9,14 @@ import com.jkk.leave.entity.VO.ArchiveVO;
 import com.jkk.leave.entity.POJO.ChartMap;
 import com.jkk.leave.entity.VO.ChartNumVO;
 import com.jkk.leave.service.CounselorApplyService;
+import com.jkk.leave.tools.ExcelTool;
 import com.jkk.leave.tools.FilterSorterParse;
 import com.jkk.leave.tools.TimeTool;
 import com.jkk.leave.utils.RestfulRes;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,6 +60,15 @@ public class CounselorLeaveController {
 	@PostMapping("getArchive")
 	public RestfulRes<List<ArchiveVO>> getArchive(Integer page, Integer num, Long startTime, Long endTime, @SessionAttribute("user")User user){
 		return RestfulRes.success(counselorApplyService.getArchive(startTime, endTime, user, page, num));
+	}
+
+	@GetMapping("getArchive")
+	public void downLoadArchive(Long startTime, Long endTime, @SessionAttribute("user")User user, HttpServletResponse response) throws UnsupportedEncodingException {
+		List<ArchiveVO> archiveVOList = counselorApplyService.getArchive(startTime, endTime, user, null, null);
+		if (archiveVOList.size() != 0){
+			String fileName = archiveVOList.get(0).getCounselor()+" "+ DateUtil.today()+" 的归档";
+			ExcelTool.downLoad(response, fileName, archiveVOList);
+		}
 	}
 
 	@PostMapping("getSummary")
@@ -105,4 +118,6 @@ public class CounselorLeaveController {
 		}
 		return RestfulRes.success(counselorApplyService.getNumChartBetWeenTime(time[0], time[1], user));
 	}
+
+
 }

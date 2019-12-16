@@ -268,7 +268,9 @@ public class LeaveApplyServiceImpl implements LeaveApplyService {
 
 	@Override
 	public List<ArchiveVO> getArchive(Long startTime, Long endTime, User user , Integer page, Integer num) {
-		PageHelper.startPage(page, num);
+		if (page != null && num != null){
+			PageHelper.startPage(page, num);
+		}
 		List<LeaveApplyDO> leaveApplyDOList = leaveApplyMapper.selectArchive(user.getId(), startTime, endTime);
 
 		List<ArchiveVO> ret = new ArrayList<>();

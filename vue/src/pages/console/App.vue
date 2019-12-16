@@ -39,7 +39,12 @@
         },
         methods: {
             logout() {
-                this.$message.info("logout");
+                this.$http.get('/user/logout').then(res=>{
+                    const data = res.data;
+                    if (data.code === 200){
+                        window.location.href = 'login.html';
+                    }
+                });
             },
             opened(e) {
                 if (e && this.value !== 0) {

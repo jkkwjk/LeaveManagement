@@ -8,11 +8,11 @@
         <div class="right">
             <el-upload
                     class="avatar-uploader"
-                    action="https://jsonplaceholder.typicode.com/posts/"
+                    action=""
+                    :multiple="false"
                     :show-file-list="false"
                     :auto-upload="false"
                     accept=".jpg,.png"
-                    :on-success="handleAvatarSuccess"
                     :on-change="beforeAvatarUpload"
                     ref="uploadAvatar">
                 <img v-if="imageUrl" :src="imageUrl" class="avatar">
@@ -30,19 +30,61 @@
     export default {
         name: "UserInfo",
         components: {EMail, ChangePwd},
+        created(){
+            switch(this.$store.state.authType){
+                case '学生':
+                    this.baseUrl = 'stu';
+                    break;
+                case '辅导员':
+                    this.baseUrl = 'cou';
+                    break;
+                case '院领导':
+                    this.baseUrl = 'col';
+                    break;
+            }
+        },
         methods: {
             changePwd(pwd){
-
+                this.$http.post('user/modifyPwd',{
+                    pwd: pwd
+                }).then(res=>{
+                    const data = res.data;
+                    if (data.code === 200){
+                        this.$message.success("修改密码成功");
+                    }else {
+                        this.$message.error(data.msg);
+                    }
+                })
             },
-            changeEmail(pwd){
-
+            changeEmail(email){
+                this.$http.post('user/modifyEMail',{
+                    email: email
+                }).then(res=>{
+                    const data = res.data;
+                    if (data.code === 200){
+                        this.$message.success("修改邮箱成功");
+                    }else {
+                        this.$message.error(data.msg);
+                    }
+                })
             },
             changeAvatar(){
                 // 存在bug  应该让头像只能上传一个
-                this.$store.commit('update',['avatar','/logout.png']);
-            },
-            handleAvatarSuccess(res, file) {
-
+                //this.$store.commit('update',['avatar','/logout.png']);
+                let formData=new FormData();
+                formData.append('file',this.file);
+                console.log(this.$refs.uploadAvatar);
+                this.$http.post('/user/modifyAvatar',formData,{
+                    headers: {'Content-Type':'multipart/form-data'}
+                }).then(res=>{
+                    const data = res.data;
+                    if (data.code === 200){
+                        this.$message.success("修改成功");
+                        this.$store.commit('update',['avatar',`///localhost:8080/api/img/${data.data}`]);
+                    }else {
+                        this.$message.error(data.msg);
+                    }
+                });
             },
             beforeAvatarUpload(file, fileList) {
                 fileList = [file];
@@ -57,11 +99,10 @@
                     this.$message.error('上传头像图片大小不能超过 2MB!');
                 }
                 if (isPIC && isLt2M){
-                    console.log(1);
                     this.imageUrl = URL.createObjectURL(file.raw);
+                    this.file = file.raw;
                     return true;
                 }else {
-                    console.log(isLt2M,isPIC);
                     return false;
                 }
             }
@@ -69,6 +110,8 @@
         data(){
             return{
                 imageUrl: '',
+                baseUrl: '',
+                file: undefined
             }
         }
     }

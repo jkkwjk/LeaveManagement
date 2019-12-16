@@ -1,26 +1,22 @@
 package com.jkk.leave.entity.POJO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Data
 public class User {
-    /**
-     * 用户唯一ID(学号)
-     */
+    @JsonIgnore
     private Integer id;
 
-    /**
-     * 用户名
-     */
     private String name;
 
-    /**
-     * 用户密码
-     */
+    @JsonIgnore
     private String password;
 
-    /**
-     * 用户的类型
-     */
+    @JsonIgnore
     private Integer type;
+
+    private String avatar;
+
+    private String eMail;
 }

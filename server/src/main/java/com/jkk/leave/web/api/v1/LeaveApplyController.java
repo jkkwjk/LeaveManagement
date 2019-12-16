@@ -1,5 +1,7 @@
 package com.jkk.leave.web.api.v1;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.poi.excel.ExcelUtil;
 import com.jkk.leave.entity.POJO.User;
 import com.jkk.leave.entity.POJO.base.Filter;
 import com.jkk.leave.entity.POJO.base.Sorter;
@@ -8,12 +10,18 @@ import com.jkk.leave.entity.VO.ArchiveVO;
 import com.jkk.leave.entity.VO.WaitStatusVO;
 import com.jkk.leave.service.LeaveApplyService;
 import com.jkk.leave.tools.DataTool;
+import com.jkk.leave.tools.ExcelTool;
 import com.jkk.leave.tools.FilterSorterParse;
 import com.jkk.leave.utils.RestfulRes;
 import com.jkk.leave.tools.TimeTool;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequestMapping("/stu")
@@ -134,5 +142,15 @@ public class LeaveApplyController {
 	@PostMapping("getArchive")
 	public RestfulRes<List<ArchiveVO>> getArchive(Integer page, Integer num, Long startTime, Long endTime, @SessionAttribute("user")User user){
 		return RestfulRes.success(leaveApplyService.getArchive(startTime, endTime, user, page, num));
+	}
+
+	@GetMapping("getArchive")
+	public void downLoadArchive(Long startTime, Long endTime, @SessionAttribute("user")User user, HttpServletResponse response) throws UnsupportedEncodingException {
+		List<ArchiveVO> archiveVOList = leaveApplyService.getArchive(startTime, endTime, user, null, null);
+		if (archiveVOList.size() != 0){
+			String fileName = archiveVOList.get(0).getStudentName()+" "+ DateUtil.today()+" 的归档";
+			ExcelTool.downLoad(response, fileName, archiveVOList);
+		}
+
 	}
 }

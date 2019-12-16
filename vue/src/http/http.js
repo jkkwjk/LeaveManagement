@@ -9,6 +9,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(function (config) {
     if (config.headers['Content-Type'] === 'application/x-www-form-urlencoded'){
+      console.log(config.headers['Content-Type']);
         config.data = Qs.stringify(config.data);
     }
     return config;

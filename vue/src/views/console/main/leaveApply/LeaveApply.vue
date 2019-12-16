@@ -255,7 +255,7 @@
             return{
                 page: 1,
                 hasNext: true,
-                num: 10,
+                num: 20,
                 lock: false, // fix loadData可能会调用多次的问题
                 timeline: {
                     row: null

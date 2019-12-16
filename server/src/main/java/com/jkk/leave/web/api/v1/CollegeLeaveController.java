@@ -1,5 +1,6 @@
 package com.jkk.leave.web.api.v1;
 
+import cn.hutool.core.date.DateUtil;
 import com.jkk.leave.entity.POJO.ManageLeaveList;
 import com.jkk.leave.entity.POJO.User;
 import com.jkk.leave.entity.POJO.base.Filter;
@@ -8,11 +9,14 @@ import com.jkk.leave.entity.VO.ArchiveVO;
 import com.jkk.leave.entity.POJO.ChartMap;
 import com.jkk.leave.entity.VO.ChartNumVO;
 import com.jkk.leave.service.CollegeApplyService;
+import com.jkk.leave.tools.ExcelTool;
 import com.jkk.leave.tools.FilterSorterParse;
 import com.jkk.leave.tools.TimeTool;
 import com.jkk.leave.utils.RestfulRes;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,6 +61,15 @@ public class CollegeLeaveController {
 	@PostMapping("getArchive")
 	public RestfulRes<List<ArchiveVO>> getArchive(Integer page, Integer num, Long startTime, Long endTime){
 		return RestfulRes.success(collegeApplyService.getArchive(startTime, endTime, page, num));
+	}
+
+	@GetMapping("getArchive")
+	public void downLoadArchive(Long startTime, Long endTime, HttpServletResponse response) throws UnsupportedEncodingException {
+		List<ArchiveVO> archiveVOList = collegeApplyService.getArchive(startTime, endTime,null, null);
+		if (archiveVOList.size() != 0){
+			String fileName = "全校 "+ DateUtil.today()+" 的归档";
+			ExcelTool.downLoad(response, fileName, archiveVOList);
+		}
 	}
 
 	@PostMapping("getSummary")

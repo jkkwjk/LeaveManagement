@@ -37,8 +37,7 @@
     .user-name{
         color: #555;
         font-size: 13px;
-        margin-left: 2px;
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-weight: bolder;
+        margin-left: 8px;
+        font-weight: 600
     }
 </style>

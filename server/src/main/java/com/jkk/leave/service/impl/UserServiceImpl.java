@@ -31,4 +31,34 @@ public class UserServiceImpl implements UserService {
 	public String getUserName(Integer id) {
 		return userMapper.selectByPrimaryKey(id).getName();
 	}
+
+	public User getUserById(Integer id){
+		return userMapper.selectByPrimaryKey(id);
+	}
+
+	@Override
+	public int modifyPwd(Integer id, String pwd) {
+		User user = new User();
+		user.setId(id);
+		user.setPassword(pwd);
+		return userMapper.updateByPrimaryKeySelective(user);
+	}
+
+	@Override
+	public int modifyAvatar(Integer id, String avatarPath) {
+		User user = new User();
+		user.setId(id);
+		user.setAvatar(avatarPath);
+		return userMapper.updateByPrimaryKeySelective(user);
+	}
+
+	@Override
+	public int modifyEMail(Integer id, String eMail) {
+		User user = new User();
+		user.setId(id);
+		user.setEMail(eMail);
+		return userMapper.updateByPrimaryKeySelective(user);
+	}
+
+
 }

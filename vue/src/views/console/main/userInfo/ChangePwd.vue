@@ -1,11 +1,11 @@
 <template>
-    <div>
+    <div class="change-pwd">
         <el-divider content-position="left" class="top-tip">密码修改</el-divider>
         <el-form :model="form" status-icon :rules="rules" ref="form" label-width="100px" style="width: 50%;">
             <el-form-item label="密码:" prop="pwd">
                 <el-input type="password" v-model="form.pwd" autocomplete="off" placeholder="请输入密码"></el-input>
             </el-form-item>
-            <el-form-item label="确认密码:" prop="checkPwd">
+            <el-form-item label="确认密码:" prop="checkPwd" style="margin-top:30px;">
                 <el-input type="password" v-model="form.checkPwd" autocomplete="off" placeholder="确认密码"></el-input>
             </el-form-item>
             <el-form-item>

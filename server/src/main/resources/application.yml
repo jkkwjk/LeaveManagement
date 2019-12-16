@@ -5,6 +5,10 @@ spring:
     restart:
       enabled: false
       additional-paths: src/main/java
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
 server:
   port: 8080
   servlet:
@@ -20,3 +24,6 @@ pagehelper:
   helperDialect: mysql
   supportMethodsArguments: true
   params: count=countSql
+prop:
+  upload: F:\webUpload\
+  img: F:\webUpload\img\

@@ -96,6 +96,7 @@
                 this.filter.custom = v;
             },
             loadData(){
+                console.log("in",this.lock);
                 if(this.hasNext && !this.lock){
                     this.lock = true;
                     this.$http.post(`/${this.baseUrl}`,{
@@ -121,7 +122,7 @@
             return{
                 baseUrl: '',
                 page: 1,
-                num: 10,
+                num: 20, // 存在bug 只有有滚动条的时候才能分页
                 hasNext: true,
                 lock: false,
                 filter: {

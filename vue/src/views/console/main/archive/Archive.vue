@@ -44,7 +44,7 @@
         },
         methods:{
             expectClick(){
-                this.$message.info("导出");
+                window.location.href = `${this.$http.defaults.baseURL}${this.baseUrl}/getArchive?startTime=${this.currentDate[0].getTime()}&endTime=${this.currentDate[1].getTime()}`;
             },
             dateChange(date){
                 if (date === null){

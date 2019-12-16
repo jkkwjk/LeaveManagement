@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
-        avatar: '/dev/avatar.jpg',
+        avatar: '/dev/a111.jpg',
         auth: [],
         authType: '',
     },

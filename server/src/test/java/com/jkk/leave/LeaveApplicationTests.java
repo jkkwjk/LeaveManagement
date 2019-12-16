@@ -25,7 +25,9 @@ class LeaveApplicationTests {
 				.param("id","1")
 				.param("password","1")
 				.session(session);
-		RequestBuilder getAuth = MockMvcRequestBuilders.get("/auth")
+		RequestBuilder getAuth = MockMvcRequestBuilders.get("/stu/getArchive")
+				.param("startTime","1575129600000")
+				.param("endTime","1577721600000")
 				.session(session);
 		mockMvc.perform(login);
 
