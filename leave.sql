@@ -296,10 +296,10 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, '金凯凯', '1', 0, '7d5c7f115ef84273b177107defd39763', '465640448@qq.com');
-INSERT INTO `user` VALUES (2, '辅导员', '2', 1, 'default.jpg', '465640448@qq.com');
-INSERT INTO `user` VALUES (3, '院领导', '3', 2, 'default.jpg', '465640448@qq.com');
-INSERT INTO `user` VALUES (4, '教师', '4', 3, 'default.jpg', '465640448@qq.com');
-INSERT INTO `user` VALUES (55, '第二个学生', '55', 0, 'default.jpg', '465640448@qq.com');
+INSERT INTO `user` VALUES (1, '金凯凯', '1', 0, '7d5c7f115ef84273b177107defd39763', '填自己的@qq.com');
+INSERT INTO `user` VALUES (2, '辅导员', '2', 1, 'default.jpg', '填自己的@qq.com');
+INSERT INTO `user` VALUES (3, '院领导', '3', 2, 'default.jpg', '填自己的@qq.com');
+INSERT INTO `user` VALUES (4, '教师', '4', 3, 'default.jpg', '填自己的@qq.com');
+INSERT INTO `user` VALUES (55, '第二个学生', '55', 0, 'default.jpg', '填自己的@qq.com');
 
 SET FOREIGN_KEY_CHECKS = 1;
